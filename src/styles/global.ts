@@ -12,7 +12,7 @@ export const globalStyles = globalCss({
   },
 
   body: {
-    backgroundColor: '$gray900',
+    backgroundColor: '$gray600',
     color: '$gray100',
     '-webkit-font-smoothing': 'antialiased',
   },
@@ -21,4 +21,11 @@ export const globalStyles = globalCss({
     fontFamily: 'Roboto',
     fontWeight: 400,
   },
+
+  input:{
+    '&:focus': {
+      outline: 0,
+      boxShadow: '0 0 0 2px #00875f'
+    },
+  }
 });
