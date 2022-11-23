@@ -7,6 +7,7 @@ import Image from 'next/image';
 globalStyles();
 
 import userImage from '../assets/images/jean.jpeg';
+import Link from 'next/link';
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -17,10 +18,10 @@ export default function App({ Component, pageProps }: AppProps) {
           <h1>Controle Financeiro</h1>
         </S.LogoContainer>
         <S.LinksContainer>
-          <li>Página principal</li>
-          <li>Valores de entrada</li>
-          <li>Valores de saída</li>
-          <li>Investimentos</li>
+          <Link href="/">Página principal</Link>
+          <Link href="/valoresDeEntrada">Valores de entrada</Link>
+          <Link href="/valoresDeSaida">Valores de saída</Link>
+          <Link href="/investimentos">Investimentos</Link>
         </S.LinksContainer>
         <S.UserContainer>
           <Image src={userImage} alt="a user image" width={50} height={50} />

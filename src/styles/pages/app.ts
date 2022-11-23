@@ -33,6 +33,13 @@ export const LinksContainer = styled('ul', {
   gap: '4rem',
 
   fontSize: '$lg',
+
+  a:{
+    textDecoration:'none',
+    color:'$gray200'
+  }
+  
+
 });
 
 export const UserContainer = styled('div', {
