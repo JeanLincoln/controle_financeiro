@@ -13,14 +13,7 @@ export const Container = styled('div', {
   margin: '3rem auto 0',
 });
 
-export const ElementsContainer = styled('div', {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  width: '100%',
-});
-
-export const IncomeValuesTable = styled('table', {
+export const OutputValuesTable = styled('table', {
   textAlign: 'center',
 
   width: '100%',
@@ -42,7 +35,27 @@ export const IncomeValuesTable = styled('table', {
     '&:last-child': {
       borderTopRightRadius: 6,
       borderBottomRightRadius: 6,
-      color: '$green500',
+      color: '$red100',
     },
   },
+});
+
+export const ElementsContainer = styled('div', {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  width: '100%',
+});
+
+export const SetIncomeTransactionButton = styled('button', {
+  padding: '3rem',
+  height: '1rem',
+  borderRadius: 8,
+  border: 'none',
+  backgroundColor: '$red200',
+  color: '$white',
+  fontWeight: 'bold',
+  fontSize: '$xl',
+  cursor: 'pointer',
+  lineHeight: 0,
 });

@@ -21,6 +21,10 @@ export const LogoContainer = styled('div', {
   svg: {
     color: '$green500',
   },
+
+  h1: {
+    fontSize: '$3xl',
+  },
 });
 
 export const LinksContainer = styled('ul', {
@@ -34,12 +38,10 @@ export const LinksContainer = styled('ul', {
 
   fontSize: '$lg',
 
-  a:{
-    textDecoration:'none',
-    color:'$gray200'
-  }
-  
-
+  a: {
+    textDecoration: 'none',
+    color: '$gray200',
+  },
 });
 
 export const UserContainer = styled('div', {
