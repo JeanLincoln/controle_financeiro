@@ -3,6 +3,7 @@ import * as P from 'phosphor-react';
 import * as S from '../styles/pages/app';
 import { globalStyles } from '../styles/global';
 import Image from 'next/image';
+import { TransactionsContextProvider } from '../contexts/TransactionsContext';
 
 globalStyles();
 
@@ -28,7 +29,9 @@ export default function App({ Component, pageProps }: AppProps) {
           <strong>Jean Lincoln</strong>
         </S.UserContainer>
       </S.Header>
-      <Component {...pageProps} />
+      <TransactionsContextProvider>
+        <Component {...pageProps} />
+      </TransactionsContextProvider>
     </>
   );
 }

@@ -2,7 +2,8 @@ import { Card } from '../components/Card';
 import * as S from '../styles/pages/valoresDeEntrada';
 import * as P from 'phosphor-react';
 import { MonthSelector } from '../components/MonthSelector';
-import { useState } from 'react';
+import { useContext } from 'react';
+import { TransactionsContext } from '../contexts/TransactionsContext';
 import { DialogComponent } from '../components/Dialog';
 
 type IncomeValuesProps = {
@@ -14,38 +15,7 @@ type IncomeValuesProps = {
 }[];
 
 export default function ValoresDeEntrada() {
-  const [incomeValues, setIncomeValues] = useState<IncomeValuesProps>([
-    {
-      id: '1',
-      data: '10/11/2022',
-      description: 'Salario',
-      origin: 'Unicred',
-      value: 2000,
-    },
-    {
-      id: '2',
-      data: '11/11/2022',
-      description: 'FreeLancer',
-      origin: 'FreeLancer',
-      value: 1000,
-    },
-    {
-      id: '3',
-      data: '12/11/2022',
-      description: 'Bico',
-      origin: 'LGPD',
-      value: 50,
-    },
-  ]);
-
-  const incomeTotal = () => {
-    const total = incomeValues.reduce((acc, income) => {
-      acc = acc += income.value;
-      return acc;
-    }, 0);
-    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(total);
-  };
-
+  const { incomeValues, incomeTotal } = useContext(TransactionsContext);
   return (
     <S.Container>
       <S.ElementsContainer>

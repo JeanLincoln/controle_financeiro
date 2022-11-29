@@ -2,7 +2,8 @@ import { Card } from '../components/Card';
 import * as S from '../styles/pages/valoresDeSaida';
 import * as P from 'phosphor-react';
 import { MonthSelector } from '../components/MonthSelector';
-import { useState } from 'react';
+import { useContext } from 'react';
+import { TransactionsContext } from '../contexts/TransactionsContext';
 import { DialogComponent } from '../components/Dialog';
 
 type OutcomeValuesProps = {
@@ -15,41 +16,7 @@ type OutcomeValuesProps = {
 }[];
 
 export default function ValoresDeSaida() {
-  const [outcomeValues, setOutcomeValues] = useState<OutcomeValuesProps>([
-    {
-      id: '1',
-      data: '10/11/2022',
-      description: 'Hamburguer',
-      method: 'Pix',
-      type: 'Comida',
-      value: 30,
-    },
-    {
-      id: '2',
-      data: '11/11/2022',
-      description: 'No Mans sky',
-      method: 'Credit Card',
-      type: 'Jogo',
-      value: 100,
-    },
-    {
-      id: '3',
-      data: '12/11/2022',
-      description: 'Ryzen 5 5500',
-      method: 'Credit Card',
-      type: 'Eletronic',
-      value: 1200,
-    },
-  ]);
-
-  const outcomeTotal = () => {
-    const total = outcomeValues.reduce((acc, income) => {
-      acc = acc += income.value;
-      return acc;
-    }, 0);
-    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(total);
-  };
-
+  const { outcomeValues, outcomeTotal } = useContext(TransactionsContext);
   return (
     <S.Container>
       <S.ElementsContainer>
