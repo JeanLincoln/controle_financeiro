@@ -1,75 +1,73 @@
-import { api } from '../../axios'
-import { ReactNode, createContext, useState, useEffect } from 'react'
+import { api } from '../../axios';
+import { ReactNode, createContext, useState, useEffect } from 'react';
 
 type IncomeTransacion = {
-  id: string
-  data: string
-  description: string
-  origin: string
-  value: number
-}
+  id: string;
+  data: Date;
+  description: string;
+  origin: string;
+  value: number;
+};
 
 type OutcomeTransaction = {
-  id: string
-  data: string
-  description: string
-  method: string
-  type: string
-  value: number
-}
+  id: string;
+  data: Date;
+  description: string;
+  method: string;
+  type: string;
+  value: number;
+};
 
 type TransactionContextType = {
-  incomeValues: IncomeTransacion[]
-  outcomeValues: OutcomeTransaction[]
-  incomeTotal: () => string
-  outcomeTotal: () => string
-}
+  incomeValues: IncomeTransacion[];
+  outcomeValues: OutcomeTransaction[];
+  incomeTotal: () => string;
+  outcomeTotal: () => string;
+};
 
 type CyclesContextProviderProps = {
-  children: ReactNode
-}
+  children: ReactNode;
+};
 
-export const TransactionsContext = createContext({} as TransactionContextType)
+export const TransactionsContext = createContext({} as TransactionContextType);
 
-export function TransactionsContextProvider({
-  children,
-}: CyclesContextProviderProps) {
-  const [incomeValues, setIncomeValues] = useState<IncomeTransacion[]>([])
+export function TransactionsContextProvider({ children }: CyclesContextProviderProps) {
+  const [incomeValues, setIncomeValues] = useState<IncomeTransacion[]>([]);
 
-  const [outcomeValues, setOutcomeValues] = useState<OutcomeTransaction[]>([])
+  const [outcomeValues, setOutcomeValues] = useState<OutcomeTransaction[]>([]);
 
   const fetchTransactions = async () => {
-    const incomeResponse = await api.get('incomeTransactions')
-    const outcomeResponse = await api.get('outcomeTransactions')
-    setIncomeValues(incomeResponse.data)
-    setOutcomeValues(outcomeResponse.data)
-  }
+    const incomeResponse = await api.get('incomeTransactions');
+    const outcomeResponse = await api.get('outcomeTransactions');
+    setIncomeValues(incomeResponse.data);
+    setOutcomeValues(outcomeResponse.data);
+  };
 
   useEffect(() => {
-    fetchTransactions()
-  }, [])
+    fetchTransactions();
+  }, []);
 
   const incomeTotal = () => {
     const total = incomeValues.reduce((acc, income) => {
-      acc = acc += income.value
-      return acc
-    }, 0)
+      acc = acc += income.value;
+      return acc;
+    }, 0);
     return new Intl.NumberFormat('pt-BR', {
       style: 'currency',
       currency: 'BRL',
-    }).format(total)
-  }
+    }).format(total);
+  };
 
   const outcomeTotal = () => {
     const total = outcomeValues.reduce((acc, income) => {
-      acc = acc += income.value
-      return acc
-    }, 0)
+      acc = acc += income.value;
+      return acc;
+    }, 0);
     return new Intl.NumberFormat('pt-BR', {
       style: 'currency',
       currency: 'BRL',
-    }).format(total)
-  }
+    }).format(total);
+  };
 
   return (
     <TransactionsContext.Provider
@@ -82,5 +80,5 @@ export function TransactionsContextProvider({
     >
       {children}
     </TransactionsContext.Provider>
-  )
+  );
 }
