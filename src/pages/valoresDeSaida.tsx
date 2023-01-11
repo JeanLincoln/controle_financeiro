@@ -33,10 +33,10 @@ export default function ValoresDeSaida() {
           </tr>
         </thead>
         <tbody>
-          {outcomeValues.map(({ id, data, description, method, type, value }) => {
+          {outcomeValues.map(({ id, date, description, method, type, value }) => {
             return (
               <tr key={id}>
-                <td>{dateFormatter.format(new Date(data))}</td>
+                <td>{dateFormatter.format(new Date(date))}</td>
                 <td>{description}</td>
                 <td>{method}</td>
                 <td>{type}</td>

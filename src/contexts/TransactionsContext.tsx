@@ -3,7 +3,14 @@ import { ReactNode, createContext, useState, useEffect } from 'react';
 
 type IncomeTransacion = {
   id: string;
-  data: Date;
+  date: Date;
+  description: string;
+  origin: string;
+  value: number;
+};
+
+type CreateIncomeTransaction = {
+  date: Date;
   description: string;
   origin: string;
   value: number;
@@ -11,7 +18,15 @@ type IncomeTransacion = {
 
 type OutcomeTransaction = {
   id: string;
-  data: Date;
+  date: Date;
+  description: string;
+  method: string;
+  type: string;
+  value: number;
+};
+
+type CreateOutcomeTransaction = {
+  date: Date;
   description: string;
   method: string;
   type: string;
@@ -23,6 +38,7 @@ type TransactionContextType = {
   outcomeValues: OutcomeTransaction[];
   incomeTotal: () => string;
   outcomeTotal: () => string;
+  newTransaction: (type: string, data: CreateIncomeTransaction | CreateOutcomeTransaction) => void;
 };
 
 type CyclesContextProviderProps = {
@@ -41,6 +57,19 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
     const outcomeResponse = await api.get('outcomeTransactions');
     setIncomeValues(incomeResponse.data);
     setOutcomeValues(outcomeResponse.data);
+  };
+
+  const newTransaction = async (
+    type: string,
+    data: CreateIncomeTransaction | CreateOutcomeTransaction
+  ) => {
+    if (type === 'income') {
+      const response = await api.post('incomeTransactions', data);
+      setIncomeValues((state) => [response.data, ...state]);
+      return;
+    }
+    const response = await api.post('outcomeTransactions', data);
+    setOutcomeValues((state) => [response.data, ...state]);
   };
 
   useEffect(() => {
@@ -76,6 +105,7 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
         outcomeValues,
         incomeTotal,
         outcomeTotal,
+        newTransaction,
       }}
     >
       {children}

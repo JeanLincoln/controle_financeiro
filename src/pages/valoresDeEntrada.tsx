@@ -32,10 +32,10 @@ export default function ValoresDeEntrada() {
           </tr>
         </thead>
         <tbody>
-          {incomeValues.map(({ id, data, description, origin, value }) => {
+          {incomeValues.map(({ id, date, description, origin, value }) => {
             return (
               <tr key={id}>
-                <td>{dateFormatter.format(new Date(data))}</td>
+                <td>{dateFormatter.format(new Date(date))}</td>
                 <td>{description}</td>
                 <td>{origin}</td>
                 <td>

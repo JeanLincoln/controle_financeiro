@@ -1,5 +1,7 @@
 import * as Dialog from '@radix-ui/react-dialog';
+import { useContext } from 'react';
 import { useForm } from 'react-hook-form';
+import { TransactionsContext } from '../../contexts/TransactionsContext';
 import * as S from '../../styles/components/Dialog';
 
 type TriggerProps = {
@@ -15,7 +17,7 @@ type IncomeTransactionProps = {
 };
 
 type OutcomeTransaction = {
-  data: Date;
+  date: Date;
   description: string;
   method: string;
   type: string;
@@ -24,11 +26,16 @@ type OutcomeTransaction = {
 
 export function DialogComponent({ type, triggerText }: TriggerProps) {
   const { register, handleSubmit } = useForm<IncomeTransactionProps | OutcomeTransaction>();
+  const { newTransaction } = useContext(TransactionsContext);
 
-  const handleCreateNewIncomeTransaction = async (
-    data: IncomeTransactionProps | OutcomeTransaction
-  ) => {
-    console.log(data);
+  const handleCreateTransaction = async (data: IncomeTransactionProps | OutcomeTransaction) => {
+    const formattedDate = new Date(data.date);
+    newTransaction(type, {
+      ...data,
+      date: new Date(
+        new Date(formattedDate.getFullYear(), formattedDate.getMonth(), formattedDate.getDate() + 1)
+      ),
+    });
   };
 
   return (
@@ -46,7 +53,7 @@ export function DialogComponent({ type, triggerText }: TriggerProps) {
             <S.CloseButton asChild>
               <button aria-label="Close">X</button>
             </S.CloseButton>
-            <form onSubmit={handleSubmit(handleCreateNewIncomeTransaction)}>
+            <form onSubmit={handleSubmit(handleCreateTransaction)}>
               <input {...register('date')} type="date" id="date" placeholder="Digite a data" />
               <input
                 {...register('description')}
@@ -77,7 +84,7 @@ export function DialogComponent({ type, triggerText }: TriggerProps) {
             <S.CloseButton asChild>
               <button aria-label="Close">X</button>
             </S.CloseButton>
-            <form onSubmit={handleSubmit(handleCreateNewIncomeTransaction)}>
+            <form onSubmit={handleSubmit(handleCreateTransaction)}>
               <input {...register('date')} type="date" id="date" placeholder="Digite a data" />
               <input
                 {...register('description')}
