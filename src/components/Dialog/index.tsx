@@ -1,13 +1,36 @@
 import * as Dialog from '@radix-ui/react-dialog';
-import { type } from 'os';
+import { useForm } from 'react-hook-form';
 import * as S from '../../styles/components/Dialog';
 
 type TriggerProps = {
-  type: string;
+  type: 'income' | 'outcome';
   triggerText: string;
 };
 
+type IncomeTransactionProps = {
+  date: Date;
+  description: string;
+  origin: string;
+  value: number;
+};
+
+type OutcomeTransaction = {
+  data: Date;
+  description: string;
+  method: string;
+  type: string;
+  value: number;
+};
+
 export function DialogComponent({ type, triggerText }: TriggerProps) {
+  const { register, handleSubmit } = useForm<IncomeTransactionProps | OutcomeTransaction>();
+
+  const handleCreateNewIncomeTransaction = async (
+    data: IncomeTransactionProps | OutcomeTransaction
+  ) => {
+    console.log(data);
+  };
+
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
@@ -23,11 +46,26 @@ export function DialogComponent({ type, triggerText }: TriggerProps) {
             <S.CloseButton asChild>
               <button aria-label="Close">X</button>
             </S.CloseButton>
-            <form>
-              <input type="date" id="date" placeholder="Digite a data" />
-              <input type="text" id="description" placeholder="Digite a descrição" />
-              <input type="text" id="origin" placeholder="Digite a procedência" />
-              <input type="number" id="value" placeholder="Digite o valor" />
+            <form onSubmit={handleSubmit(handleCreateNewIncomeTransaction)}>
+              <input {...register('date')} type="date" id="date" placeholder="Digite a data" />
+              <input
+                {...register('description')}
+                type="text"
+                id="description"
+                placeholder="Digite a descrição"
+              />
+              <input
+                {...register('origin')}
+                type="text"
+                id="origin"
+                placeholder="Digite a procedência"
+              />
+              <input
+                {...register('value', { valueAsNumber: true })}
+                type="number"
+                id="value"
+                placeholder="Digite o valor"
+              />
               <S.TypeButton transactionType="income" type="submit">
                 Inserir Entrada
               </S.TypeButton>
@@ -39,20 +77,35 @@ export function DialogComponent({ type, triggerText }: TriggerProps) {
             <S.CloseButton asChild>
               <button aria-label="Close">X</button>
             </S.CloseButton>
-            <form>
-              <input type="date" id="date" placeholder="Digite a data" />
-              <input type="text" id="description" placeholder="Digite a descrição" />
-              <input type="text" id="method" placeholder="Digite a método" />
-              <select id="type" placeholder="Selecione o tipo">
+            <form onSubmit={handleSubmit(handleCreateNewIncomeTransaction)}>
+              <input {...register('date')} type="date" id="date" placeholder="Digite a data" />
+              <input
+                {...register('description')}
+                type="text"
+                id="description"
+                placeholder="Digite a descrição"
+              />
+              <input
+                {...register('method')}
+                type="text"
+                id="method"
+                placeholder="Digite a método"
+              />
+              <select {...register('type')} id="type" placeholder="Selecione o tipo">
                 <option value="">Escolha um tipo</option>
-                <option value="dog">Comida</option>
-                <option value="cat">Lazer</option>
-                <option value="hamster">Alcool</option>
-                <option value="parrot">Vestimenta</option>
-                <option value="spider">Jogos</option>
-                <option value="goldfish">Locomoção</option>
+                <option value="Comida">Comida</option>
+                <option value="Lazer">Lazer</option>
+                <option value="Alcool">Alcool</option>
+                <option value="Vestimenta">Vestimenta</option>
+                <option value="Jogos">Jogos</option>
+                <option value="Locomoção">Locomoção</option>
               </select>
-              <input type="number" id="value" placeholder="Digite o valor" />
+              <input
+                {...register('value', { valueAsNumber: true })}
+                type="number"
+                id="value"
+                placeholder="Digite o valor"
+              />
               <S.TypeButton transactionType="outcome" type="submit">
                 Inserir Saída
               </S.TypeButton>
