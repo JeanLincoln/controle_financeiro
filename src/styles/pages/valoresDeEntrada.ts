@@ -44,5 +44,17 @@ export const IncomeValuesTable = styled('table', {
       borderBottomRightRadius: 6,
       color: '$green500',
     },
+
+    button: {
+      backgroundColor: 'transparent',
+      border: 'none',
+      svg: {
+        color: '$gray300',
+        cursor: 'pointer',
+        '&:hover': {
+          color: '$red100',
+        },
+      },
+    },
   },
 });

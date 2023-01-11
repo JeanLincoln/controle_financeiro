@@ -8,7 +8,7 @@ import { TransactionsContext } from '../contexts/TransactionsContext';
 import { DialogComponent } from '../components/Dialog';
 
 export default function ValoresDeEntrada() {
-  const { incomeValues, incomeTotal } = useContext(TransactionsContext);
+  const { incomeValues, incomeTotal, deleteTransaction } = useContext(TransactionsContext);
   return (
     <S.Container>
       <S.ElementsContainer>
@@ -42,6 +42,15 @@ export default function ValoresDeEntrada() {
                   {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(
                     value
                   )}
+                </td>
+                <td>
+                  <button
+                    onClick={() => {
+                      deleteTransaction('income', id);
+                    }}
+                  >
+                    <P.Trash size={32} />
+                  </button>
                 </td>
               </tr>
             );

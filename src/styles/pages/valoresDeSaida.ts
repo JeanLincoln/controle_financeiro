@@ -37,6 +37,18 @@ export const OutputValuesTable = styled('table', {
       borderBottomRightRadius: 6,
       color: '$red100',
     },
+
+    button: {
+      backgroundColor: 'transparent',
+      border: 'none',
+      svg: {
+        color: '$gray300',
+        cursor: 'pointer',
+        '&:hover': {
+          color: '$red100',
+        },
+      },
+    },
   },
 });
 

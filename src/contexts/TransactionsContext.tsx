@@ -39,6 +39,7 @@ type TransactionContextType = {
   incomeTotal: () => string;
   outcomeTotal: () => string;
   newTransaction: (type: string, data: CreateIncomeTransaction | CreateOutcomeTransaction) => void;
+  deleteTransaction: (type: string, transactionId: string) => void;
 };
 
 type CyclesContextProviderProps = {
@@ -49,7 +50,6 @@ export const TransactionsContext = createContext({} as TransactionContextType);
 
 export function TransactionsContextProvider({ children }: CyclesContextProviderProps) {
   const [incomeValues, setIncomeValues] = useState<IncomeTransacion[]>([]);
-
   const [outcomeValues, setOutcomeValues] = useState<OutcomeTransaction[]>([]);
 
   const fetchTransactions = async () => {
@@ -70,6 +70,22 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
     }
     const response = await api.post('outcomeTransactions', data);
     setOutcomeValues((state) => [response.data, ...state]);
+  };
+
+  const deleteTransaction = async (type: string, transactionId: string) => {
+    if (type === 'income') {
+      await api.delete(`incomeTransactions/${transactionId}`);
+      const remainingTransactions = incomeValues.filter(
+        (transaction) => transaction.id !== transactionId
+      );
+      setIncomeValues(remainingTransactions);
+      return;
+    }
+    await api.delete(`outcomeTransactions/${transactionId}`);
+    const remainingTransactions = outcomeValues.filter(
+      (transaction) => transaction.id !== transactionId
+    );
+    setOutcomeValues(remainingTransactions);
   };
 
   useEffect(() => {
@@ -106,6 +122,7 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
         incomeTotal,
         outcomeTotal,
         newTransaction,
+        deleteTransaction,
       }}
     >
       {children}

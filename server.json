@@ -20,13 +20,6 @@
       "description": "Bico",
       "origin": "LGPD",
       "value": 50
-    },
-    {
-      "date": "2023-01-09T03:00:00.000Z",
-      "description": "teste",
-      "origin": "teste",
-      "value": 120,
-      "id": "I7WBghH"
     }
   ],
   "outcomeTransactions": [
@@ -53,14 +46,6 @@
       "method": "Credit Card",
       "type": "Eletronic",
       "value": 1200
-    },
-    {
-      "date": "2023-01-25T03:00:00.000Z",
-      "description": "teste",
-      "method": "teste",
-      "type": "Alcool",
-      "value": 10000,
-      "id": "rluQZwb"
     }
   ]
 }

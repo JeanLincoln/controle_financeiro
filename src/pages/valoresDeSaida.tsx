@@ -3,12 +3,13 @@ import * as S from '../styles/pages/valoresDeSaida';
 import * as P from 'phosphor-react';
 import { dateFormatter } from '../utils/Formatter';
 import { MonthSelector } from '../components/MonthSelector';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { TransactionsContext } from '../contexts/TransactionsContext';
 import { DialogComponent } from '../components/Dialog';
 
 export default function ValoresDeSaida() {
-  const { outcomeValues, outcomeTotal } = useContext(TransactionsContext);
+  const { outcomeValues, outcomeTotal, deleteTransaction } = useContext(TransactionsContext);
+
   return (
     <S.Container>
       <S.ElementsContainer>
@@ -44,6 +45,15 @@ export default function ValoresDeSaida() {
                   {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(
                     value
                   )}
+                </td>
+                <td>
+                  <button
+                    onClick={() => {
+                      deleteTransaction('outcome', id);
+                    }}
+                  >
+                    <P.Trash size={32} />
+                  </button>
                 </td>
               </tr>
             );
