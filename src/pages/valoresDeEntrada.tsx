@@ -1,11 +1,11 @@
 import { Card } from '../components/Card';
 import * as S from '../styles/pages/valoresDeEntrada';
 import * as P from 'phosphor-react';
-import { dateFormatter } from '../utils/Formatter';
 import { MonthSelector } from '../components/MonthSelector';
 import { useContext } from 'react';
 import { TransactionsContext } from '../contexts/TransactionsContext';
 import { DialogComponent } from '../components/Dialog';
+import { format } from 'date-fns';
 
 export default function ValoresDeEntrada() {
   const { incomeValues, incomeTotal, deleteTransaction } = useContext(TransactionsContext);
@@ -35,7 +35,7 @@ export default function ValoresDeEntrada() {
           {incomeValues.map(({ id, date, description, origin, value }) => {
             return (
               <tr key={id}>
-                <td>{dateFormatter.format(new Date(date))}</td>
+                <td>{format(new Date(date), 'dd/MM/yyyy')}</td>
                 <td>{description}</td>
                 <td>{origin}</td>
                 <td>

@@ -1,11 +1,11 @@
 import { Card } from '../components/Card';
 import * as S from '../styles/pages/valoresDeSaida';
 import * as P from 'phosphor-react';
-import { dateFormatter } from '../utils/Formatter';
 import { MonthSelector } from '../components/MonthSelector';
 import { useContext, useState } from 'react';
 import { TransactionsContext } from '../contexts/TransactionsContext';
 import { DialogComponent } from '../components/Dialog';
+import { format } from 'date-fns';
 
 export default function ValoresDeSaida() {
   const { outcomeValues, outcomeTotal, deleteTransaction } = useContext(TransactionsContext);
@@ -37,7 +37,7 @@ export default function ValoresDeSaida() {
           {outcomeValues.map(({ id, date, description, method, type, value }) => {
             return (
               <tr key={id}>
-                <td>{dateFormatter.format(new Date(date))}</td>
+                <td>{format(new Date(date), 'dd/MM/yyyy')}</td>
                 <td>{description}</td>
                 <td>{method}</td>
                 <td>{type}</td>

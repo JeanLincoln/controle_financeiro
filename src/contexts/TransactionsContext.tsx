@@ -1,5 +1,6 @@
 import { api } from '../../axios';
 import { ReactNode, createContext, useState, useEffect } from 'react';
+import { isSameMonth } from 'date-fns';
 
 type IncomeTransacion = {
   id: string;
@@ -36,6 +37,7 @@ type CreateOutcomeTransaction = {
 type TransactionContextType = {
   incomeValues: IncomeTransacion[];
   outcomeValues: OutcomeTransaction[];
+  fetchTransactions: (query?: Date) => void;
   incomeTotal: () => string;
   outcomeTotal: () => string;
   newTransaction: (type: string, data: CreateIncomeTransaction | CreateOutcomeTransaction) => void;
@@ -52,9 +54,20 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
   const [incomeValues, setIncomeValues] = useState<IncomeTransacion[]>([]);
   const [outcomeValues, setOutcomeValues] = useState<OutcomeTransaction[]>([]);
 
-  const fetchTransactions = async () => {
+  const fetchTransactions = async (filterDate?: Date) => {
     const incomeResponse = await api.get('incomeTransactions');
     const outcomeResponse = await api.get('outcomeTransactions');
+    console.log(filterDate);
+
+    if (filterDate) {
+      const filteredIncomeResponse = incomeResponse.data.filter((transaction: IncomeTransacion) =>
+        isSameMonth(new Date(transaction.date), filterDate)
+      );
+      setIncomeValues(filteredIncomeResponse);
+      setOutcomeValues(filteredIncomeResponse);
+      return;
+    }
+
     setIncomeValues(incomeResponse.data);
     setOutcomeValues(outcomeResponse.data);
   };
@@ -119,6 +132,7 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
       value={{
         incomeValues,
         outcomeValues,
+        fetchTransactions,
         incomeTotal,
         outcomeTotal,
         newTransaction,
