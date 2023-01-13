@@ -2,27 +2,20 @@ import { Card } from '../components/Card';
 import * as S from '../styles/pages/valoresDeSaida';
 import * as P from 'phosphor-react';
 import { MonthSelector } from '../components/MonthSelector';
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { TransactionsContext } from '../contexts/TransactionsContext';
 import { DialogComponent } from '../components/Dialog';
 import { format, differenceInMonths, addMonths } from 'date-fns';
+import { FilterMonthDate, TransactionDate } from '../utils/DatesValidation';
 
 export default function ValoresDeSaida() {
-  const { outcomeValues, outcomeTotal, deleteTransaction } = useContext(TransactionsContext);
+  const { outcomeValues, outcomeTotal, deleteTransaction, filterMonth } =
+    useContext(TransactionsContext);
 
-  const CalculateActualInstallment = (date: Date, installment: number) => {
-    const ocorringPurchase = differenceInMonths(new Date(), new Date(date)) <= installment;
-    const firstParcel = differenceInMonths(new Date(), new Date(date)) === 0;
-    console.log({ firstParcel: firstParcel, ocorringPurchase: ocorringPurchase });
-    if (ocorringPurchase && !firstParcel) {
-      return differenceInMonths(new Date(), new Date(date));
-    }
+  const CalculateActualInstallment = (date: Date) => {
+    const datesDifference = differenceInMonths(FilterMonthDate(filterMonth), TransactionDate(date));
 
-    if (firstParcel) {
-      return 1;
-    }
-
-    return installment;
+    return datesDifference === 0 ? 1 : datesDifference + 1;
   };
 
   return (
@@ -68,7 +61,7 @@ export default function ValoresDeSaida() {
                   <td>{type}</td>
                   <td>{paymentForm}</td>
                   <td>{installment}</td>
-                  <td>{CalculateActualInstallment(date, installment)}</td>
+                  <td>{CalculateActualInstallment(date)}</td>
                   <td>
                     {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(
                       value

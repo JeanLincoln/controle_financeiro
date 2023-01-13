@@ -1,6 +1,7 @@
 import { api } from '../../axios';
 import { ReactNode, createContext, useState, useEffect } from 'react';
-import { isSameMonth } from 'date-fns';
+import { differenceInMonths, isSameMonth } from 'date-fns';
+import { FilterMonthDate, TransactionDate } from '../utils/DatesValidation';
 
 type IncomeTransacion = {
   id: string;
@@ -75,11 +76,18 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
       )
     );
 
-    const filteredOutcomeResponse = outcomeResponse.data.filter((transaction: IncomeTransacion) =>
-      isSameMonth(
-        new Date(transaction.date),
-        new Date(Number(filterMonth.split('-')[0]), Number(filterMonth.split('-')[1]) - 1)
-      )
+    const filteredOutcomeResponse = outcomeResponse.data.filter(
+      (transaction: OutcomeTransaction) => {
+        const datesDifference = differenceInMonths(
+          FilterMonthDate(filterMonth),
+          TransactionDate(transaction.date)
+        );
+
+        const ocorringPurchase = datesDifference >= 0 && datesDifference <= transaction.installment;
+        const paidPurchase = datesDifference > transaction.installment - 1;
+
+        return ocorringPurchase && !paidPurchase;
+      }
     );
 
     setIncomeValues(filteredIncomeResponse);
