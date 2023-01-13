@@ -23,6 +23,8 @@ type OutcomeTransaction = {
   description: string;
   method: string;
   type: string;
+  paymentForm: string;
+  installment: number;
   value: number;
 };
 
