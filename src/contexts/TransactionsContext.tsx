@@ -37,9 +37,12 @@ type CreateOutcomeTransaction = {
 type TransactionContextType = {
   incomeValues: IncomeTransacion[];
   outcomeValues: OutcomeTransaction[];
-  fetchTransactions: (query?: Date) => void;
+  filterMonth: string;
+  setFilterMonth: (FilterMonth: string) => void;
+  fetchTransactions: () => void;
   incomeTotal: () => string;
   outcomeTotal: () => string;
+  pickings: () => string;
   newTransaction: (type: string, data: CreateIncomeTransaction | CreateOutcomeTransaction) => void;
   deleteTransaction: (type: string, transactionId: string) => void;
 };
@@ -53,23 +56,32 @@ export const TransactionsContext = createContext({} as TransactionContextType);
 export function TransactionsContextProvider({ children }: CyclesContextProviderProps) {
   const [incomeValues, setIncomeValues] = useState<IncomeTransacion[]>([]);
   const [outcomeValues, setOutcomeValues] = useState<OutcomeTransaction[]>([]);
+  const [filterMonth, setFilterMonth] = useState(
+    `${new Date().getFullYear()}-${
+      new Date().getMonth() + 1 > 9 ? new Date().getMonth() + 1 : `0${new Date().getMonth() + 1}`
+    }`
+  );
 
-  const fetchTransactions = async (filterDate?: Date) => {
+  const fetchTransactions = async () => {
     const incomeResponse = await api.get('incomeTransactions');
     const outcomeResponse = await api.get('outcomeTransactions');
-    console.log(filterDate);
 
-    if (filterDate) {
-      const filteredIncomeResponse = incomeResponse.data.filter((transaction: IncomeTransacion) =>
-        isSameMonth(new Date(transaction.date), filterDate)
-      );
-      setIncomeValues(filteredIncomeResponse);
-      setOutcomeValues(filteredIncomeResponse);
-      return;
-    }
+    const filteredIncomeResponse = incomeResponse.data.filter((transaction: IncomeTransacion) =>
+      isSameMonth(
+        new Date(transaction.date),
+        new Date(Number(filterMonth.split('-')[0]), Number(filterMonth.split('-')[1]) - 1)
+      )
+    );
 
-    setIncomeValues(incomeResponse.data);
-    setOutcomeValues(outcomeResponse.data);
+    const filteredOutcomeResponse = outcomeResponse.data.filter((transaction: IncomeTransacion) =>
+      isSameMonth(
+        new Date(transaction.date),
+        new Date(Number(filterMonth.split('-')[0]), Number(filterMonth.split('-')[1]) - 1)
+      )
+    );
+
+    setIncomeValues(filteredIncomeResponse);
+    setOutcomeValues(filteredOutcomeResponse);
   };
 
   const newTransaction = async (
@@ -103,7 +115,7 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
 
   useEffect(() => {
     fetchTransactions();
-  }, []);
+  }, [filterMonth]);
 
   const incomeTotal = () => {
     const total = incomeValues.reduce((acc, income) => {
@@ -127,14 +139,36 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
     }).format(total);
   };
 
+  const pickings = () => {
+    const incomesTotal = incomeValues.reduce((acc, income) => {
+      acc = acc += income.value;
+      return acc;
+    }, 0);
+
+    const outcomesTotal = outcomeValues.reduce((acc, income) => {
+      acc = acc += income.value;
+      return acc;
+    }, 0);
+
+    const total = incomesTotal - outcomesTotal;
+
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    }).format(total);
+  };
+
   return (
     <TransactionsContext.Provider
       value={{
         incomeValues,
         outcomeValues,
+        filterMonth,
+        setFilterMonth,
         fetchTransactions,
         incomeTotal,
         outcomeTotal,
+        pickings,
         newTransaction,
         deleteTransaction,
       }}
