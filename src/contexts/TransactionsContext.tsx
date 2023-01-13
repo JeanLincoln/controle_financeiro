@@ -140,7 +140,7 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
 
   const outcomeTotal = () => {
     const total = outcomeValues.reduce((acc, income) => {
-      acc = acc += income.value;
+      acc = acc += income.installment > 1 ? income.value / income.installment : income.value;
       return acc;
     }, 0);
     return new Intl.NumberFormat('pt-BR', {

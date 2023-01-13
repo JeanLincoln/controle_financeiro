@@ -15,7 +15,7 @@ export default function ValoresDeSaida() {
   const CalculateActualInstallment = (date: Date) => {
     const datesDifference = differenceInMonths(FilterMonthDate(filterMonth), TransactionDate(date));
 
-    return datesDifference === 0 ? 1 : datesDifference + 1;
+    return datesDifference + 1;
   };
 
   return (
@@ -42,7 +42,8 @@ export default function ValoresDeSaida() {
             <th>Forma de pagamento</th>
             <th>Parcelas</th>
             <th>Parcela Atual</th>
-            <th>Valor</th>
+            <th>Valor da parcela</th>
+            <th>Valor da compra</th>
           </tr>
         </thead>
         <tbody>
@@ -62,6 +63,11 @@ export default function ValoresDeSaida() {
                   <td>{paymentForm}</td>
                   <td>{installment}</td>
                   <td>{CalculateActualInstallment(date)}</td>
+                  <td>
+                    {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(
+                      value / installment
+                    )}
+                  </td>
                   <td>
                     {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(
                       value
