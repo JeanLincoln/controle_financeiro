@@ -43,6 +43,8 @@
       "description": "Hamburguer",
       "method": "Pix",
       "type": "Comida",
+      "paymentForm": "Débito",
+      "installment": 1,
       "value": 30
     },
     {
@@ -51,6 +53,8 @@
       "description": "No Mans sky",
       "method": "Credit Card",
       "type": "Jogo",
+      "paymentForm": "Crédito à vista",
+      "installment": 1,
       "value": 100
     },
     {
@@ -59,7 +63,29 @@
       "description": "Ryzen 5 5500",
       "method": "Credit Card",
       "type": "Eletronic",
+      "paymentForm": "Crédito à parcelado",
+      "installment": 12,
       "value": 1200
+    },
+    {
+      "date": "2023-01-13T03:00:00.000Z",
+      "description": "Pizza",
+      "method": "Crédito à vista",
+      "type": "Comida",
+      "paymentForm": "Crédito parcelado",
+      "value": 100,
+      "installment": 5,
+      "id": "yENx5d_"
+    },
+    {
+      "date": "2022-12-13T03:00:00.000Z",
+      "description": "marmita",
+      "method": "Crédito à vista",
+      "type": "Comida",
+      "paymentForm": "Crédito parcelado",
+      "installment": 3,
+      "value": 20,
+      "id": "4C8bf1f"
     }
   ]
 }

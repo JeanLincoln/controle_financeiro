@@ -9,7 +9,7 @@ export const Container = styled('div', {
   marginTop: '5rem',
   gap: '3rem',
 
-  maxWidth: 1120,
+  maxWidth: 1600,
   margin: '3rem auto 0',
 });
 

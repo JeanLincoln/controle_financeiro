@@ -92,12 +92,13 @@ export function DialogComponent({ type, triggerText }: TriggerProps) {
                 id="description"
                 placeholder="Digite a descrição"
               />
-              <input
-                {...register('method')}
-                type="text"
-                id="method"
-                placeholder="Digite a método"
-              />
+              <select {...register('method')} id="type" placeholder="Selecione o método">
+                <option value="">Escolha um tipo</option>
+                <option value="Crédito à vista">Cartão de crédito</option>
+                <option value="Crédito parcelado">Pix</option>
+                <option value="Débito">Boleto</option>
+                <option value="Boleto">Transferencia</option>
+              </select>
               <select {...register('type')} id="type" placeholder="Selecione o tipo">
                 <option value="">Escolha um tipo</option>
                 <option value="Comida">Comida</option>
@@ -107,6 +108,18 @@ export function DialogComponent({ type, triggerText }: TriggerProps) {
                 <option value="Jogos">Jogos</option>
                 <option value="Locomoção">Locomoção</option>
               </select>
+              <select {...register('paymentForm')} id="type" placeholder="Selecione o tipo">
+                <option value="">Escolha um tipo</option>
+                <option value="Crédito à vista">Crédito à vista</option>
+                <option value="Crédito parcelado">Crédito parcelado</option>
+                <option value="Débito">Débito</option>
+              </select>
+              <input
+                {...register('installment', { valueAsNumber: true })}
+                type="number"
+                id="installment"
+                placeholder="Digite o número de parcelas"
+              />
               <input
                 {...register('value', { valueAsNumber: true })}
                 type="number"

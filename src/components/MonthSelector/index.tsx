@@ -4,7 +4,6 @@ import * as S from '../../styles/components/MonthSelector';
 
 export function MonthSelector() {
   const { filterMonth, fetchTransactions, setFilterMonth } = useContext(TransactionsContext);
-  console.log(filterMonth);
 
   const handleChangeMonth = (e: ChangeEvent<HTMLInputElement>) => {
     const chosenMonth = new Date(e.target.value);
