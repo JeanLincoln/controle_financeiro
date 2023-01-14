@@ -1,7 +1,9 @@
 import * as Dialog from '@radix-ui/react-dialog';
-import { useContext, useState } from 'react';
+import { ChangeEvent, KeyboardEvent, useContext, useState } from 'react';
+import CurrencyInput from 'react-currency-input-field';
 import { useForm } from 'react-hook-form';
 import { TransactionsContext } from '../../contexts/TransactionsContext';
+import { useTransaction } from '../../hooks/useTransaction';
 import * as S from '../../styles/components/Dialog';
 
 type TriggerProps = {
@@ -13,7 +15,7 @@ type IncomeTransactionProps = {
   date: Date;
   description: string;
   origin: string;
-  value: number;
+  value: string;
 };
 
 type OutcomeTransaction = {
@@ -23,33 +25,40 @@ type OutcomeTransaction = {
   type: string;
   paymentForm: string;
   installment: number;
-  value: number;
+  value: string;
 };
 
 export function DialogComponent({ type, triggerText }: TriggerProps) {
   const { register, handleSubmit, reset } = useForm<IncomeTransactionProps | OutcomeTransaction>();
-  const { newTransaction } = useContext(TransactionsContext);
+  const { newTransaction } = useTransaction();
   const [open, setOpen] = useState(false);
   const [isCard, setIsCard] = useState(false);
   const [installmentPurchase, isInstallmentPurchase] = useState(false);
 
   const handleCreateTransaction = async (data: IncomeTransactionProps | OutcomeTransaction) => {
     const formattedDate = new Date(data.date);
+
+    const transactionValue = data.value;
+    const dotOff = transactionValue.replace('.', '');
+    const formattedValue = Number(dotOff.replace(',', '.'));
+
     newTransaction(type, {
       ...data,
+      value: formattedValue,
       date: new Date(
         new Date(formattedDate.getFullYear(), formattedDate.getMonth(), formattedDate.getDate() + 1)
       ),
     });
+
     reset();
     setOpen(false);
   };
 
-  const handleMethod = (e) => {
+  const handleMethod = (e: ChangeEvent<HTMLSelectElement>) => {
     e.target.value === 'Cartão de crédito' ? setIsCard(true) : setIsCard(false);
   };
 
-  const handlePaymentForm = (e) => {
+  const handlePaymentForm = (e: ChangeEvent<HTMLSelectElement>) => {
     e.target.value === 'Crédito parcelado'
       ? isInstallmentPurchase(true)
       : isInstallmentPurchase(false);
@@ -66,30 +75,45 @@ export function DialogComponent({ type, triggerText }: TriggerProps) {
         <S.Overlay className="DialogOverlay" />
         {type === 'income' ? (
           <S.Content>
-            <Dialog.Title>Novo Valor De Entrada</Dialog.Title>
+            <S.Title>Novo Valor De Entrada</S.Title>
             <S.CloseButton asChild>
               <button aria-label="Close">X</button>
             </S.CloseButton>
             <form onSubmit={handleSubmit(handleCreateTransaction)}>
-              <input {...register('date')} type="date" id="date" placeholder="Digite a data" />
-              <input
-                {...register('description')}
-                type="text"
-                id="description"
-                placeholder="Digite a descrição"
-              />
-              <input
-                {...register('origin')}
-                type="text"
-                id="origin"
-                placeholder="Digite a procedência"
-              />
-              <input
-                {...register('value', { valueAsNumber: true })}
-                type="text"
-                id="value"
-                placeholder="R$000,00"
-              />
+              <S.InputGroup>
+                <span>Data:</span>
+                <input {...register('date')} type="date" id="date" placeholder="Digite a data" />
+              </S.InputGroup>
+              <S.InputGroup>
+                <span>Descrição:</span>
+                <input
+                  {...register('description')}
+                  type="text"
+                  id="description"
+                  placeholder="Digite a descrição"
+                />
+              </S.InputGroup>
+              <S.InputGroup>
+                <span>Origem:</span>
+                <input
+                  {...register('origin')}
+                  type="text"
+                  id="origin"
+                  placeholder="Digite a procedência"
+                />
+              </S.InputGroup>
+              <S.InputGroup>
+                <span>Valor:</span>
+                <CurrencyInput
+                  {...register('value')}
+                  id="value"
+                  name="value"
+                  fixedDecimalLength={2}
+                  placeholder="R$ 000,00"
+                  defaultValue={0}
+                  decimalsLimit={2}
+                />
+              </S.InputGroup>
               <S.TypeButton transactionType="income" type="submit">
                 Inserir Entrada
               </S.TypeButton>
@@ -102,66 +126,89 @@ export function DialogComponent({ type, triggerText }: TriggerProps) {
               <button aria-label="Close">X</button>
             </S.CloseButton>
             <form onSubmit={handleSubmit(handleCreateTransaction)}>
-              <input {...register('date')} type="date" id="date" placeholder="Digite a data" />
-              <input
-                {...register('description')}
-                type="text"
-                id="description"
-                placeholder="Digite a descrição"
-                autoComplete="off"
-              />
-              <select
-                {...register('type')}
-                id="type"
-                placeholder="Qual foi o tipo da compra/gasto?"
+              <S.InputGroup>
+                <span>Data:</span>
+                <input {...register('date')} type="date" id="date" placeholder="Digite a data" />
+              </S.InputGroup>
+              <S.InputGroup>
+                <span>Descrição:</span>
+                <input
+                  {...register('description')}
+                  type="text"
+                  id="description"
+                  placeholder="Digite a descrição"
+                  autoComplete="off"
+                />
+              </S.InputGroup>
+              <S.InputGroup>
+                <span>Tipo:</span>
+                <select
+                  {...register('type')}
+                  id="type"
+                  placeholder="Qual foi o tipo da compra/gasto?"
+                >
+                  <option value="">Qual foi o tipo da compra/gasto?</option>
+                  <option value="Comida">Comida</option>
+                  <option value="Lazer">Lazer</option>
+                  <option value="Alcool">Alcool</option>
+                  <option value="Vestimenta">Vestimenta</option>
+                  <option value="Jogos">Jogos</option>
+                  <option value="Locomoção">Locomoção</option>
+                </select>
+              </S.InputGroup>
+              <S.InputGroup>
+                <span>Método:</span>
+                <select
+                  {...register('method')}
+                  onChange={handleMethod}
+                  id="method"
+                  placeholder="Selecione o método"
+                >
+                  <option value="">Qual foi o método?</option>
+                  <option value="Cartão de crédito">Cartão de crédito</option>
+                  <option value="Pix">Pix</option>
+                  <option value="Boleto">Boleto</option>
+                  <option value="Transferencia">Transferencia</option>
+                </select>
+              </S.InputGroup>
+              <S.InputGroup style={!isCard ? { display: 'none' } : { display: 'flex' }}>
+                <span>Forma de Pagamento:</span>
+                <select
+                  {...register('paymentForm')}
+                  id="paymentForm"
+                  placeholder="Qual foi o método de pagamento?"
+                  onChange={handlePaymentForm}
+                >
+                  <option value="Débito">Qual foi o método de pagamento?</option>
+                  <option value="Crédito à vista">Crédito à vista</option>
+                  <option value="Crédito parcelado">Crédito parcelado</option>
+                  <option value="Débito">Débito</option>
+                </select>
+              </S.InputGroup>
+              <S.InputGroup
+                style={!installmentPurchase ? { display: 'none' } : { display: 'flex' }}
               >
-                <option value="">Qual foi o tipo da compra/gasto?</option>
-                <option value="Comida">Comida</option>
-                <option value="Lazer">Lazer</option>
-                <option value="Alcool">Alcool</option>
-                <option value="Vestimenta">Vestimenta</option>
-                <option value="Jogos">Jogos</option>
-                <option value="Locomoção">Locomoção</option>
-              </select>
-              <select
-                {...register('method')}
-                onChange={handleMethod}
-                id="method"
-                placeholder="Selecione o método"
-              >
-                <option value="">Qual foi o método?</option>
-                <option value="Cartão de crédito">Cartão de crédito</option>
-                <option value="Pix">Pix</option>
-                <option value="Boleto">Boleto</option>
-                <option value="Transferencia">Transferencia</option>
-              </select>
-
-              <select
-                {...register('paymentForm')}
-                id="paymentForm"
-                placeholder="Qual foi o método de pagamento?"
-                onChange={handlePaymentForm}
-                style={!isCard ? { display: 'none' } : { display: 'block' }}
-              >
-                <option value="Débito">Qual foi o método de pagamento?</option>
-                <option value="Crédito à vista">Crédito à vista</option>
-                <option value="Crédito parcelado">Crédito parcelado</option>
-                <option value="Débito">Débito</option>
-              </select>
-              <input
-                {...register('installment', { valueAsNumber: true })}
-                type="number"
-                id="installment"
-                placeholder="Digite o número de parcelas"
-                defaultValue={1}
-                style={!installmentPurchase ? { display: 'none' } : { display: 'block' }}
-              />
-              <input
-                {...register('value', { valueAsNumber: true })}
-                type="text"
-                id="value"
-                placeholder="R$000,00"
-              />
+                <span>Número de parcelas:</span>
+                <input
+                  {...register('installment', { valueAsNumber: true })}
+                  type="number"
+                  id="installment"
+                  placeholder="Digite o número de parcelas"
+                  defaultValue={1}
+                />
+              </S.InputGroup>
+              <S.InputGroup>
+                <span>Valor:</span>
+                <CurrencyInput
+                  {...register('value')}
+                  id="value"
+                  name="value"
+                  fixedDecimalLength={2}
+                  placeholder="R$ 000,00"
+                  defaultValue={0}
+                  decimalsLimit={2}
+                />
+              </S.InputGroup>
               <S.TypeButton transactionType="outcome" type="submit">
                 Inserir Saída
               </S.TypeButton>

@@ -68,6 +68,26 @@ export const Content = styled(Dialog.Content, {
   },
 });
 
+export const Title = styled(Dialog.Title, {
+  textAlign: 'center',
+  fontSize: '$2xl',
+});
+
+export const InputGroup = styled('div', {
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  gap: '2rem',
+
+  span: {
+    fontSize: '1.5rem',
+  },
+
+  'input,select': {
+    width: '50rem',
+  },
+});
+
 export const TypeButton = styled('button', {
   height: 58,
   border: '0',

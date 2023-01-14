@@ -29,11 +29,11 @@
       "id": "ph1ssuI"
     },
     {
-      "date": "2023-01-10T03:00:00.000Z",
-      "description": "teste2",
-      "origin": "teste2",
-      "value": 200,
-      "id": "CkSzXhw"
+      "date": "2023-01-05T03:00:00.000Z",
+      "description": "teste",
+      "origin": "teste",
+      "value": 10.22,
+      "id": "2K3O-Ki"
     }
   ],
   "outcomeTransactions": [
@@ -96,6 +96,16 @@
       "installment": 10,
       "value": 500,
       "id": "c36wbmW"
+    },
+    {
+      "date": "2023-01-12T03:00:00.000Z",
+      "description": "teste",
+      "type": "Lazer",
+      "method": "Cartão de crédito",
+      "paymentForm": "Crédito parcelado",
+      "installment": 4,
+      "value": 10.22,
+      "id": "970ZdRD"
     }
   ]
 }
