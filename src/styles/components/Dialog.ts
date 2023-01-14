@@ -42,7 +42,7 @@ export const Overlay = styled(Dialog.Overlay, {
 });
 
 export const Content = styled(Dialog.Content, {
-  minWidth: '32rem',
+  minWidth: '50rem',
   borderRadius: 6,
   padding: '2.5rem 3rem',
   background: '$gray600',
@@ -62,15 +62,9 @@ export const Content = styled(Dialog.Content, {
       borderRadius: 6,
       border: 0,
       background: '$gray700',
-      color: '$gray200',
-      padding: '1rem',
-
-      '&::placehoder': {
-        color: '$gray300',
-      },
+      color: '$gray300',
+      padding: '2rem',
     },
-
-    'button[type="submit"]': {},
   },
 });
 
