@@ -34,6 +34,8 @@ type CreateOutcomeTransaction = {
   description: string;
   method: string;
   type: string;
+  paymentForm: string;
+  installment: number;
   value: number;
 };
 
@@ -156,11 +158,12 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
     }, 0);
 
     const outcomesTotal = outcomeValues.reduce((acc, income) => {
-      acc = acc += income.value;
+      acc = acc += income.installment > 1 ? income.value / income.installment : income.value;
       return acc;
     }, 0);
 
     const total = incomesTotal - outcomesTotal;
+    console.log({ incomesTotal: incomesTotal, outcomesTotal: outcomesTotal });
 
     return new Intl.NumberFormat('pt-BR', {
       style: 'currency',
