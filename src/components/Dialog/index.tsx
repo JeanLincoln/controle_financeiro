@@ -1,5 +1,5 @@
 import * as Dialog from '@radix-ui/react-dialog';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { TransactionsContext } from '../../contexts/TransactionsContext';
 import * as S from '../../styles/components/Dialog';
@@ -21,12 +21,17 @@ type OutcomeTransaction = {
   description: string;
   method: string;
   type: string;
+  paymentForm: string;
+  installment: number;
   value: number;
 };
 
 export function DialogComponent({ type, triggerText }: TriggerProps) {
-  const { register, handleSubmit } = useForm<IncomeTransactionProps | OutcomeTransaction>();
+  const { register, handleSubmit, reset } = useForm<IncomeTransactionProps | OutcomeTransaction>();
   const { newTransaction } = useContext(TransactionsContext);
+  const [open, setOpen] = useState(false);
+  const [isCard, setIsCard] = useState(false);
+  const [installmentPurchase, isInstallmentPurchase] = useState(false);
 
   const handleCreateTransaction = async (data: IncomeTransactionProps | OutcomeTransaction) => {
     const formattedDate = new Date(data.date);
@@ -36,10 +41,22 @@ export function DialogComponent({ type, triggerText }: TriggerProps) {
         new Date(formattedDate.getFullYear(), formattedDate.getMonth(), formattedDate.getDate() + 1)
       ),
     });
+    reset();
+    setOpen(false);
+  };
+
+  const handleMethod = (e) => {
+    e.target.value === 'Cartão de crédito' ? setIsCard(true) : setIsCard(false);
+  };
+
+  const handlePaymentForm = (e) => {
+    e.target.value === 'Crédito parcelado'
+      ? isInstallmentPurchase(true)
+      : isInstallmentPurchase(false);
   };
 
   return (
-    <Dialog.Root>
+    <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger asChild>
         <S.SetIncomeTransactionButton transactionType={type}>
           {triggerText}
@@ -69,9 +86,9 @@ export function DialogComponent({ type, triggerText }: TriggerProps) {
               />
               <input
                 {...register('value', { valueAsNumber: true })}
-                type="number"
+                type="text"
                 id="value"
-                placeholder="Digite o valor"
+                placeholder="R$000,00"
               />
               <S.TypeButton transactionType="income" type="submit">
                 Inserir Entrada
@@ -91,16 +108,14 @@ export function DialogComponent({ type, triggerText }: TriggerProps) {
                 type="text"
                 id="description"
                 placeholder="Digite a descrição"
+                autoComplete="off"
               />
-              <select {...register('method')} id="type" placeholder="Selecione o método">
-                <option value="">Escolha um tipo</option>
-                <option value="Crédito à vista">Cartão de crédito</option>
-                <option value="Crédito parcelado">Pix</option>
-                <option value="Débito">Boleto</option>
-                <option value="Boleto">Transferencia</option>
-              </select>
-              <select {...register('type')} id="type" placeholder="Selecione o tipo">
-                <option value="">Escolha um tipo</option>
+              <select
+                {...register('type')}
+                id="type"
+                placeholder="Qual foi o tipo da compra/gasto?"
+              >
+                <option value="">Qual foi o tipo da compra/gasto?</option>
                 <option value="Comida">Comida</option>
                 <option value="Lazer">Lazer</option>
                 <option value="Alcool">Alcool</option>
@@ -108,8 +123,27 @@ export function DialogComponent({ type, triggerText }: TriggerProps) {
                 <option value="Jogos">Jogos</option>
                 <option value="Locomoção">Locomoção</option>
               </select>
-              <select {...register('paymentForm')} id="type" placeholder="Selecione o tipo">
-                <option value="">Escolha um tipo</option>
+              <select
+                {...register('method')}
+                onChange={handleMethod}
+                id="method"
+                placeholder="Selecione o método"
+              >
+                <option value="">Qual foi o método?</option>
+                <option value="Cartão de crédito">Cartão de crédito</option>
+                <option value="Pix">Pix</option>
+                <option value="Boleto">Boleto</option>
+                <option value="Transferencia">Transferencia</option>
+              </select>
+
+              <select
+                {...register('paymentForm')}
+                id="paymentForm"
+                placeholder="Qual foi o método de pagamento?"
+                onChange={handlePaymentForm}
+                style={!isCard ? { display: 'none' } : { display: 'block' }}
+              >
+                <option value="Débito">Qual foi o método de pagamento?</option>
                 <option value="Crédito à vista">Crédito à vista</option>
                 <option value="Crédito parcelado">Crédito parcelado</option>
                 <option value="Débito">Débito</option>
@@ -119,12 +153,14 @@ export function DialogComponent({ type, triggerText }: TriggerProps) {
                 type="number"
                 id="installment"
                 placeholder="Digite o número de parcelas"
+                defaultValue={1}
+                style={!installmentPurchase ? { display: 'none' } : { display: 'block' }}
               />
               <input
                 {...register('value', { valueAsNumber: true })}
-                type="number"
+                type="text"
                 id="value"
-                placeholder="Digite o valor"
+                placeholder="R$000,00"
               />
               <S.TypeButton transactionType="outcome" type="submit">
                 Inserir Saída

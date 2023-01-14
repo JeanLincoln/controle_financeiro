@@ -35,7 +35,7 @@ export default function Summary() {
         </Card> */}
         <Card>
           <div>
-            <span>Sobras</span>
+            <span>Saldo</span>
             <P.Wallet size={32} color="#00887f" />
           </div>
           <h2>{pickings()}</h2>
