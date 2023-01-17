@@ -31,8 +31,12 @@ export const AsideContainer = styled('div', {
     width: '29rem',
     padding: '3rem 5rem',
 
-    'h3,h1,strong': {
+    'h1,strong': {
       display: 'block',
+    },
+
+    h3: {
+      display: 'inline-block',
     },
 
     ul: {
@@ -83,6 +87,9 @@ export const LinksContainer = styled('ul', {
   },
 
   a: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '1rem',
     textDecoration: 'none',
     color: '$gray200',
   },
