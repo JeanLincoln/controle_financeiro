@@ -29,6 +29,13 @@ export const SetIncomeTransactionButton = styled('button', {
           transition: 'background-color 0.2s',
         },
       },
+      fixed: {
+        background: '#b37400',
+        '&:not(:disabled):hover': {
+          background: '#d89c2c',
+          transition: 'background-color 0.2s',
+        },
+      },
     },
   },
 });
@@ -115,6 +122,13 @@ export const TypeButton = styled('button', {
         background: '$red200',
         '&:not(:disabled):hover': {
           background: '$red100',
+          transition: 'background-color 0.2s',
+        },
+      },
+      fixed: {
+        background: '#b37400',
+        '&:not(:disabled):hover': {
+          background: '#d89c2c',
           transition: 'background-color 0.2s',
         },
       },

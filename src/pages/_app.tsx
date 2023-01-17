@@ -23,6 +23,12 @@ export default function App({ Component, pageProps }: AppProps) {
           </S.LogoContainer>
           <S.LinksContainer>
             <S.LinkGroup>
+              <Link href="/Fixos">
+                <P.Infinity size={25} color="#b37400" />
+                <h3>Fixos</h3>
+              </Link>
+            </S.LinkGroup>
+            <S.LinkGroup>
               <Link href="/Entradas">
                 <P.ArrowCircleUp size={25} color="#00b37e" />
                 <h3>Entradas</h3>
@@ -36,7 +42,7 @@ export default function App({ Component, pageProps }: AppProps) {
             </S.LinkGroup>
             <S.LinkGroup>
               <Link href="/investimentos">
-                <P.CurrencyDollar size={25} color="#5abdf7" />
+                <P.ChartLineUp size={25} color="#5abdf7" />
                 <h3>Investimentos</h3>
               </Link>
             </S.LinkGroup>

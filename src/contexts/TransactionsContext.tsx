@@ -39,17 +39,34 @@ type CreateOutcomeTransaction = {
   value: number;
 };
 
+type FixedValues = {
+  id: string;
+  description: string;
+  type: string;
+  value: number;
+};
+
+type CreateFixedValues = {
+  description: string;
+  type: string;
+  value: number;
+};
+
 type TransactionContextType = {
   incomeValues: IncomeTransacion[];
   outcomeValues: OutcomeTransaction[];
+  fixedValues: FixedValues[];
   filterMonth: string;
   setFilterMonth: (FilterMonth: string) => void;
   fetchTransactions: () => void;
   incomeTotal: () => string;
   outcomeTotal: () => string;
   pickings: () => string;
-  newTransaction: (type: string, data: CreateIncomeTransaction | CreateOutcomeTransaction) => void;
-  deleteTransaction: (type: string, transactionId: string) => void;
+  newTransaction: (
+    type: string,
+    data: CreateIncomeTransaction | CreateOutcomeTransaction | CreateFixedValues
+  ) => Promise<void>;
+  deleteTransaction: (type: string, transactionId: string) => Promise<void>;
 };
 
 type CyclesContextProviderProps = {
@@ -61,15 +78,24 @@ export const TransactionsContext = createContext({} as TransactionContextType);
 export function TransactionsContextProvider({ children }: CyclesContextProviderProps) {
   const [incomeValues, setIncomeValues] = useState<IncomeTransacion[]>([]);
   const [outcomeValues, setOutcomeValues] = useState<OutcomeTransaction[]>([]);
+  const [fixedValues, setFixedValues] = useState<FixedValues[]>([]);
   const [filterMonth, setFilterMonth] = useState(
     `${new Date().getFullYear()}-${
       new Date().getMonth() + 1 > 9 ? new Date().getMonth() + 1 : `0${new Date().getMonth() + 1}`
     }`
   );
 
+  const insertFixedValues = () => {
+    const incomeFixedValues = fixedValues.filter((value) => value.type === 'Entrada');
+    const outcomeFixedValues = fixedValues.filter((value) => value.type === 'Saída');
+
+    console.log(incomeFixedValues, outcomeFixedValues);
+  };
+
   const fetchTransactions = async () => {
     const incomeResponse = await api.get('incomeTransactions');
     const outcomeResponse = await api.get('outcomeTransactions');
+    const fixedResponse = await api.get('fixedValues');
 
     const filteredIncomeResponse = incomeResponse.data.filter((transaction: IncomeTransacion) =>
       isSameMonth(
@@ -94,11 +120,13 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
 
     setIncomeValues(filteredIncomeResponse);
     setOutcomeValues(filteredOutcomeResponse);
+    setFixedValues(fixedResponse.data);
+    insertFixedValues();
   };
 
   const newTransaction = async (
     type: string,
-    data: CreateIncomeTransaction | CreateOutcomeTransaction
+    data: CreateIncomeTransaction | CreateOutcomeTransaction | CreateFixedValues
   ) => {
     if (type === 'income') {
       const response = await api.post('incomeTransactions', data);
@@ -176,6 +204,7 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
       value={{
         incomeValues,
         outcomeValues,
+        fixedValues,
         filterMonth,
         setFilterMonth,
         fetchTransactions,
