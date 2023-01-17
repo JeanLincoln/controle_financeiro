@@ -1,5 +1,5 @@
 import { Card } from '../components/Card';
-import * as S from '../styles/pages/valoresDeSaida';
+import * as S from '../styles/pages/Saidas';
 import * as P from 'phosphor-react';
 import { MonthSelector } from '../components/MonthSelector';
 import { useContext } from 'react';
@@ -44,6 +44,7 @@ export default function ValoresDeSaida() {
             <th>Parcela Atual</th>
             <th>Valor da parcela</th>
             <th>Valor da compra</th>
+            <th>Valor restante da compra</th>
           </tr>
         </thead>
         <tbody>
@@ -71,6 +72,11 @@ export default function ValoresDeSaida() {
                   <td>
                     {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(
                       value
+                    )}
+                  </td>
+                  <td>
+                    {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(
+                      value - (value / installment) * CalculateActualInstallment(date)
                     )}
                   </td>
                   <td>

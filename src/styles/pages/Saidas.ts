@@ -3,14 +3,11 @@ import { styled } from '..';
 export const Container = styled('div', {
   display: 'flex',
   flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
 
-  marginTop: '5rem',
+  marginTop: '3rem',
   gap: '3rem',
-
-  maxWidth: 1600,
-  margin: '3rem auto 0',
+  padding: '5rem 4rem 0',
+  width: '100%',
 });
 
 export const OutputValuesTable = styled('table', {
@@ -24,7 +21,7 @@ export const OutputValuesTable = styled('table', {
   fontSize: '$lg',
 
   td: {
-    padding: '1.25rem 2rem',
+    padding: '1.25rem 3rem',
     backgroundColor: '$gray700',
 
     '&:first-child': {

@@ -3,5 +3,6 @@ import { styled } from '..';
 export const Container = styled('div', {
   display: 'flex',
   flexDirection: 'column',
-  justifyContent: 'center',
+  width: '100%',
+  marginTop: '3rem',
 });

@@ -1,5 +1,5 @@
 import { Card } from '../components/Card';
-import * as S from '../styles/pages/valoresDeEntrada';
+import * as S from '../styles/pages/Entradas';
 import * as P from 'phosphor-react';
 import { MonthSelector } from '../components/MonthSelector';
 import { useContext } from 'react';

@@ -1,42 +1,63 @@
 import { styled } from '..';
 
-export const Header = styled('div', {
+export const AppContainer = styled('div', {
   display: 'flex',
-  justifyContent: 'space-between',
+  width: '100%',
+});
+
+export const AsideContainer = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
   alignItems: 'center',
 
   backgroundColor: '$gray700',
-  padding: '0 16rem',
 
-  height: '21.2rem',
+  height: '100vh',
+  padding: '3rem 2rem',
+  gap: '8rem',
+  width: '10rem',
+
+  transition: 'all ease 0.2s',
+
+  'h3,h1,strong': {
+    display: 'none',
+  },
+
+  ul: {
+    alignItems: 'center',
+  },
+
+  '&:hover': {
+    width: '29rem',
+    padding: '3rem 5rem',
+
+    'h3,h1,strong': {
+      display: 'block',
+    },
+
+    ul: {
+      alignItems: 'start',
+    },
+  },
 });
 
 export const LogoContainer = styled('div', {
   display: 'flex',
-  justifyContent: 'space-between',
+  flexDirection: 'column',
+  justifyContent: 'flex-start',
   alignItems: 'center',
+  textAlign: 'center',
 
   gap: '2rem',
+  flex: 1,
 
   svg: {
     color: '$green500',
   },
 
   h1: {
-    fontSize: '$3xl',
+    fontSize: '$2xl',
   },
-});
-
-export const LinksContainer = styled('ul', {
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  listStyle: 'none',
-  letterSpacing: '0.4rem',
-
-  gap: '4rem',
-
-  fontSize: '$lg',
 
   a: {
     textDecoration: 'none',
@@ -44,10 +65,45 @@ export const LinksContainer = styled('ul', {
   },
 });
 
+export const LinksContainer = styled('ul', {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'start',
+  listStyle: 'none',
+
+  letterSpacing: '0.2rem',
+  lineHeight: '25px',
+  width: '100%',
+  gap: '3rem',
+  flex: 3,
+
+  h3: {
+    fontSize: '$lg',
+    fontWeight: 'normal',
+  },
+
+  a: {
+    textDecoration: 'none',
+    color: '$gray200',
+  },
+});
+
+export const LinkGroup = styled('div', {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: '1rem',
+
+  svg: {
+    height: '100%',
+  },
+});
+
 export const UserContainer = styled('div', {
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
+  justifySelf: 'baseline',
 
   gap: '2rem',
 
