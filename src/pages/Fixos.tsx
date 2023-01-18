@@ -7,7 +7,7 @@ import { TransactionsContext } from '../contexts/TransactionsContext';
 import { DialogComponent } from '../components/Dialog';
 
 export default function ValoresDeEntrada() {
-  const { fixedValues } = useContext(TransactionsContext);
+  const { fixedValues, deleteTransaction } = useContext(TransactionsContext);
 
   const FormatValue = (value: number) =>
     new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
@@ -62,7 +62,7 @@ export default function ValoresDeEntrada() {
           </tr>
         </thead>
         <tbody>
-          {fixedValues.map(({ description, type, value }, index) => {
+          {fixedValues.map(({ id, description, type, value }, index) => {
             return (
               <tr key={index}>
                 <td>{description}</td>
@@ -77,6 +77,15 @@ export default function ValoresDeEntrada() {
                       value
                     )}
                   </S.TransactionValue>
+                </td>
+                <td>
+                  <button
+                    onClick={() => {
+                      deleteTransaction('fixed', id);
+                    }}
+                  >
+                    <P.Trash size={32} />
+                  </button>
                 </td>
               </tr>
             );

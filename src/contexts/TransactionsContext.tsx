@@ -128,17 +128,36 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
     type: string,
     data: CreateIncomeTransaction | CreateOutcomeTransaction | CreateFixedValues
   ) => {
-    if (type === 'income') {
+    const incomeTransaction = type === 'income';
+    const outcomeTransaction = type === 'outcome';
+    const fixedTransaction = type === 'fixed';
+    console.log(fixedTransaction);
+
+    if (incomeTransaction) {
       const response = await api.post('incomeTransactions', data);
       setIncomeValues((state) => [response.data, ...state]);
       return;
     }
-    const response = await api.post('outcomeTransactions', data);
-    setOutcomeValues((state) => [response.data, ...state]);
+
+    if (outcomeTransaction) {
+      const response = await api.post('outcomeTransactions', data);
+      setOutcomeValues((state) => [response.data, ...state]);
+      return;
+    }
+
+    if (fixedTransaction) {
+      const response = await api.post('fixedValues', data);
+      setFixedValues((state) => [response.data, ...state]);
+      return;
+    }
   };
 
   const deleteTransaction = async (type: string, transactionId: string) => {
-    if (type === 'income') {
+    const incomeTransaction = type === 'income';
+    const outcomeTransaction = type === 'outcome';
+    const fixedTransaction = type === 'fixed';
+
+    if (incomeTransaction) {
       await api.delete(`incomeTransactions/${transactionId}`);
       const remainingTransactions = incomeValues.filter(
         (transaction) => transaction.id !== transactionId
@@ -146,11 +165,22 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
       setIncomeValues(remainingTransactions);
       return;
     }
-    await api.delete(`outcomeTransactions/${transactionId}`);
-    const remainingTransactions = outcomeValues.filter(
-      (transaction) => transaction.id !== transactionId
-    );
-    setOutcomeValues(remainingTransactions);
+    if (outcomeTransaction) {
+      await api.delete(`outcomeTransactions/${transactionId}`);
+      const remainingTransactions = outcomeValues.filter(
+        (transaction) => transaction.id !== transactionId
+      );
+      setOutcomeValues(remainingTransactions);
+    }
+
+    if (fixedTransaction) {
+      await api.delete(`fixedValues/${transactionId}`);
+      const remainingTransactions = fixedValues.filter(
+        (transaction) => transaction.id !== transactionId
+      );
+      setFixedValues(remainingTransactions);
+      return;
+    }
   };
 
   useEffect(() => {

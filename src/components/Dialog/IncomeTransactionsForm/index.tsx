@@ -25,21 +25,13 @@ export const IncomeTransactionsForm = ({ type, setOpen }: TriggerProps) => {
     const formattedDate = new Date(data.date);
     const formattedValue = formatValue(data.value);
 
-    console.log({
+    newTransaction(type, {
       ...data,
       value: formattedValue,
       date: new Date(
         new Date(formattedDate.getFullYear(), formattedDate.getMonth(), formattedDate.getDate() + 1)
       ),
     });
-
-    // newTransaction(type, {
-    //   ...data,
-    //   value: formattedValue,
-    //   date: new Date(
-    //     new Date(formattedDate.getFullYear(), formattedDate.getMonth(), formattedDate.getDate() + 1)
-    //   ),
-    // });
 
     reset();
     setOpen(false);

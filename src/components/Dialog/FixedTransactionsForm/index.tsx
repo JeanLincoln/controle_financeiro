@@ -23,15 +23,10 @@ export const FixedTransactionsForm = ({ type, setOpen }: TriggerProps) => {
   const handleCreateIncomeTransaction = async (data: FixedTransactionProps) => {
     const formattedValue = formatValue(data.value);
 
-    console.log({
+    newTransaction(type, {
       ...data,
       value: formattedValue,
     });
-
-    // newTransaction(type, {
-    //   ...data,
-    //   value: formattedValue,
-    // });
 
     reset();
     setOpen(false);
@@ -55,7 +50,11 @@ export const FixedTransactionsForm = ({ type, setOpen }: TriggerProps) => {
         </S.InputGroup>
         <S.InputGroup>
           <span>Tipo:</span>
-          <input {...register('type')} type="text" id="origin" placeholder="Digite o tipo" />
+          <select {...register('type')} id="type">
+            <option value="">Entrada ou saída?</option>
+            <option value="Entrada">Entrada</option>
+            <option value="Saída">Saída</option>
+          </select>
         </S.InputGroup>
         <S.InputGroup>
           <span>Valor:</span>

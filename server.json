@@ -110,14 +110,16 @@
   ],
   "fixedValues": [
     {
+      "id": "1",
       "description": "Salário",
       "type": "Entrada",
-      "value": 2700.0
+      "value": 2700
     },
     {
+      "id": "2",
       "description": "FIES",
       "type": "Saída",
-      "value": 700.0
+      "value": 700
     }
   ]
 }
