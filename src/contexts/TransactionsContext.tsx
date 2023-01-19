@@ -1,7 +1,8 @@
 import { api } from '../../axios';
 import { ReactNode, createContext, useState, useEffect } from 'react';
-import { differenceInMonths, isSameMonth } from 'date-fns';
+import { differenceInMonths, format, formatISO, isSameMonth, isWithinInterval } from 'date-fns';
 import { FilterMonthDate, TransactionDate } from '../utils/DatesValidation';
+import { formatMonetary } from '../utils/FormatMonetaryValues';
 
 type IncomeTransacion = {
   id: string;
@@ -41,15 +42,25 @@ type CreateOutcomeTransaction = {
 
 type FixedValues = {
   id: string;
+  initialDate: Date;
+  finalDate: Date | undefined;
   description: string;
   type: string;
   value: number;
 };
 
 type CreateFixedValues = {
+  initialDate: Date;
+  finalDate: Date | undefined;
   description: string;
   type: string;
   value: number;
+};
+
+type TotalItensProps = {
+  incomeItens: number;
+  outcomeItens: number;
+  fixedItens: number;
 };
 
 type TransactionContextType = {
@@ -57,11 +68,13 @@ type TransactionContextType = {
   outcomeValues: OutcomeTransaction[];
   fixedValues: FixedValues[];
   filterMonth: string;
+  totalItens: TotalItensProps;
   setFilterMonth: (FilterMonth: string) => void;
   fetchTransactions: () => void;
-  incomeTotal: () => string;
-  outcomeTotal: () => string;
-  pickings: () => string;
+  monthlyIncomeTotal: () => number;
+  monthlyOutcomeTotal: () => number;
+  fixedIncomeTotal: () => number;
+  fixedOutcomeTotal: () => number;
   newTransaction: (
     type: string,
     data: CreateIncomeTransaction | CreateOutcomeTransaction | CreateFixedValues
@@ -79,18 +92,16 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
   const [incomeValues, setIncomeValues] = useState<IncomeTransacion[]>([]);
   const [outcomeValues, setOutcomeValues] = useState<OutcomeTransaction[]>([]);
   const [fixedValues, setFixedValues] = useState<FixedValues[]>([]);
+  const [totalItens, setTotalItens] = useState<TotalItensProps>({
+    incomeItens: 0,
+    outcomeItens: 0,
+    fixedItens: 0,
+  });
   const [filterMonth, setFilterMonth] = useState(
     `${new Date().getFullYear()}-${
       new Date().getMonth() + 1 > 9 ? new Date().getMonth() + 1 : `0${new Date().getMonth() + 1}`
     }`
   );
-
-  const insertFixedValues = () => {
-    const incomeFixedValues = fixedValues.filter((value) => value.type === 'Entrada');
-    const outcomeFixedValues = fixedValues.filter((value) => value.type === 'Saída');
-
-    console.log(incomeFixedValues, outcomeFixedValues);
-  };
 
   const fetchTransactions = async () => {
     const incomeResponse = await api.get('incomeTransactions');
@@ -121,7 +132,11 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
     setIncomeValues(filteredIncomeResponse);
     setOutcomeValues(filteredOutcomeResponse);
     setFixedValues(fixedResponse.data);
-    insertFixedValues();
+    setTotalItens({
+      incomeItens: Number(incomeResponse.headers.get('x-total-count')),
+      outcomeItens: Number(outcomeResponse.headers.get('x-total-count')),
+      fixedItens: Number(fixedResponse.headers.get('x-total-count')),
+    });
   };
 
   const newTransaction = async (
@@ -131,7 +146,6 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
     const incomeTransaction = type === 'income';
     const outcomeTransaction = type === 'outcome';
     const fixedTransaction = type === 'fixed';
-    console.log(fixedTransaction);
 
     if (incomeTransaction) {
       const response = await api.post('incomeTransactions', data);
@@ -187,46 +201,69 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
     fetchTransactions();
   }, [filterMonth]);
 
-  const incomeTotal = () => {
+  const monthlyIncomeTotal = () => {
     const total = incomeValues.reduce((acc, income) => {
       acc = acc += income.value;
       return acc;
     }, 0);
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-    }).format(total);
+    return total;
   };
 
-  const outcomeTotal = () => {
+  const monthlyOutcomeTotal = () => {
     const total = outcomeValues.reduce((acc, income) => {
       acc = acc += income.installment > 1 ? income.value / income.installment : income.value;
       return acc;
     }, 0);
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-    }).format(total);
+    return total;
   };
 
-  const pickings = () => {
-    const incomesTotal = incomeValues.reduce((acc, income) => {
-      acc = acc += income.value;
+  const fixedIncomeTotal = () => {
+    const fixedIncomesTotal = fixedValues.reduce((acc, income) => {
+      const fixedIncome = income.type === 'Entrada';
+      const incomeInitialDate = new Date(income.initialDate);
+      const incomeFinalDate = income.finalDate ? new Date(income.finalDate) : new Date(2999, 1, 1);
+      const filteredDate = new Date(
+        Number(filterMonth.split('-')[0]),
+        Number(filterMonth.split('-')[1]) - 1
+      );
+
+      if (
+        fixedIncome &&
+        isWithinInterval(filteredDate, {
+          start: incomeInitialDate,
+          end: incomeFinalDate,
+        })
+      ) {
+        acc = acc += income.value;
+      }
       return acc;
     }, 0);
 
-    const outcomesTotal = outcomeValues.reduce((acc, income) => {
-      acc = acc += income.installment > 1 ? income.value / income.installment : income.value;
+    return fixedIncomesTotal;
+  };
+
+  const fixedOutcomeTotal = () => {
+    const fixedOutcomesTotal = fixedValues.reduce((acc, income) => {
+      const fixedOutcome = income.type === 'Saída';
+      const outcomeInitialDate = new Date(income.initialDate);
+      const outcomeFinalDate = income.finalDate ? new Date(income.finalDate) : new Date(2999, 1, 1);
+      const filteredDate = new Date(
+        Number(filterMonth.split('-')[0]),
+        Number(filterMonth.split('-')[1]) - 1
+      );
+      if (
+        fixedOutcome &&
+        isWithinInterval(filteredDate, {
+          start: outcomeInitialDate,
+          end: outcomeFinalDate,
+        })
+      ) {
+        acc = acc += income.value;
+      }
+
       return acc;
     }, 0);
-
-    const total = incomesTotal - outcomesTotal;
-    console.log({ incomesTotal: incomesTotal, outcomesTotal: outcomesTotal });
-
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-    }).format(total);
+    return fixedOutcomesTotal;
   };
 
   return (
@@ -236,11 +273,13 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
         outcomeValues,
         fixedValues,
         filterMonth,
+        totalItens,
         setFilterMonth,
         fetchTransactions,
-        incomeTotal,
-        outcomeTotal,
-        pickings,
+        monthlyIncomeTotal,
+        monthlyOutcomeTotal,
+        fixedIncomeTotal,
+        fixedOutcomeTotal,
         newTransaction,
         deleteTransaction,
       }}
