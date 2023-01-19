@@ -7,10 +7,19 @@ import { TransactionsContext } from '../contexts/TransactionsContext';
 import { DialogComponent } from '../components/Dialog';
 import { format, differenceInMonths, addMonths } from 'date-fns';
 import { FilterMonthDate, TransactionDate } from '../utils/DatesValidation';
+import { formatMonetary } from '../utils/FormatMonetaryValues';
 
 export default function ValoresDeSaida() {
-  const { outcomeValues, outcomeTotal, deleteTransaction, filterMonth } =
-    useContext(TransactionsContext);
+  const {
+    outcomeValues,
+    totalItens,
+    fixedOutcomeTotal,
+    monthlyOutcomeTotal,
+    deleteTransaction,
+    filterMonth,
+  } = useContext(TransactionsContext);
+
+  console.log(totalItens.outcomeItens);
 
   const CalculateActualInstallment = (date: Date) => {
     const datesDifference = differenceInMonths(FilterMonthDate(filterMonth), TransactionDate(date));
@@ -24,10 +33,26 @@ export default function ValoresDeSaida() {
         <MonthSelector />
         <Card>
           <div>
-            <span>Saídas</span>
+            <span>Saídas Fixas</span>
             <P.ArrowCircleDown size={32} color="#f75a68" />
           </div>
-          <h2>{outcomeTotal()}</h2>
+          <h2>{formatMonetary(fixedOutcomeTotal())}</h2>
+        </Card>
+        <P.PlusCircle size={32} />
+        <Card>
+          <div>
+            <span>Saídas Mensais</span>
+            <P.ArrowCircleDown size={32} color="#f75a68" />
+          </div>
+          <h2>{formatMonetary(monthlyOutcomeTotal())}</h2>
+        </Card>
+        <P.Equals size={32} />
+        <Card>
+          <div>
+            <span>Total de Saídas</span>
+            <P.ArrowCircleDown size={32} color="#f75a68" />
+          </div>
+          <h2>{formatMonetary(fixedOutcomeTotal() + monthlyOutcomeTotal())}</h2>
         </Card>
         <DialogComponent type="outcome" triggerText="Novo Valor de Saída" />
       </S.ElementsContainer>
@@ -64,18 +89,10 @@ export default function ValoresDeSaida() {
                   <td>{paymentForm}</td>
                   <td>{installment}</td>
                   <td>{CalculateActualInstallment(date)}</td>
+                  <td>{formatMonetary(value / installment)}</td>
+                  <td>{formatMonetary(value)}</td>
                   <td>
-                    {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(
-                      value / installment
-                    )}
-                  </td>
-                  <td>
-                    {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(
-                      value
-                    )}
-                  </td>
-                  <td>
-                    {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(
+                    {formatMonetary(
                       value - (value / installment) * CalculateActualInstallment(date)
                     )}
                   </td>

@@ -17,6 +17,7 @@
 
 # misc
 .DS_Store
+/server.json
 *.pem
 
 # debug

@@ -29,97 +29,484 @@
       "id": "ph1ssuI"
     },
     {
-      "date": "2023-01-05T03:00:00.000Z",
-      "description": "teste",
-      "origin": "teste",
-      "value": 10.22,
-      "id": "2K3O-Ki"
+      "date": "2023-01-02T03:00:00.000Z",
+      "description": "Rendimento Poupança",
+      "origin": "Nubank",
+      "value": 395.03,
+      "id": "m7vnQDi"
+    },
+    {
+      "date": "2023-01-11T03:00:00.000Z",
+      "description": "Freelancer",
+      "origin": "Gabriel / Prime",
+      "value": 1350,
+      "id": "EQFiFsw"
     }
   ],
   "outcomeTransactions": [
     {
-      "id": "1",
-      "date": "2022-11-11T03:00:00.000Z",
-      "description": "Hamburguer",
+      "date": "2023-01-17T03:00:00.000Z",
+      "description": "Manutenção moto",
+      "type": "Locomoção",
       "method": "Pix",
-      "type": "Comida",
       "paymentForm": "Débito",
       "installment": 1,
-      "value": 30
+      "value": 988,
+      "id": 1
     },
     {
-      "id": "2",
-      "date": "2022-11-11T03:00:00.000Z",
-      "description": "No Mans sky",
-      "method": "Credit Card",
-      "type": "Jogo",
+      "date": "2023-01-01T03:00:00.000Z",
+      "description": "Drogaria",
+      "type": "Saúde/Remedios",
+      "method": "Cartão de crédito",
       "paymentForm": "Crédito à vista",
       "installment": 1,
-      "value": 100
+      "value": 28.26,
+      "id": 3
     },
     {
-      "id": "3",
-      "date": "2022-11-11T03:00:00.000Z",
-      "description": "Ryzen 5 5500",
-      "method": "Credit Card",
-      "type": "Eletronic",
-      "paymentForm": "Crédito à parcelado",
-      "installment": 12,
-      "value": 1200
-    },
-    {
-      "date": "2023-01-13T03:00:00.000Z",
-      "description": "Pizza",
-      "method": "Crédito à vista",
-      "type": "Comida",
-      "paymentForm": "Crédito parcelado",
-      "value": 100,
-      "installment": 5,
-      "id": "yENx5d_"
-    },
-    {
-      "date": "2022-12-13T00:00:00.000Z",
-      "description": "marmita",
-      "method": "Crédito à vista",
-      "type": "Comida",
-      "paymentForm": "Crédito parcelado",
-      "installment": 3,
-      "value": 20,
-      "id": "4C8bf1f"
-    },
-    {
-      "date": "2023-02-08T03:00:00.000Z",
-      "description": "teste",
+      "date": "2023-01-01T03:00:00.000Z",
+      "description": "Marciano FasFood",
       "type": "Comida",
       "method": "Cartão de crédito",
-      "paymentForm": "Crédito parcelado",
-      "installment": 10,
-      "value": 500,
-      "id": "c36wbmW"
+      "paymentForm": "Crédito à vista",
+      "installment": 1,
+      "value": 66.88,
+      "id": 4
     },
     {
-      "date": "2023-01-12T03:00:00.000Z",
-      "description": "teste",
+      "date": "2023-01-01T03:00:00.000Z",
+      "description": "Estacionamento Itau",
+      "type": "Locomoção",
+      "method": "Cartão de crédito",
+      "paymentForm": "Crédito à vista",
+      "installment": 1,
+      "value": 5,
+      "id": 5
+    },
+    {
+      "date": "2023-01-01T03:00:00.000Z",
+      "description": "Liquidificador",
+      "type": "Casa",
+      "method": "Cartão de crédito",
+      "paymentForm": "Crédito parcelado",
+      "installment": 2,
+      "value": 33.33,
+      "id": 6
+    },
+    {
+      "date": "2023-01-01T03:00:00.000Z",
+      "description": "Travesseiros Nasa",
+      "type": "Casa",
+      "method": "Cartão de crédito",
+      "paymentForm": "Crédito parcelado",
+      "installment": 3,
+      "value": 177.65,
+      "id": 7
+    },
+    {
+      "date": "2023-01-01T03:00:00.000Z",
+      "description": "Cuecas Hering",
+      "type": "Vestimenta",
+      "method": "Cartão de crédito",
+      "paymentForm": "Crédito parcelado",
+      "installment": 2,
+      "value": 105,
+      "id": 8
+    },
+    {
+      "date": "2023-01-01T03:00:00.000Z",
+      "description": "Academia",
+      "type": "Musculação",
+      "method": "Cartão de crédito",
+      "paymentForm": "Crédito à vista",
+      "installment": 1,
+      "value": 100,
+      "id": 9
+    },
+    {
+      "date": "2023-01-01T03:00:00.000Z",
+      "description": "Padaria",
+      "type": "Comida",
+      "method": "Cartão de crédito",
+      "paymentForm": "Crédito à vista",
+      "installment": 1,
+      "value": 15.07,
+      "id": 10
+    },
+    {
+      "date": "2023-01-01T03:00:00.000Z",
+      "description": "Uber",
+      "type": "Locomoção",
+      "method": "Cartão de crédito",
+      "paymentForm": "Crédito à vista",
+      "installment": 1,
+      "value": 10.18,
+      "id": 11
+    },
+    {
+      "date": "2023-01-01T03:00:00.000Z",
+      "description": "Tefon,silicone, fita isolante",
+      "type": "Casa",
+      "method": "Cartão de crédito",
+      "paymentForm": "Crédito à vista",
+      "installment": 1,
+      "value": 11.32,
+      "id": 12
+    },
+    {
+      "date": "2023-01-01T03:00:00.000Z",
+      "description": "Açougue - Costelinha",
+      "type": "Comida",
+      "method": "Cartão de crédito",
+      "paymentForm": "Crédito à vista",
+      "installment": 1,
+      "value": 36.06,
+      "id": 13
+    },
+    {
+      "date": "2023-01-01T03:00:00.000Z",
+      "description": "Drogaria",
+      "type": "Saúde/Remedios",
+      "method": "Cartão de crédito",
+      "paymentForm": "Crédito à vista",
+      "installment": 1,
+      "value": 10,
+      "id": 14
+    },
+    {
+      "date": "2023-01-01T03:00:00.000Z",
+      "description": "Carrefour - Role Senhorinha",
+      "type": "Alcool",
+      "method": "Cartão de crédito",
+      "paymentForm": "Crédito à vista",
+      "installment": 1,
+      "value": 26.05,
+      "id": 15
+    },
+    {
+      "date": "2023-01-01T03:00:00.000Z",
+      "description": "Supermercado BH - Role",
+      "type": "Alcool",
+      "method": "Cartão de crédito",
+      "paymentForm": "Crédito à vista",
+      "installment": 1,
+      "value": 33.33,
+      "id": 16
+    },
+    {
+      "date": "2023-01-01T03:00:00.000Z",
+      "description": "Copos de cobre",
+      "type": "Alcool",
+      "method": "Cartão de crédito",
+      "paymentForm": "Crédito parcelado",
+      "installment": 3,
+      "value": 24.98,
+      "id": 17
+    },
+    {
+      "date": "2022-12-01T03:00:00.000Z",
+      "description": "Coisas Casa",
+      "type": "Casa",
+      "method": "Cartão de crédito",
+      "paymentForm": "Crédito parcelado",
+      "installment": 2,
+      "value": 13.27,
+      "id": 18
+    },
+    {
+      "date": "2022-12-01T03:00:00.000Z",
+      "description": "Calça Preta",
+      "type": "Vestimenta",
+      "method": "Cartão de crédito",
+      "paymentForm": "Crédito parcelado",
+      "installment": 2,
+      "value": 140,
+      "id": 19
+    },
+    {
+      "date": "2022-12-01T03:00:00.000Z",
+      "description": "Ventilador de mesa",
+      "type": "Casa",
+      "method": "Cartão de crédito",
+      "paymentForm": "Crédito parcelado",
+      "installment": 6,
+      "value": 44,
+      "id": 20
+    },
+    {
+      "date": "2022-12-01T03:00:00.000Z",
+      "description": "Chivalry 2",
+      "type": "Jogos",
+      "method": "Cartão de crédito",
+      "paymentForm": "Crédito parcelado",
+      "installment": 3,
+      "value": 45.29,
+      "id": 21
+    },
+    {
+      "date": "2022-11-01T03:00:00.000Z",
+      "description": "Coisas Casa",
+      "type": "Casa",
+      "method": "Cartão de crédito",
+      "paymentForm": "Crédito parcelado",
+      "installment": 3,
+      "value": 11.85,
+      "id": 22
+    },
+    {
+      "date": "2022-11-01T03:00:00.000Z",
+      "description": "Jogo Panela Tramontina",
+      "type": "Casa",
+      "method": "Cartão de crédito",
+      "paymentForm": "Crédito parcelado",
+      "installment": 8,
+      "value": 123.3,
+      "id": 23
+    },
+    {
+      "date": "2022-11-01T03:00:00.000Z",
+      "description": "Loja Eletrica - Coisas Casa",
+      "type": "Casa",
+      "method": "Cartão de crédito",
+      "paymentForm": "Crédito parcelado",
+      "installment": 3,
+      "value": 204.14,
+      "id": 24
+    },
+    {
+      "date": "2022-11-01T03:00:00.000Z",
+      "description": "Fallout",
+      "type": "Jogos",
+      "method": "Cartão de crédito",
+      "paymentForm": "Crédito parcelado",
+      "installment": 3,
+      "value": 25.23,
+      "id": 25
+    },
+    {
+      "date": "2022-09-01T03:00:00.000Z",
+      "description": "Fone KZ",
       "type": "Lazer",
       "method": "Cartão de crédito",
       "paymentForm": "Crédito parcelado",
+      "installment": 6,
+      "value": 58.44,
+      "id": 26
+    },
+    {
+      "date": "2023-02-01T03:00:00.000Z",
+      "description": "Café da manhã",
+      "type": "Comida",
+      "method": "Cartão de crédito",
+      "paymentForm": "Crédito à vista",
+      "installment": 1,
+      "value": 41,
+      "id": 27
+    },
+    {
+      "date": "2023-02-01T03:00:00.000Z",
+      "description": "Hamburguer Gorillas",
+      "type": "Comida",
+      "method": "Cartão de crédito",
+      "paymentForm": "Crédito à vista",
+      "installment": 1,
+      "value": 43.8,
+      "id": 28
+    },
+    {
+      "date": "2023-02-01T03:00:00.000Z",
+      "description": "Estacionamento Itau",
+      "type": "Locomoção",
+      "method": "Cartão de crédito",
+      "paymentForm": "Crédito à vista",
+      "installment": 1,
+      "value": 5,
+      "id": 29
+    },
+    {
+      "date": "2023-02-01T03:00:00.000Z",
+      "description": "Chaveiro Rick and morty",
+      "type": "Casa",
+      "method": "Cartão de crédito",
+      "paymentForm": "Crédito à vista",
+      "installment": 1,
+      "value": 10,
+      "id": 30
+    },
+    {
+      "date": "2023-02-01T03:00:00.000Z",
+      "description": "Presente Mãe - Colar",
+      "type": "Presente",
+      "method": "Cartão de crédito",
+      "paymentForm": "Crédito parcelado",
+      "installment": 2,
+      "value": 116.82,
+      "id": 31
+    },
+    {
+      "date": "2023-02-01T03:00:00.000Z",
+      "description": "Padaria ",
+      "type": "Comida",
+      "method": "Cartão de crédito",
+      "paymentForm": "Crédito à vista",
+      "installment": 1,
+      "value": 9.99,
+      "id": 32
+    },
+    {
+      "date": "2023-02-01T03:00:00.000Z",
+      "description": "Monster Hunter e Cult of the lamb",
+      "type": "Jogos",
+      "method": "Cartão de crédito",
+      "paymentForm": "Crédito parcelado",
       "installment": 4,
-      "value": 10.22,
-      "id": "970ZdRD"
+      "value": 101.95,
+      "id": 33
+    },
+    {
+      "date": "2023-01-01T03:00:00.000Z",
+      "description": "Jogo Steam",
+      "type": "Jogos",
+      "method": "Cartão de crédito",
+      "paymentForm": "Crédito parcelado",
+      "installment": 3,
+      "value": 36,
+      "id": 34
+    },
+    {
+      "date": "2022-06-01T03:00:00.000Z",
+      "description": "Monitor LG",
+      "type": "Eletrônicos",
+      "method": "Cartão de crédito",
+      "paymentForm": "Crédito parcelado",
+      "installment": 10,
+      "value": 1878.9,
+      "id": 35
+    },
+    {
+      "date": "2022-05-01T03:00:00.000Z",
+      "description": "Alura",
+      "type": "Vestimenta",
+      "method": "Cartão de crédito",
+      "paymentForm": "Crédito parcelado",
+      "installment": 12,
+      "value": 918,
+      "id": 36
+    },
+    {
+      "date": "2022-12-01T03:00:00.000Z",
+      "description": "Cod",
+      "type": "Jogos",
+      "method": "Cartão de crédito",
+      "paymentForm": "Crédito parcelado",
+      "installment": 3,
+      "value": 419.9,
+      "id": 37
+    },
+    {
+      "date": "2022-11-01T03:00:00.000Z",
+      "description": "Máquina de lavar",
+      "type": "Casa",
+      "method": "Cartão de crédito",
+      "paymentForm": "Crédito parcelado",
+      "installment": 10,
+      "value": 666.67,
+      "id": 38
+    },
+    {
+      "date": "2022-11-01T03:00:00.000Z",
+      "description": "Dying Light 2",
+      "type": "Jogos",
+      "method": "Cartão de crédito",
+      "paymentForm": "Crédito parcelado",
+      "installment": 5,
+      "value": 131.05,
+      "id": 39
+    },
+    {
+      "date": "2022-11-01T03:00:00.000Z",
+      "description": "Ignição moto",
+      "type": "Locomoção",
+      "method": "Cartão de crédito",
+      "paymentForm": "Crédito parcelado",
+      "installment": 5,
+      "value": 40,
+      "id": 40
     }
   ],
   "fixedValues": [
     {
       "id": "1",
+      "initialDate": "2023-01-01T03:00:00.000Z",
+      "finalDate": "",
       "description": "Salário",
       "type": "Entrada",
       "value": 2700
     },
     {
       "id": "2",
+      "initialDate": "2023-01-01T03:00:00.000Z",
+      "finalDate": "2044-01-02T03:00:00.000Z",
       "description": "FIES",
       "type": "Saída",
       "value": 700
+    },
+    {
+      "initialDate": "2023-01-01",
+      "description": "Gastos Mensais moto",
+      "type": "Saída",
+      "value": 148.83,
+      "id": "Q0Q-O59"
+    },
+    {
+      "initialDate": "2023-01-01",
+      "description": "Amazon Prime",
+      "type": "Saída",
+      "value": 10,
+      "id": "n_98t4j"
+    },
+    {
+      "initialDate": "2023-01-01",
+      "description": "HBO MAX",
+      "type": "Saída",
+      "value": 13.95,
+      "id": "_srfvur"
+    },
+    {
+      "initialDate": "2023-01-01",
+      "description": "Corte de cabelo",
+      "type": "Saída",
+      "value": 30,
+      "id": "DMA4bec"
+    },
+    {
+      "initialDate": "2023-01-01",
+      "description": "Internet Vivo (Celular)",
+      "type": "Saída",
+      "value": 60,
+      "id": "jTxFNgP"
+    },
+    {
+      "initialDate": "2023-01-01",
+      "description": "Internet Maxxnet Mãe",
+      "type": "Saída",
+      "value": 100,
+      "id": "ucBUbmz"
+    },
+    {
+      "initialDate": "2023-01-01",
+      "description": "Aluguel + condominio",
+      "type": "Saída",
+      "value": 463,
+      "id": "v9bYkU1"
+    },
+    {
+      "initialDate": "2023-01-01",
+      "description": "GamePass",
+      "type": "Saída",
+      "value": 30,
+      "id": "tQzuWsz"
     }
   ]
 }

@@ -77,12 +77,18 @@ export const OutcomeTransactionsForm = ({ type, setOpen }: TriggerProps) => {
           <span>Tipo:</span>
           <select {...register('type')} id="type" placeholder="Qual foi o tipo da compra/gasto?">
             <option value="">Qual foi o tipo da compra/gasto?</option>
-            <option value="Comida">Comida</option>
-            <option value="Lazer">Lazer</option>
             <option value="Alcool">Alcool</option>
-            <option value="Vestimenta">Vestimenta</option>
+            <option value="Casa">Casa</option>
+            <option value="Vestimenta">Curso/Estudo</option>
+            <option value="Comida">Comida</option>
+            <option value="Eletrônicos">Eletrônicos</option>
             <option value="Jogos">Jogos</option>
+            <option value="Lazer">Lazer</option>
             <option value="Locomoção">Locomoção</option>
+            <option value="Musculação">Musculação</option>
+            <option value="Presente">Presente</option>
+            <option value="Saúde/Remedios">Saúde/Remedios</option>
+            <option value="Vestimenta">Vestimenta</option>
           </select>
         </S.InputGroup>
         <S.InputGroup>

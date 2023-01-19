@@ -6,19 +6,38 @@ import { useContext } from 'react';
 import { TransactionsContext } from '../contexts/TransactionsContext';
 import { DialogComponent } from '../components/Dialog';
 import { format } from 'date-fns';
+import { formatMonetary } from '../utils/FormatMonetaryValues';
 
 export default function ValoresDeEntrada() {
-  const { incomeValues, incomeTotal, deleteTransaction } = useContext(TransactionsContext);
+  const { incomeValues, fixedIncomeTotal, monthlyIncomeTotal, deleteTransaction } =
+    useContext(TransactionsContext);
+
   return (
     <S.Container>
       <S.ElementsContainer>
         <MonthSelector />
         <Card>
           <div>
-            <span>Entradas</span>
+            <span>Entradas Fixas</span>
             <P.ArrowCircleUp size={32} color="#00b37e" />
           </div>
-          <h2>{incomeTotal()}</h2>
+          <h2>{formatMonetary(fixedIncomeTotal())}</h2>
+        </Card>
+        <P.PlusCircle size={32} />
+        <Card>
+          <div>
+            <span>Entradas Mensais</span>
+            <P.ArrowCircleUp size={32} color="#00b37e" />
+          </div>
+          <h2>{formatMonetary(monthlyIncomeTotal())}</h2>
+        </Card>
+        <P.Equals size={32} />
+        <Card>
+          <div>
+            <span>Total de entradas</span>
+            <P.ArrowCircleUp size={32} color="#00b37e" />
+          </div>
+          <h2>{formatMonetary(fixedIncomeTotal() + monthlyIncomeTotal())}</h2>
         </Card>
         <DialogComponent type="income" triggerText="Novo Valor de Entrada" />
       </S.ElementsContainer>
@@ -38,11 +57,7 @@ export default function ValoresDeEntrada() {
                 <td>{format(new Date(date), 'dd/MM/yyyy')}</td>
                 <td>{description}</td>
                 <td>{origin}</td>
-                <td>
-                  {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(
-                    value
-                  )}
-                </td>
+                <td>{formatMonetary(value)}</td>
                 <td>
                   <button
                     onClick={() => {

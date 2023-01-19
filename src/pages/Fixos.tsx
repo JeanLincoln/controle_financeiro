@@ -5,12 +5,11 @@ import { MonthSelector } from '../components/MonthSelector';
 import { useContext } from 'react';
 import { TransactionsContext } from '../contexts/TransactionsContext';
 import { DialogComponent } from '../components/Dialog';
+import { format } from 'date-fns';
+import { formatMonetary } from '../utils/FormatMonetaryValues';
 
 export default function ValoresDeEntrada() {
   const { fixedValues, deleteTransaction } = useContext(TransactionsContext);
-
-  const FormatValue = (value: number) =>
-    new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
 
   const FixedSubTotal = (type: string) => {
     if (type === 'incomes') {
@@ -18,13 +17,13 @@ export default function ValoresDeEntrada() {
         acc = fixedValue.type === 'Entrada' ? (acc += fixedValue.value) : (acc += 0);
         return acc;
       }, 0);
-      return FormatValue(fixedIncomeSubTotal);
+      return formatMonetary(fixedIncomeSubTotal);
     } else {
       const fixedOutcomeSubTotal = fixedValues.reduce((acc, fixedValue) => {
         acc = fixedValue.type === 'Saída' ? (acc += fixedValue.value) : (acc += 0);
         return acc;
       }, 0);
-      return FormatValue(fixedOutcomeSubTotal);
+      return formatMonetary(fixedOutcomeSubTotal);
     }
   };
 
@@ -56,15 +55,19 @@ export default function ValoresDeEntrada() {
       <S.FixedValuesTable>
         <thead>
           <tr>
+            <th>Data de inicio</th>
+            <th>Data de fim</th>
             <th>Descrição</th>
             <th>Tipo</th>
             <th>Valor</th>
           </tr>
         </thead>
         <tbody>
-          {fixedValues.map(({ id, description, type, value }, index) => {
+          {fixedValues.map(({ id, initialDate, finalDate, description, type, value }, index) => {
             return (
               <tr key={index}>
+                <td>{format(new Date(initialDate), 'dd/MM/yyyy')}</td>
+                <td>{finalDate ? format(new Date(finalDate), 'dd/MM/yyyy') : 'Não determinado'}</td>
                 <td>{description}</td>
                 <td>
                   <S.TransactionType transactionType={type === 'Entrada' ? 'income' : 'outcome'}>
@@ -73,9 +76,7 @@ export default function ValoresDeEntrada() {
                 </td>
                 <td>
                   <S.TransactionValue transactionType={type === 'Entrada' ? 'income' : 'outcome'}>
-                    {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(
-                      value
-                    )}
+                    {formatMonetary(value)}
                   </S.TransactionValue>
                 </td>
                 <td>
