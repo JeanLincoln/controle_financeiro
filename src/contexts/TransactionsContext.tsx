@@ -57,18 +57,11 @@ type CreateFixedValues = {
   value: number;
 };
 
-type TotalItensProps = {
-  incomeItens: number;
-  outcomeItens: number;
-  fixedItens: number;
-};
-
 type TransactionContextType = {
   incomeValues: IncomeTransacion[];
   outcomeValues: OutcomeTransaction[];
   fixedValues: FixedValues[];
   filterMonth: string;
-  totalItens: TotalItensProps;
   setFilterMonth: (FilterMonth: string) => void;
   fetchTransactions: () => void;
   monthlyIncomeTotal: () => number;
@@ -92,11 +85,6 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
   const [incomeValues, setIncomeValues] = useState<IncomeTransacion[]>([]);
   const [outcomeValues, setOutcomeValues] = useState<OutcomeTransaction[]>([]);
   const [fixedValues, setFixedValues] = useState<FixedValues[]>([]);
-  const [totalItens, setTotalItens] = useState<TotalItensProps>({
-    incomeItens: 0,
-    outcomeItens: 0,
-    fixedItens: 0,
-  });
   const [filterMonth, setFilterMonth] = useState(
     `${new Date().getFullYear()}-${
       new Date().getMonth() + 1 > 9 ? new Date().getMonth() + 1 : `0${new Date().getMonth() + 1}`
@@ -132,11 +120,6 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
     setIncomeValues(filteredIncomeResponse);
     setOutcomeValues(filteredOutcomeResponse);
     setFixedValues(fixedResponse.data);
-    setTotalItens({
-      incomeItens: Number(incomeResponse.headers.get('x-total-count')),
-      outcomeItens: Number(outcomeResponse.headers.get('x-total-count')),
-      fixedItens: Number(fixedResponse.headers.get('x-total-count')),
-    });
   };
 
   const newTransaction = async (
@@ -273,7 +256,6 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
         outcomeValues,
         fixedValues,
         filterMonth,
-        totalItens,
         setFilterMonth,
         fetchTransactions,
         monthlyIncomeTotal,

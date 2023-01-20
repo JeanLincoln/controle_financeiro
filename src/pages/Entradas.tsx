@@ -2,20 +2,30 @@ import { Card } from '../components/Card';
 import * as S from '../styles/pages/Entradas';
 import * as P from 'phosphor-react';
 import { MonthSelector } from '../components/MonthSelector';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { TransactionsContext } from '../contexts/TransactionsContext';
 import { DialogComponent } from '../components/Dialog';
 import { format } from 'date-fns';
 import { formatMonetary } from '../utils/FormatMonetaryValues';
+import { Pagination } from '../components/Pagination';
 
 export default function ValoresDeEntrada() {
   const { incomeValues, fixedIncomeTotal, monthlyIncomeTotal, deleteTransaction } =
     useContext(TransactionsContext);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itensPerPage] = useState(8);
+
+  const indexOfLastItem = currentPage * itensPerPage;
+  const indexOfFirstItem = indexOfLastItem - itensPerPage;
+  const currentItens = incomeValues.slice(indexOfFirstItem, indexOfLastItem);
+
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
   return (
     <S.Container>
       <S.ElementsContainer>
-        <MonthSelector />
+        <MonthSelector setCurrentPage={setCurrentPage} />
         <Card>
           <div>
             <span>Entradas Fixas</span>
@@ -51,7 +61,7 @@ export default function ValoresDeEntrada() {
           </tr>
         </thead>
         <tbody>
-          {incomeValues.map(({ id, date, description, origin, value }) => {
+          {currentItens.map(({ id, date, description, origin, value }) => {
             return (
               <tr key={id}>
                 <td>{format(new Date(date), 'dd/MM/yyyy')}</td>
@@ -72,6 +82,12 @@ export default function ValoresDeEntrada() {
           })}
         </tbody>
       </S.IncomeValuesTable>
+      <Pagination
+        currentPage={currentPage}
+        itensPerPage={itensPerPage}
+        totalItens={incomeValues.length}
+        paginate={paginate}
+      />
     </S.Container>
   );
 }

@@ -2,24 +2,25 @@ import { Card } from '../components/Card';
 import * as S from '../styles/pages/Saidas';
 import * as P from 'phosphor-react';
 import { MonthSelector } from '../components/MonthSelector';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { TransactionsContext } from '../contexts/TransactionsContext';
 import { DialogComponent } from '../components/Dialog';
 import { format, differenceInMonths, addMonths } from 'date-fns';
 import { FilterMonthDate, TransactionDate } from '../utils/DatesValidation';
 import { formatMonetary } from '../utils/FormatMonetaryValues';
+import { Pagination } from '../components/Pagination';
 
 export default function ValoresDeSaida() {
-  const {
-    outcomeValues,
-    totalItens,
-    fixedOutcomeTotal,
-    monthlyOutcomeTotal,
-    deleteTransaction,
-    filterMonth,
-  } = useContext(TransactionsContext);
+  const { outcomeValues, fixedOutcomeTotal, monthlyOutcomeTotal, deleteTransaction, filterMonth } =
+    useContext(TransactionsContext);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itensPerPage] = useState(8);
 
-  console.log(totalItens.outcomeItens);
+  const indexOfLastItem = currentPage * itensPerPage;
+  const indexOfFirstItem = indexOfLastItem - itensPerPage;
+  const currentItens = outcomeValues.slice(indexOfFirstItem, indexOfLastItem);
+
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   const CalculateActualInstallment = (date: Date) => {
     const datesDifference = differenceInMonths(FilterMonthDate(filterMonth), TransactionDate(date));
@@ -30,7 +31,7 @@ export default function ValoresDeSaida() {
   return (
     <S.Container>
       <S.ElementsContainer>
-        <MonthSelector />
+        <MonthSelector setCurrentPage={setCurrentPage} />
         <Card>
           <div>
             <span>Saídas Fixas</span>
@@ -73,7 +74,7 @@ export default function ValoresDeSaida() {
           </tr>
         </thead>
         <tbody>
-          {outcomeValues.map(
+          {currentItens.map(
             ({ id, date, description, method, type, paymentForm, installment, value }) => {
               return (
                 <tr key={id}>
@@ -111,6 +112,12 @@ export default function ValoresDeSaida() {
           )}
         </tbody>
       </S.OutputValuesTable>
+      <Pagination
+        currentPage={currentPage}
+        itensPerPage={itensPerPage}
+        totalItens={outcomeValues.length}
+        paginate={paginate}
+      />
     </S.Container>
   );
 }

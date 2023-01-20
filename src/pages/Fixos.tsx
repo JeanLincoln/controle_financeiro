@@ -2,14 +2,17 @@ import { Card } from '../components/Card';
 import * as S from '../styles/pages/Fixos';
 import * as P from 'phosphor-react';
 import { MonthSelector } from '../components/MonthSelector';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { TransactionsContext } from '../contexts/TransactionsContext';
 import { DialogComponent } from '../components/Dialog';
 import { format } from 'date-fns';
 import { formatMonetary } from '../utils/FormatMonetaryValues';
+import { Pagination } from '../components/Pagination';
 
 export default function ValoresDeEntrada() {
   const { fixedValues, deleteTransaction } = useContext(TransactionsContext);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itensPerPage] = useState(8);
 
   const FixedSubTotal = (type: string) => {
     if (type === 'incomes') {
@@ -26,6 +29,12 @@ export default function ValoresDeEntrada() {
       return formatMonetary(fixedOutcomeSubTotal);
     }
   };
+
+  const indexOfLastItem = currentPage * itensPerPage;
+  const indexOfFirstItem = indexOfLastItem - itensPerPage;
+  const currentItens = fixedValues.slice(indexOfFirstItem, indexOfLastItem);
+
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   return (
     <S.Container>
@@ -63,7 +72,7 @@ export default function ValoresDeEntrada() {
           </tr>
         </thead>
         <tbody>
-          {fixedValues.map(({ id, initialDate, finalDate, description, type, value }, index) => {
+          {currentItens.map(({ id, initialDate, finalDate, description, type, value }, index) => {
             return (
               <tr key={index}>
                 <td>{format(new Date(initialDate), 'dd/MM/yyyy')}</td>
@@ -93,6 +102,12 @@ export default function ValoresDeEntrada() {
           })}
         </tbody>
       </S.FixedValuesTable>
+      <Pagination
+        currentPage={currentPage}
+        itensPerPage={itensPerPage}
+        totalItens={fixedValues.length}
+        paginate={paginate}
+      />
     </S.Container>
   );
 }
