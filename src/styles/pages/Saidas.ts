@@ -18,10 +18,10 @@ export const OutputValuesTable = styled('table', {
   borderSpacing: '0 0.5rem',
   marginTop: '1rem',
 
-  fontSize: '$lg',
+  fontSize: '$md',
 
   td: {
-    padding: '1.25rem 3rem',
+    padding: '1rem',
     backgroundColor: '$gray700',
 
     '&:first-child': {
@@ -35,7 +35,7 @@ export const OutputValuesTable = styled('table', {
       color: '$red100',
     },
 
-    button: {
+    'button.delete': {
       backgroundColor: 'transparent',
       border: 'none',
       svg: {

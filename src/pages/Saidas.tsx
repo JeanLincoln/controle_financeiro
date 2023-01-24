@@ -4,15 +4,22 @@ import * as P from 'phosphor-react';
 import { MonthSelector } from '../components/MonthSelector';
 import { useContext, useState } from 'react';
 import { TransactionsContext } from '../contexts/TransactionsContext';
-import { DialogComponent } from '../components/Dialog';
+import { NewTransactionForm } from '../components/Dialog/NewTransaction';
 import { format, differenceInMonths, addMonths } from 'date-fns';
 import { FilterMonthDate, TransactionDate } from '../utils/DatesValidation';
 import { formatMonetary } from '../utils/FormatMonetaryValues';
 import { Pagination } from '../components/Pagination';
+import { UpdateTransactionForm } from '../components/Dialog/UpdateTransaction';
 
 export default function ValoresDeSaida() {
-  const { outcomeValues, fixedOutcomeTotal, monthlyOutcomeTotal, deleteTransaction, filterMonth } =
-    useContext(TransactionsContext);
+  const {
+    outcomeValues,
+    fixedOutcomeTotal,
+    monthlyOutcomeTotal,
+    deleteTransaction,
+    updateTransaction,
+    filterMonth,
+  } = useContext(TransactionsContext);
   const [currentPage, setCurrentPage] = useState(1);
   const [itensPerPage] = useState(8);
 
@@ -55,7 +62,7 @@ export default function ValoresDeSaida() {
           </div>
           <h2>{formatMonetary(fixedOutcomeTotal() + monthlyOutcomeTotal())}</h2>
         </Card>
-        <DialogComponent type="outcome" triggerText="Novo Valor de Saída" />
+        <NewTransactionForm method="post" type="outcome" triggerText="Novo Valor de Saída" />
       </S.ElementsContainer>
       <S.OutputValuesTable>
         <thead>
@@ -74,42 +81,49 @@ export default function ValoresDeSaida() {
           </tr>
         </thead>
         <tbody>
-          {currentItens.map(
-            ({ id, date, description, method, type, paymentForm, installment, value }) => {
-              return (
-                <tr key={id}>
-                  <td>{format(new Date(date), 'dd/MM/yyyy')}</td>
-                  <td>
-                    {installment !== 1
-                      ? format(addMonths(new Date(date), installment), 'dd/MM/yyyy')
-                      : format(new Date(date), 'dd/MM/yyyy')}
-                  </td>
-                  <td>{description}</td>
-                  <td>{method}</td>
-                  <td>{type}</td>
-                  <td>{paymentForm}</td>
-                  <td>{installment}</td>
-                  <td>{CalculateActualInstallment(date)}</td>
-                  <td>{formatMonetary(value / installment)}</td>
-                  <td>{formatMonetary(value)}</td>
-                  <td>
-                    {formatMonetary(
-                      value - (value / installment) * CalculateActualInstallment(date)
-                    )}
-                  </td>
-                  <td>
-                    <button
-                      onClick={() => {
-                        deleteTransaction('outcome', id);
-                      }}
-                    >
-                      <P.Trash size={32} />
-                    </button>
-                  </td>
-                </tr>
-              );
-            }
-          )}
+          {currentItens.map((transaction) => {
+            return (
+              <tr key={transaction.id}>
+                <td>{format(new Date(transaction.date), 'dd/MM/yyyy')}</td>
+                <td>
+                  {transaction.installment !== 1
+                    ? format(
+                        addMonths(new Date(transaction.date), transaction.installment),
+                        'dd/MM/yyyy'
+                      )
+                    : format(new Date(transaction.date), 'dd/MM/yyyy')}
+                </td>
+                <td>{transaction.description}</td>
+                <td>{transaction.method}</td>
+                <td>{transaction.type}</td>
+                <td>{transaction.paymentForm}</td>
+                <td>{transaction.installment}</td>
+                <td>{CalculateActualInstallment(transaction.date)}</td>
+                <td>{formatMonetary(transaction.value / transaction.installment)}</td>
+                <td>{formatMonetary(transaction.value)}</td>
+                <td>
+                  {formatMonetary(
+                    transaction.value -
+                      (transaction.value / transaction.installment) *
+                        CalculateActualInstallment(transaction.date)
+                  )}
+                </td>
+                <td>
+                  <button
+                    className="delete"
+                    onClick={() => {
+                      deleteTransaction('outcome', transaction.id);
+                    }}
+                  >
+                    <P.Trash size={25} />
+                  </button>
+                </td>
+                <td>
+                  <UpdateTransactionForm method="put" type="outcome" transaction={transaction} />
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </S.OutputValuesTable>
       <Pagination

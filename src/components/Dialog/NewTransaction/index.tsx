@@ -1,28 +1,27 @@
 import * as Dialog from '@radix-ui/react-dialog';
-import * as S from '../../styles/components/Dialog';
+import * as S from '../../../styles/components/NewTransactionDialog';
 import { useState } from 'react';
-import { useTransaction } from '../../hooks/useTransaction';
-import { IncomeTransactionsForm } from './IncomeTransactionsForm';
-import { OutcomeTransactionsForm } from './OutcomeTransactionsForm';
-import { FixedTransactionsForm } from './FixedTransactionsForm';
+import { IncomeTransactionsForm } from '../IncomeTransactionsForm';
+import { OutcomeTransactionsForm } from '../OutcomeTransactionsForm';
+import { FixedTransactionsForm } from '../FixedTransactionsForm';
 
 type TriggerProps = {
+  method: 'post' | 'put';
   type: 'income' | 'outcome' | 'fixed';
   triggerText: string;
 };
 
-export function DialogComponent({ type, triggerText }: TriggerProps) {
-  const { newTransaction } = useTransaction();
+export function NewTransactionForm({ type, triggerText, method }: TriggerProps) {
   const [open, setOpen] = useState(false);
 
   const HandleTransactionType = (type: string) => {
-    if (type === 'income') {
+    if (type === 'income' && method === 'post') {
       return <IncomeTransactionsForm type={type} setOpen={setOpen} />;
     }
-    if (type === 'outcome') {
+    if (type === 'outcome' && method === 'post') {
       return <OutcomeTransactionsForm type={type} setOpen={setOpen} />;
     }
-    if (type === 'fixed') {
+    if (type === 'fixed' && method === 'post') {
       return <FixedTransactionsForm type={type} setOpen={setOpen} />;
     }
   };

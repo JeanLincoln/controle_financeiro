@@ -47,7 +47,7 @@ export const FixedValuesTable = styled('table', {
       color: '$green500',
     },
 
-    button: {
+    'button.delete': {
       backgroundColor: 'transparent',
       border: 'none',
       svg: {

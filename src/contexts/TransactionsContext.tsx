@@ -3,59 +3,14 @@ import { ReactNode, createContext, useState, useEffect } from 'react';
 import { differenceInMonths, format, formatISO, isSameMonth, isWithinInterval } from 'date-fns';
 import { FilterMonthDate, TransactionDate } from '../utils/DatesValidation';
 import { formatMonetary } from '../utils/FormatMonetaryValues';
-
-type IncomeTransacion = {
-  id: string;
-  date: Date;
-  description: string;
-  origin: string;
-  value: number;
-};
-
-type CreateIncomeTransaction = {
-  date: Date;
-  description: string;
-  origin: string;
-  value: number;
-};
-
-type OutcomeTransaction = {
-  id: string;
-  date: Date;
-  description: string;
-  method: string;
-  type: string;
-  paymentForm: string;
-  installment: number;
-  value: number;
-};
-
-type CreateOutcomeTransaction = {
-  date: Date;
-  description: string;
-  method: string;
-  type: string;
-  paymentForm: string;
-  installment: number;
-  value: number;
-};
-
-type FixedValues = {
-  id: string;
-  initialDate: Date;
-  finalDate: Date | undefined;
-  description: string;
-  type: string;
-  value: number;
-};
-
-type CreateFixedValues = {
-  initialDate: Date;
-  finalDate: Date | undefined;
-  description: string;
-  type: string;
-  value: number;
-};
+import {
+  CreateFixedValues,
+  CreateIncomeTransaction,
+  CreateOutcomeTransaction,
+  FixedValues,
+  IncomeTransacion,
+  OutcomeTransaction,
+} from '../types/TransactionTypes';
 
 type TransactionContextType = {
   incomeValues: IncomeTransacion[];
@@ -73,6 +28,11 @@ type TransactionContextType = {
     data: CreateIncomeTransaction | CreateOutcomeTransaction | CreateFixedValues
   ) => Promise<void>;
   deleteTransaction: (type: string, transactionId: string) => Promise<void>;
+  updateTransaction: (
+    transactionToUpdateId: string,
+    type: string,
+    updateTransaction: CreateIncomeTransaction | CreateOutcomeTransaction | CreateFixedValues
+  ) => Promise<void>;
 };
 
 type CyclesContextProviderProps = {
@@ -180,6 +140,32 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
     }
   };
 
+  const updateTransaction = async (
+    transactionToUpdateId: string,
+    type: string,
+    Transactionupdate: CreateIncomeTransaction | CreateOutcomeTransaction | CreateFixedValues
+  ) => {
+    const incomeTransaction = type === 'income';
+    const outcomeTransaction = type === 'outcome';
+    const fixedTransaction = type === 'fixed';
+
+    if (incomeTransaction) {
+      await api.put(`incomeTransactions/${transactionToUpdateId}`, Transactionupdate);
+      fetchTransactions();
+      return;
+    }
+    if (outcomeTransaction) {
+      await api.put(`outcomeTransactions/${transactionToUpdateId}`, Transactionupdate);
+      fetchTransactions();
+    }
+
+    if (fixedTransaction) {
+      await api.put(`fixedValues/${transactionToUpdateId}`, Transactionupdate);
+      fetchTransactions();
+      return;
+    }
+  };
+
   useEffect(() => {
     fetchTransactions();
   }, [filterMonth]);
@@ -264,6 +250,7 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
         fixedOutcomeTotal,
         newTransaction,
         deleteTransaction,
+        updateTransaction,
       }}
     >
       {children}

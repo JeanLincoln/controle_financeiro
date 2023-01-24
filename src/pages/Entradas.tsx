@@ -4,10 +4,11 @@ import * as P from 'phosphor-react';
 import { MonthSelector } from '../components/MonthSelector';
 import { useContext, useState } from 'react';
 import { TransactionsContext } from '../contexts/TransactionsContext';
-import { DialogComponent } from '../components/Dialog';
+import { NewTransactionForm } from '../components/Dialog/NewTransaction';
 import { format } from 'date-fns';
 import { formatMonetary } from '../utils/FormatMonetaryValues';
 import { Pagination } from '../components/Pagination';
+import { UpdateTransactionForm } from '../components/Dialog/UpdateTransaction';
 
 export default function ValoresDeEntrada() {
   const { incomeValues, fixedIncomeTotal, monthlyIncomeTotal, deleteTransaction } =
@@ -49,7 +50,7 @@ export default function ValoresDeEntrada() {
           </div>
           <h2>{formatMonetary(fixedIncomeTotal() + monthlyIncomeTotal())}</h2>
         </Card>
-        <DialogComponent type="income" triggerText="Novo Valor de Entrada" />
+        <NewTransactionForm method="post" type="income" triggerText="Novo Valor de Entrada" />
       </S.ElementsContainer>
       <S.IncomeValuesTable>
         <thead>
@@ -61,21 +62,25 @@ export default function ValoresDeEntrada() {
           </tr>
         </thead>
         <tbody>
-          {currentItens.map(({ id, date, description, origin, value }) => {
+          {currentItens.map((transaction) => {
             return (
-              <tr key={id}>
-                <td>{format(new Date(date), 'dd/MM/yyyy')}</td>
-                <td>{description}</td>
-                <td>{origin}</td>
-                <td>{formatMonetary(value)}</td>
+              <tr key={transaction.id}>
+                <td>{format(new Date(transaction.date), 'dd/MM/yyyy')}</td>
+                <td>{transaction.description}</td>
+                <td>{transaction.origin}</td>
+                <td>{formatMonetary(transaction.value)}</td>
                 <td>
                   <button
+                    className="delete"
                     onClick={() => {
-                      deleteTransaction('income', id);
+                      deleteTransaction('income', transaction.id);
                     }}
                   >
                     <P.Trash size={32} />
                   </button>
+                </td>
+                <td>
+                  <UpdateTransactionForm method="put" type="income" transaction={transaction} />
                 </td>
               </tr>
             );

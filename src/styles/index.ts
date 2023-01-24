@@ -23,7 +23,7 @@ export const { config, styled, css, globalCss, keyframes, getCssText, theme, cre
       },
 
       fontSizes: {
-        md: '1.4rem',
+        md: '1.3rem',
         lg: '1.6rem',
         xl: '2rem',
         '2xl': '2.4rem',

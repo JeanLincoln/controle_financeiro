@@ -42,7 +42,7 @@ export const IncomeValuesTable = styled('table', {
       color: '$green500',
     },
 
-    button: {
+    'button.delete': {
       backgroundColor: 'transparent',
       border: 'none',
       svg: {

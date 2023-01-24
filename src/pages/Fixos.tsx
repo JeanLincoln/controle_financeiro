@@ -1,13 +1,13 @@
 import { Card } from '../components/Card';
 import * as S from '../styles/pages/Fixos';
 import * as P from 'phosphor-react';
-import { MonthSelector } from '../components/MonthSelector';
 import { useContext, useState } from 'react';
 import { TransactionsContext } from '../contexts/TransactionsContext';
-import { DialogComponent } from '../components/Dialog';
+import { NewTransactionForm } from '../components/Dialog/NewTransaction';
 import { format } from 'date-fns';
 import { formatMonetary } from '../utils/FormatMonetaryValues';
 import { Pagination } from '../components/Pagination';
+import { UpdateTransactionForm } from '../components/Dialog/UpdateTransaction';
 
 export default function ValoresDeEntrada() {
   const { fixedValues, deleteTransaction } = useContext(TransactionsContext);
@@ -59,7 +59,7 @@ export default function ValoresDeEntrada() {
             </S.VariantSubTotal>
           </Card>
         </S.CardsContainer>
-        <DialogComponent type="fixed" triggerText="Novo Valor Fixo" />
+        <NewTransactionForm method="post" type="fixed" triggerText="Novo Valor Fixo" />
       </S.ElementsContainer>
       <S.FixedValuesTable>
         <thead>
@@ -72,30 +72,42 @@ export default function ValoresDeEntrada() {
           </tr>
         </thead>
         <tbody>
-          {currentItens.map(({ id, initialDate, finalDate, description, type, value }, index) => {
+          {currentItens.map((transaction, index) => {
             return (
               <tr key={index}>
-                <td>{format(new Date(initialDate), 'dd/MM/yyyy')}</td>
-                <td>{finalDate ? format(new Date(finalDate), 'dd/MM/yyyy') : 'Não determinado'}</td>
-                <td>{description}</td>
+                <td>{format(new Date(transaction.initialDate), 'dd/MM/yyyy')}</td>
                 <td>
-                  <S.TransactionType transactionType={type === 'Entrada' ? 'income' : 'outcome'}>
-                    {type}
+                  {transaction.finalDate
+                    ? format(new Date(transaction.finalDate), 'dd/MM/yyyy')
+                    : 'Não determinado'}
+                </td>
+                <td>{transaction.description}</td>
+                <td>
+                  <S.TransactionType
+                    transactionType={transaction.type === 'Entrada' ? 'income' : 'outcome'}
+                  >
+                    {transaction.type}
                   </S.TransactionType>
                 </td>
                 <td>
-                  <S.TransactionValue transactionType={type === 'Entrada' ? 'income' : 'outcome'}>
-                    {formatMonetary(value)}
+                  <S.TransactionValue
+                    transactionType={transaction.type === 'Entrada' ? 'income' : 'outcome'}
+                  >
+                    {formatMonetary(transaction.value)}
                   </S.TransactionValue>
                 </td>
                 <td>
                   <button
+                    className="delete"
                     onClick={() => {
-                      deleteTransaction('fixed', id);
+                      deleteTransaction('fixed', transaction.id);
                     }}
                   >
                     <P.Trash size={32} />
                   </button>
+                </td>
+                <td>
+                  <UpdateTransactionForm method="put" type="fixed" transaction={transaction} />
                 </td>
               </tr>
             );
