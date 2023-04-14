@@ -10,18 +10,9 @@ import { FilterMonthDate, TransactionDate } from '../utils/DatesValidation'
 import { formatMonetary } from '../utils/FormatMonetaryValues'
 import { Pagination } from '../components/Pagination'
 import { UpdateTransactionForm } from '../components/Dialog/UpdateTransaction'
-import { OutcomeTransaction } from '../types/TransactionTypes'
+import { OutcomeTransaction, SearchProps } from '../types/TransactionTypes'
 import { SearchTransactions } from '../components/SearchTransactions'
-
-type SearchProps = {
-  dateFilter: string
-  descriptionFilter: string
-  methodFilter: string
-  typeFilter: string
-  paymentFormFilter: string
-  installmentFilter: number
-  valueFilter: number
-}
+import { handleOutcomeSearch } from '../utils/HandleSearch'
 
 export default function ValoresDeSaida() {
   const { outcomeValues, fixedOutcomeTotal, monthlyOutcomeTotal, deleteTransaction, filterMonth } =
@@ -38,64 +29,9 @@ export default function ValoresDeSaida() {
     : outcomeValues.slice(indexOfFirstItem, indexOfLastItem)
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber)
-
-  const handleSearch = (searchArray: SearchProps) => {
-    if (!searchArray) {
-      setCurrentPage(1)
-      setSearchedTransanctions([])
-      return
-    }
-
-    debugger
-
-    let filteredTransactions = outcomeValues
-
-    if (searchArray.dateFilter) {
-      filteredTransactions = filteredTransactions.filter((transaction) => {
-        return format(new Date(transaction.date), 'yyyy-MM-dd') === searchArray.dateFilter
-      })
-    }
-
-    if (searchArray.descriptionFilter) {
-      filteredTransactions = filteredTransactions.filter((transaction) => {
-        return transaction.description
-          .toUpperCase()
-          .includes(searchArray.descriptionFilter.toUpperCase())
-      })
-    }
-    if (searchArray.methodFilter) {
-      filteredTransactions = filteredTransactions.filter((transaction) => {
-        return transaction.method === searchArray.methodFilter
-      })
-    }
-
-    if (searchArray.typeFilter) {
-      filteredTransactions = filteredTransactions.filter((transaction) => {
-        return transaction.type === searchArray.typeFilter
-      })
-    }
-    if (searchArray.paymentFormFilter) {
-      filteredTransactions = filteredTransactions.filter((transaction) => {
-        return transaction.paymentForm === searchArray.paymentFormFilter
-      })
-    }
-    if (searchArray.installmentFilter) {
-      filteredTransactions = filteredTransactions.filter((transaction) => {
-        return transaction.installment === searchArray.installmentFilter
-      })
-    }
-    if (searchArray.valueFilter) {
-      filteredTransactions = filteredTransactions.filter((transaction) => {
-        return transaction.value.toString().includes(searchArray.valueFilter.toString())
-      })
-    }
-
-    filteredTransactions.length > 0
-      ? setSearchedTransanctions(filteredTransactions)
-      : setSearchedTransanctions([])
-    setCurrentPage(1)
-    return
-  }
+  const clearSearchedTransanctions = () => setSearchedTransanctions([])
+  const insertSearchedTransanctions = (transactions: OutcomeTransaction[]) =>
+    setSearchedTransanctions(transactions)
 
   const handleTransactions = () => {
     if (search && currentItens.length > 0) {
@@ -236,7 +172,13 @@ export default function ValoresDeSaida() {
   }
 
   useEffect(() => {
-    handleSearch(search)
+    setCurrentPage(1)
+    handleOutcomeSearch({
+      searchFilters: search,
+      clearSearchedTransanctions: clearSearchedTransanctions,
+      insertSearchedTransanctions: insertSearchedTransanctions,
+      transactionValues: outcomeValues,
+    })
   }, [search, outcomeValues])
 
   const CalculateActualInstallment = (date: Date) => {
@@ -274,7 +216,7 @@ export default function ValoresDeSaida() {
         </Card>
         <NewTransactionForm method="post" type="outcome" triggerText="Novo Valor de Saída" />
       </S.ElementsContainer>
-      <SearchTransactions setSearch={setSearch} />
+      <SearchTransactions transactionType="outcome" setSearch={setSearch} />
       {handleTransactions()}
       <Pagination
         currentPage={currentPage}
