@@ -1,57 +1,249 @@
-import { Card } from '../components/Card';
-import * as S from '../styles/pages/Saidas';
-import * as P from 'phosphor-react';
-import { MonthSelector } from '../components/MonthSelector';
-import { useContext, useState, ChangeEvent, useEffect } from 'react';
-import { TransactionsContext } from '../contexts/TransactionsContext';
-import { NewTransactionForm } from '../components/Dialog/NewTransaction';
-import { format, differenceInMonths, addMonths } from 'date-fns';
-import { FilterMonthDate, TransactionDate } from '../utils/DatesValidation';
-import { formatMonetary } from '../utils/FormatMonetaryValues';
-import { Pagination } from '../components/Pagination';
-import { UpdateTransactionForm } from '../components/Dialog/UpdateTransaction';
-import { OutcomeTransaction } from '../types/TransactionTypes';
+import { Card } from '../components/Card'
+import * as S from '../styles/pages/Saidas'
+import * as P from 'phosphor-react'
+import { MonthSelector } from '../components/MonthSelector'
+import { useContext, useState, ChangeEvent, useEffect } from 'react'
+import { TransactionsContext } from '../contexts/TransactionsContext'
+import { NewTransactionForm } from '../components/Dialog/NewTransaction'
+import { format, differenceInMonths, addMonths } from 'date-fns'
+import { FilterMonthDate, TransactionDate } from '../utils/DatesValidation'
+import { formatMonetary } from '../utils/FormatMonetaryValues'
+import { Pagination } from '../components/Pagination'
+import { UpdateTransactionForm } from '../components/Dialog/UpdateTransaction'
+import { OutcomeTransaction } from '../types/TransactionTypes'
+import { SearchTransactions } from '../components/SearchTransactions'
+
+type SearchProps = {
+  dateFilter: string
+  descriptionFilter: string
+  methodFilter: string
+  typeFilter: string
+  paymentFormFilter: string
+  installmentFilter: number
+  valueFilter: number
+}
 
 export default function ValoresDeSaida() {
   const { outcomeValues, fixedOutcomeTotal, monthlyOutcomeTotal, deleteTransaction, filterMonth } =
-    useContext(TransactionsContext);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itensPerPage] = useState(8);
-  const [activeFilter, setActiveFilter] = useState('description');
-  const [search, setSearch] = useState('');
-  const [searchedTransactions, setSearchedTransanctions] = useState<OutcomeTransaction[]>([]);
+    useContext(TransactionsContext)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [itensPerPage] = useState(8)
+  const [search, setSearch] = useState<SearchProps>({})
+  const [searchedTransactions, setSearchedTransanctions] = useState<OutcomeTransaction[]>([])
 
-  const indexOfLastItem = currentPage * itensPerPage;
-  const indexOfFirstItem = indexOfLastItem - itensPerPage;
-  const currentItens =
-    search.length > 0
-      ? searchedTransactions.slice(indexOfFirstItem, indexOfLastItem)
-      : outcomeValues.slice(indexOfFirstItem, indexOfLastItem);
+  const indexOfLastItem = currentPage * itensPerPage
+  const indexOfFirstItem = indexOfLastItem - itensPerPage
+  const currentItens = search
+    ? searchedTransactions.slice(indexOfFirstItem, indexOfLastItem)
+    : outcomeValues.slice(indexOfFirstItem, indexOfLastItem)
 
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber)
 
-  const handleSearch = () => {
-    if (search.length >= 1) {
-      const transactions = outcomeValues.filter((transaction) =>
-        String(transaction[activeFilter]).toUpperCase().includes(search.toUpperCase())
-      );
-      setSearchedTransanctions(transactions);
-      setCurrentPage(1);
-      return;
+  const handleSearch = (searchArray: SearchProps) => {
+    if (!searchArray) {
+      setCurrentPage(1)
+      setSearchedTransanctions([])
+      return
     }
-    setCurrentPage(1);
-    setSearchedTransanctions([]);
-  };
+
+    debugger
+
+    let filteredTransactions = outcomeValues
+
+    if (searchArray.dateFilter) {
+      filteredTransactions = filteredTransactions.filter((transaction) => {
+        return format(new Date(transaction.date), 'yyyy-MM-dd') === searchArray.dateFilter
+      })
+    }
+
+    if (searchArray.descriptionFilter) {
+      filteredTransactions = filteredTransactions.filter((transaction) => {
+        return transaction.description
+          .toUpperCase()
+          .includes(searchArray.descriptionFilter.toUpperCase())
+      })
+    }
+    if (searchArray.methodFilter) {
+      filteredTransactions = filteredTransactions.filter((transaction) => {
+        return transaction.method === searchArray.methodFilter
+      })
+    }
+
+    if (searchArray.typeFilter) {
+      filteredTransactions = filteredTransactions.filter((transaction) => {
+        return transaction.type === searchArray.typeFilter
+      })
+    }
+    if (searchArray.paymentFormFilter) {
+      filteredTransactions = filteredTransactions.filter((transaction) => {
+        return transaction.paymentForm === searchArray.paymentFormFilter
+      })
+    }
+    if (searchArray.installmentFilter) {
+      filteredTransactions = filteredTransactions.filter((transaction) => {
+        return transaction.installment === searchArray.installmentFilter
+      })
+    }
+    if (searchArray.valueFilter) {
+      filteredTransactions = filteredTransactions.filter((transaction) => {
+        return transaction.value.toString().includes(searchArray.valueFilter.toString())
+      })
+    }
+
+    filteredTransactions.length > 0
+      ? setSearchedTransanctions(filteredTransactions)
+      : setSearchedTransanctions([])
+    setCurrentPage(1)
+    return
+  }
+
+  const handleTransactions = () => {
+    if (search && currentItens.length > 0) {
+      return (
+        <S.OutputValuesTable>
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Finaliza em</th>
+              <th>Descrição</th>
+              <th>Método</th>
+              <th>Tipo</th>
+              <th>Forma de pagamento</th>
+              <th>Parcelas</th>
+              <th>Parcela Atual</th>
+              <th>Valor da parcela</th>
+              <th>Valor da compra</th>
+              <th>Valor restante da compra</th>
+            </tr>
+          </thead>
+          <tbody>
+            {currentItens.map((transaction) => {
+              return (
+                <tr key={transaction.id}>
+                  <td>{format(new Date(transaction.date), 'dd/MM/yyyy')}</td>
+                  <td>
+                    {transaction.installment !== 1
+                      ? format(
+                          addMonths(new Date(transaction.date), transaction.installment),
+                          'dd/MM/yyyy'
+                        )
+                      : format(new Date(transaction.date), 'dd/MM/yyyy')}
+                  </td>
+                  <td>{transaction.description}</td>
+                  <td>{transaction.method}</td>
+                  <td>{transaction.type}</td>
+                  <td>{transaction.paymentForm}</td>
+                  <td>{transaction.installment}</td>
+                  <td>{CalculateActualInstallment(transaction.date)}</td>
+                  <td>{formatMonetary(transaction.value / transaction.installment)}</td>
+                  <td>{formatMonetary(transaction.value)}</td>
+                  <td>
+                    {formatMonetary(
+                      transaction.value -
+                        (transaction.value / transaction.installment) *
+                          CalculateActualInstallment(transaction.date)
+                    )}
+                  </td>
+                  <td>
+                    <button
+                      className="delete"
+                      onClick={() => {
+                        deleteTransaction('outcome', transaction.id)
+                      }}
+                    >
+                      <P.Trash size={25} />
+                    </button>
+                  </td>
+                  <td>
+                    <UpdateTransactionForm method="put" type="outcome" transaction={transaction} />
+                  </td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </S.OutputValuesTable>
+      )
+    }
+
+    if (!search && currentItens.length === 0) {
+      return (
+        <S.OutputValuesTable>
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Finaliza em</th>
+              <th>Descrição</th>
+              <th>Método</th>
+              <th>Tipo</th>
+              <th>Forma de pagamento</th>
+              <th>Parcelas</th>
+              <th>Parcela Atual</th>
+              <th>Valor da parcela</th>
+              <th>Valor da compra</th>
+              <th>Valor restante da compra</th>
+            </tr>
+          </thead>
+          <tbody>
+            {outcomeValues.map((transaction) => {
+              return (
+                <tr key={transaction.id}>
+                  <td>{format(new Date(transaction.date), 'dd/MM/yyyy')}</td>
+                  <td>
+                    {transaction.installment !== 1
+                      ? format(
+                          addMonths(new Date(transaction.date), transaction.installment),
+                          'dd/MM/yyyy'
+                        )
+                      : format(new Date(transaction.date), 'dd/MM/yyyy')}
+                  </td>
+                  <td>{transaction.description}</td>
+                  <td>{transaction.method}</td>
+                  <td>{transaction.type}</td>
+                  <td>{transaction.paymentForm}</td>
+                  <td>{transaction.installment}</td>
+                  <td>{CalculateActualInstallment(transaction.date)}</td>
+                  <td>{formatMonetary(transaction.value / transaction.installment)}</td>
+                  <td>{formatMonetary(transaction.value)}</td>
+                  <td>
+                    {formatMonetary(
+                      transaction.value -
+                        (transaction.value / transaction.installment) *
+                          CalculateActualInstallment(transaction.date)
+                    )}
+                  </td>
+                  <td>
+                    <button
+                      className="delete"
+                      onClick={() => {
+                        deleteTransaction('outcome', transaction.id)
+                      }}
+                    >
+                      <P.Trash size={25} />
+                    </button>
+                  </td>
+                  <td>
+                    <UpdateTransactionForm method="put" type="outcome" transaction={transaction} />
+                  </td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </S.OutputValuesTable>
+      )
+    }
+
+    return <div>Nenhum lancamento encontrado!</div>
+  }
 
   useEffect(() => {
-    handleSearch();
-  }, [search]);
+    handleSearch(search)
+  }, [search, outcomeValues])
 
   const CalculateActualInstallment = (date: Date) => {
-    const datesDifference = differenceInMonths(FilterMonthDate(filterMonth), TransactionDate(date));
+    const datesDifference = differenceInMonths(FilterMonthDate(filterMonth), TransactionDate(date))
 
-    return datesDifference + 1;
-  };
+    return datesDifference + 1
+  }
 
   return (
     <S.Container>
@@ -82,126 +274,8 @@ export default function ValoresDeSaida() {
         </Card>
         <NewTransactionForm method="post" type="outcome" triggerText="Novo Valor de Saída" />
       </S.ElementsContainer>
-      <S.FiltersContainers>
-        <S.FilterItem
-          onClick={(e) => setActiveFilter((e.target as HTMLInputElement).value)}
-          value="date"
-          className={activeFilter === 'date' ? 'activeFilter' : ''}
-        >
-          Data
-        </S.FilterItem>
-        <S.FilterItem
-          onClick={(e) => setActiveFilter((e.target as HTMLInputElement).value)}
-          value="description"
-          className={activeFilter === 'description' ? 'activeFilter' : ''}
-        >
-          Descrição
-        </S.FilterItem>
-        <S.FilterItem
-          onClick={(e) => setActiveFilter((e.target as HTMLInputElement).value)}
-          value="method"
-          className={activeFilter === 'method' ? 'activeFilter' : ''}
-        >
-          Método
-        </S.FilterItem>
-        <S.FilterItem
-          onClick={(e) => setActiveFilter((e.target as HTMLInputElement).value)}
-          value="type"
-          className={activeFilter === 'type' ? 'activeFilter' : ''}
-        >
-          Tipo
-        </S.FilterItem>
-        <S.FilterItem
-          onClick={(e) => setActiveFilter((e.target as HTMLInputElement).value)}
-          value="paymentForm"
-          className={activeFilter === 'paymentForm' ? 'activeFilter' : ''}
-        >
-          Forma de pagamento
-        </S.FilterItem>
-        <S.FilterItem
-          onClick={(e) => setActiveFilter((e.target as HTMLInputElement).value)}
-          value="installment"
-          className={activeFilter === 'installment' ? 'activeFilter' : ''}
-        >
-          Parcelas
-        </S.FilterItem>
-        <S.FilterItem
-          onClick={(e) => setActiveFilter((e.target as HTMLInputElement).value)}
-          value="value"
-          className={activeFilter === 'value' ? 'activeFilter' : ''}
-        >
-          Valor da compra
-        </S.FilterItem>
-      </S.FiltersContainers>
-      <S.SearchTransactionForm>
-        <input
-          onChange={(e) => setSearch(e.target.value)}
-          type="text"
-          placeholder="Digite sua pesquisa aqui!"
-        />
-      </S.SearchTransactionForm>
-      <S.OutputValuesTable>
-        <thead>
-          <tr>
-            <th>Data</th>
-            <th>Finaliza em</th>
-            <th>Descrição</th>
-            <th>Método</th>
-            <th>Tipo</th>
-            <th>Forma de pagamento</th>
-            <th>Parcelas</th>
-            <th>Parcela Atual</th>
-            <th>Valor da parcela</th>
-            <th>Valor da compra</th>
-            <th>Valor restante da compra</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentItens.map((transaction) => {
-            return (
-              <tr key={transaction.id}>
-                <td>{format(new Date(transaction.date), 'dd/MM/yyyy')}</td>
-                <td>
-                  {transaction.installment !== 1
-                    ? format(
-                        addMonths(new Date(transaction.date), transaction.installment),
-                        'dd/MM/yyyy'
-                      )
-                    : format(new Date(transaction.date), 'dd/MM/yyyy')}
-                </td>
-                <td>{transaction.description}</td>
-                <td>{transaction.method}</td>
-                <td>{transaction.type}</td>
-                <td>{transaction.paymentForm}</td>
-                <td>{transaction.installment}</td>
-                <td>{CalculateActualInstallment(transaction.date)}</td>
-                <td>{formatMonetary(transaction.value / transaction.installment)}</td>
-                <td>{formatMonetary(transaction.value)}</td>
-                <td>
-                  {formatMonetary(
-                    transaction.value -
-                      (transaction.value / transaction.installment) *
-                        CalculateActualInstallment(transaction.date)
-                  )}
-                </td>
-                <td>
-                  <button
-                    className="delete"
-                    onClick={() => {
-                      deleteTransaction('outcome', transaction.id);
-                    }}
-                  >
-                    <P.Trash size={25} />
-                  </button>
-                </td>
-                <td>
-                  <UpdateTransactionForm method="put" type="outcome" transaction={transaction} />
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </S.OutputValuesTable>
+      <SearchTransactions setSearch={setSearch} />
+      {handleTransactions()}
       <Pagination
         currentPage={currentPage}
         itensPerPage={itensPerPage}
@@ -211,5 +285,5 @@ export default function ValoresDeSaida() {
         paginate={paginate}
       />
     </S.Container>
-  );
+  )
 }

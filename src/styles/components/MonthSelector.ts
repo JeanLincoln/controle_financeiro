@@ -1,4 +1,4 @@
-import { styled } from '..';
+import { styled } from '..'
 
 export const MonthSelectorContainer = styled('div', {
   display: 'flex',
@@ -16,9 +16,16 @@ export const MonthSelectorContainer = styled('div', {
     color: '$gray100',
 
     backgroundColor: '$gray700',
+
+    '&::-webkit-calendar-picker-indicator': {
+      backgroundColor: 'white',
+      padding: '5px',
+      cursor: 'pointer',
+      borderRadius: '10px',
+    },
   },
 
   h2: {
     fontSize: '$xl',
   },
-});
+})

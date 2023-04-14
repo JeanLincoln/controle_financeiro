@@ -3,7 +3,7 @@ import { TransactionsContext } from '../../contexts/TransactionsContext';
 import * as S from '../../styles/components/MonthSelector';
 
 type MonthSelectorProps = {
-  setCurrentPage: (setCurrentPage: number) => void;
+  setCurrentPage?: (setCurrentPage: number) => void;
 };
 
 export function MonthSelector({ setCurrentPage }: MonthSelectorProps) {
@@ -12,7 +12,7 @@ export function MonthSelector({ setCurrentPage }: MonthSelectorProps) {
   const handleChangeMonth = (e: ChangeEvent<HTMLInputElement>) => {
     const chosenMonth = new Date(e.target.value);
     chosenMonth.setDate(chosenMonth.getDate() + 1);
-    setCurrentPage(1);
+    setCurrentPage && setCurrentPage(1);
     setFilterMonth(
       `${chosenMonth.getFullYear()}-${
         chosenMonth.getMonth() + 1 > 9

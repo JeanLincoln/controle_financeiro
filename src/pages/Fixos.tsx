@@ -13,7 +13,7 @@ import { FixedValues } from '../types/TransactionTypes';
 export default function ValoresDeEntrada() {
   const { fixedValues, deleteTransaction } = useContext(TransactionsContext);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itensPerPage] = useState(8);
+  const [itensPerPage] = useState(6);
   const [activeFilter, setActiveFilter] = useState('description');
   const [search, setSearch] = useState('');
   const [searchedTransactions, setSearchedTransanctions] = useState<FixedValues[]>([]);

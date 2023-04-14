@@ -7,6 +7,7 @@ export type CreateIncomeTransaction = {
 
 export type IncomeTransacion = {
   id: string;
+  [key: string]: string;
 } & CreateIncomeTransaction;
 
 export type CreateOutcomeTransaction = {
@@ -21,6 +22,7 @@ export type CreateOutcomeTransaction = {
 
 export type OutcomeTransaction = {
   id: string;
+  [key: string]: string;
 } & CreateOutcomeTransaction;
 
 export type CreateFixedValues = {
@@ -33,4 +35,5 @@ export type CreateFixedValues = {
 
 export type FixedValues = {
   id: string;
+  [key: string]: string;
 } & CreateFixedValues;
