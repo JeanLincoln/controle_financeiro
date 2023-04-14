@@ -42,7 +42,7 @@ export type IncomeSearchProps = {
   dateFilter: string
   descriptionFilter: string
   originFilter: string
-  valueFilter: number
+  valueFilter: string
 }
 
 export type OutcomeSearchProps = {
@@ -51,8 +51,8 @@ export type OutcomeSearchProps = {
   methodFilter: string
   typeFilter: string
   paymentFormFilter: string
-  installmentFilter: number
-  valueFilter: number
+  installmentFilter: string
+  valueFilter: string
 }
 
 export type FixedSearchProps = {
@@ -60,5 +60,5 @@ export type FixedSearchProps = {
   finalDateFilter: string
   descriptionFilter: string
   typeFilter: string
-  valueFilter: number
+  valueFilter: string
 }

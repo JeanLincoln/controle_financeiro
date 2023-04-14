@@ -10,7 +10,7 @@ import { FilterMonthDate, TransactionDate } from '../utils/DatesValidation'
 import { formatMonetary } from '../utils/FormatMonetaryValues'
 import { Pagination } from '../components/Pagination'
 import { UpdateTransactionForm } from '../components/Dialog/UpdateTransaction'
-import { OutcomeTransaction, SearchProps } from '../types/TransactionTypes'
+import { OutcomeTransaction, OutcomeSearchProps } from '../types/TransactionTypes'
 import { SearchTransactions } from '../components/SearchTransactions'
 import { handleOutcomeSearch } from '../utils/HandleSearch'
 
@@ -19,7 +19,7 @@ export default function ValoresDeSaida() {
     useContext(TransactionsContext)
   const [currentPage, setCurrentPage] = useState(1)
   const [itensPerPage] = useState(8)
-  const [search, setSearch] = useState<SearchProps>({})
+  const [search, setSearch] = useState<OutcomeSearchProps>({})
   const [searchedTransactions, setSearchedTransanctions] = useState<OutcomeTransaction[]>([])
 
   const indexOfLastItem = currentPage * itensPerPage
@@ -32,6 +32,13 @@ export default function ValoresDeSaida() {
   const clearSearchedTransanctions = () => setSearchedTransanctions([])
   const insertSearchedTransanctions = (transactions: OutcomeTransaction[]) =>
     setSearchedTransanctions(transactions)
+  const insertSearch = (
+    filter: string,
+    event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
+  ) => {
+    console.log({ [filter]: event.target.value })
+    setSearch((state) => ({ ...state, [filter]: event.target.value }))
+  }
 
   const handleTransactions = () => {
     if (search && currentItens.length > 0) {
@@ -216,7 +223,7 @@ export default function ValoresDeSaida() {
         </Card>
         <NewTransactionForm method="post" type="outcome" triggerText="Novo Valor de Saída" />
       </S.ElementsContainer>
-      <SearchTransactions transactionType="outcome" setSearch={setSearch} />
+      <SearchTransactions transactionType="outcome" insertSearch={insertSearch} />
       {handleTransactions()}
       <Pagination
         currentPage={currentPage}

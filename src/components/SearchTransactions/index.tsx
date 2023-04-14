@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from 'react'
+import { ChangeEvent, Dispatch, SetStateAction } from 'react'
 import {
   IncomeSearchProps,
   OutcomeSearchProps,
@@ -8,35 +8,28 @@ import * as S from '../../styles/components/SearchTransactions'
 
 type SearchTransactionsProps = {
   transactionType: 'income' | 'outcome' | 'fixed'
-  setSearch: Dispatch<SetStateAction<IncomeSearchProps | OutcomeSearchProps | FixedSearchProps>>
+  insertSearch: (
+    filter: string,
+    event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
+  ) => void
 }
 
-export const SearchTransactions = ({ setSearch, transactionType }: SearchTransactionsProps) => {
+export const SearchTransactions = ({ insertSearch, transactionType }: SearchTransactionsProps) => {
   const handleTransactionType = () => {
     if (transactionType === 'outcome') {
       return (
         <>
           <S.ItemGroup>
             <label htmlFor="">Data</label>
-            <input
-              onChange={(e) => setSearch((state) => ({ ...state, dateFilter: e.target.value }))}
-              type="date"
-            />
+            <input onChange={(e) => insertSearch('dateFilter', e)} type="date" />
           </S.ItemGroup>
           <S.ItemGroup>
             <label htmlFor="">Descricão</label>
-            <input
-              onChange={(e) =>
-                setSearch((state) => ({ ...state, descriptionFilter: e.target.value }))
-              }
-              type="text"
-            />
+            <input onChange={(e) => insertSearch('descriptionFilter', e)} type="text" />
           </S.ItemGroup>
           <S.ItemGroup>
             <label htmlFor="">Método</label>
-            <select
-              onChange={(e) => setSearch((state) => ({ ...state, methodFilter: e.target.value }))}
-            >
+            <select onChange={(e) => insertSearch('methodFilter', e)}>
               <option value=""></option>
               <option value="Cartão de crédito">Cartão de crédito</option>
               <option value="Pix">Pix</option>
@@ -46,9 +39,7 @@ export const SearchTransactions = ({ setSearch, transactionType }: SearchTransac
           </S.ItemGroup>
           <S.ItemGroup>
             <label htmlFor="">Tipo</label>
-            <select
-              onChange={(e) => setSearch((state) => ({ ...state, typeFilter: e.target.value }))}
-            >
+            <select onChange={(e) => insertSearch('typeFilter', e)}>
               <option value=""></option>
               <option value="Alcool">Alcool</option>
               <option value="Casa">Casa</option>
@@ -66,11 +57,7 @@ export const SearchTransactions = ({ setSearch, transactionType }: SearchTransac
           </S.ItemGroup>
           <S.ItemGroup>
             <label htmlFor="">Forma de pagamento</label>
-            <select
-              onChange={(e) =>
-                setSearch((state) => ({ ...state, paymentFormFilter: e.target.value }))
-              }
-            >
+            <select onChange={(e) => insertSearch('paymentFormFilter', e)}>
               <option value=""></option>
               <option value="Crédito à vista">Crédito à vista</option>
               <option value="Crédito parcelado">Crédito parcelado</option>
@@ -79,21 +66,11 @@ export const SearchTransactions = ({ setSearch, transactionType }: SearchTransac
           </S.ItemGroup>
           <S.ItemGroup>
             <label htmlFor="">Parcelas</label>
-            <input
-              onChange={(e) =>
-                setSearch((state) => ({ ...state, installmentFilter: Number(e.target.value) }))
-              }
-              type="number"
-            />
+            <input onChange={(e) => insertSearch('installmentFilter', e)} type="number" />
           </S.ItemGroup>
           <S.ItemGroup>
             <label htmlFor="">Valor da compra</label>
-            <input
-              onChange={(e) =>
-                setSearch((state) => ({ ...state, valueFilter: Number(e.target.value) }))
-              }
-              type="number"
-            />
+            <input onChange={(e) => insertSearch('valueFilter', e)} type="number" />
           </S.ItemGroup>
         </>
       )

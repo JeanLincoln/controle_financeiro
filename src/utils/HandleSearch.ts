@@ -71,7 +71,7 @@ export const handleOutcomeSearch = ({
   }
   if (searchFilters.installmentFilter) {
     filteredTransactions = filteredTransactions.filter((transaction) => {
-      return transaction.installment === searchFilters.installmentFilter
+      return transaction.installment.toString() === searchFilters.installmentFilter
     })
   }
   if (searchFilters.valueFilter) {
