@@ -1,10 +1,14 @@
 import { Dispatch, SetStateAction } from 'react'
-import { SearchProps } from '../../types/TransactionTypes'
+import {
+  IncomeSearchProps,
+  OutcomeSearchProps,
+  FixedSearchProps,
+} from '../../types/TransactionTypes'
 import * as S from '../../styles/components/SearchTransactions'
 
 type SearchTransactionsProps = {
   transactionType: 'income' | 'outcome' | 'fixed'
-  setSearch: Dispatch<SetStateAction<SearchProps>>
+  setSearch: Dispatch<SetStateAction<IncomeSearchProps | OutcomeSearchProps | FixedSearchProps>>
 }
 
 export const SearchTransactions = ({ setSearch, transactionType }: SearchTransactionsProps) => {
