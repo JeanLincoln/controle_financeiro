@@ -11,9 +11,10 @@ import { UpdateTransactionForm } from '../components/Dialog/UpdateTransaction'
 import { FixedSearchProps, FixedValues } from '../types/TransactionTypes'
 import { handlefixedSearch } from '../utils/HandleSearch'
 import { SearchTransactions } from '../components/SearchTransactions'
+import { Loading } from '../components/Loading'
 
 export default function ValoresDeEntrada() {
-  const { fixedValues, deleteTransaction } = useContext(TransactionsContext)
+  const { loading, fixedValues, deleteTransaction } = useContext(TransactionsContext)
   const [currentPage, setCurrentPage] = useState(1)
   const [itensPerPage] = useState(6)
   const [search, setSearch] = useState<FixedSearchProps>({})
@@ -190,7 +191,7 @@ export default function ValoresDeEntrada() {
               <P.Infinity size={32} color="#00b37e" />
             </div>
             <S.VariantSubTotal subTotalType="positive">
-              {FixedSubTotal('incomes')}
+              {loading ? <Loading /> : FixedSubTotal('incomes')}
             </S.VariantSubTotal>
           </Card>
           <Card>
@@ -199,22 +200,24 @@ export default function ValoresDeEntrada() {
               <P.Infinity size={32} color="#f75a68" />
             </div>
             <S.VariantSubTotal subTotalType="negative">
-              - {FixedSubTotal('outcomes')}
+              {loading ? <Loading /> : <> - {FixedSubTotal('outcomes')}</>}
             </S.VariantSubTotal>
           </Card>
         </S.CardsContainer>
         <NewTransactionForm method="post" type="fixed" triggerText="Novo Valor Fixo" />
       </S.ElementsContainer>
       <SearchTransactions transactionType="fixed" insertSearch={insertSearch} />
-      {handleTransactions()}
-      <Pagination
-        currentPage={currentPage}
-        itensPerPage={itensPerPage}
-        totalItens={
-          searchedTransactions.length === 0 ? fixedValues.length : searchedTransactions.length
-        }
-        paginate={paginate}
-      />
+      {loading ? <Loading /> : handleTransactions()}
+      {!loading && (
+        <Pagination
+          currentPage={currentPage}
+          itensPerPage={itensPerPage}
+          totalItens={
+            searchedTransactions.length === 0 ? fixedValues.length : searchedTransactions.length
+          }
+          paginate={paginate}
+        />
+      )}
     </S.Container>
   )
 }

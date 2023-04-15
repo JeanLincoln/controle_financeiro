@@ -1,4 +1,4 @@
-import { styled } from '..';
+import { styled } from '..'
 
 export const Container = styled('div', {
   display: 'flex',
@@ -8,12 +8,17 @@ export const Container = styled('div', {
   gap: '3rem',
   padding: '5rem 4rem 0',
   width: '100%',
-});
+
+  '.loader': {
+    top: '0 !important',
+    alignSelf: 'center',
+  },
+})
 
 export const FiltersContainers = styled('div', {
   display: 'flex',
   justifyContent: 'space-around',
-});
+})
 
 export const FilterItem = styled('button', {
   padding: '1.5rem',
@@ -34,14 +39,14 @@ export const FilterItem = styled('button', {
   '&.activeFilter': {
     backgroundColor: '$gray400',
   },
-});
+})
 
 export const ElementsContainer = styled('div', {
   display: 'flex',
   alignItems: 'center',
   width: '100%',
   justifyContent: 'space-between',
-});
+})
 
 export const SearchTransactionForm = styled('form', {
   display: 'flex',
@@ -57,12 +62,12 @@ export const SearchTransactionForm = styled('form', {
 
     flex: 1,
   },
-});
+})
 
 export const CardsContainer = styled('div', {
   display: 'flex',
   gap: '2rem',
-});
+})
 
 export const FixedValuesTable = styled('table', {
   textAlign: 'center',
@@ -101,7 +106,7 @@ export const FixedValuesTable = styled('table', {
       },
     },
   },
-});
+})
 
 export const TransactionType = styled('span', {
   borderRadius: '20px',
@@ -127,7 +132,7 @@ export const TransactionType = styled('span', {
       },
     },
   },
-});
+})
 
 export const TransactionValue = styled('span', {
   variants: {
@@ -140,7 +145,7 @@ export const TransactionValue = styled('span', {
       },
     },
   },
-});
+})
 
 export const VariantSubTotal = styled('h2', {
   variants: {
@@ -153,4 +158,4 @@ export const VariantSubTotal = styled('h2', {
       },
     },
   },
-});
+})

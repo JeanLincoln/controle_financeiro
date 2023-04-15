@@ -13,10 +13,17 @@ import { UpdateTransactionForm } from '../components/Dialog/UpdateTransaction'
 import { OutcomeTransaction, OutcomeSearchProps } from '../types/TransactionTypes'
 import { SearchTransactions } from '../components/SearchTransactions'
 import { handleOutcomeSearch } from '../utils/HandleSearch'
+import { Loading } from '../components/Loading'
 
 export default function ValoresDeSaida() {
-  const { outcomeValues, fixedOutcomeTotal, monthlyOutcomeTotal, deleteTransaction, filterMonth } =
-    useContext(TransactionsContext)
+  const {
+    loading,
+    outcomeValues,
+    fixedOutcomeTotal,
+    monthlyOutcomeTotal,
+    deleteTransaction,
+    filterMonth,
+  } = useContext(TransactionsContext)
   const [currentPage, setCurrentPage] = useState(1)
   const [itensPerPage] = useState(8)
   const [search, setSearch] = useState<OutcomeSearchProps>({})
@@ -200,7 +207,7 @@ export default function ValoresDeSaida() {
             <span>Saídas Fixas</span>
             <P.ArrowCircleDown size={32} color="#f75a68" />
           </div>
-          <h2>{formatMonetary(fixedOutcomeTotal())}</h2>
+          <h2>{loading ? <Loading /> : formatMonetary(fixedOutcomeTotal())}</h2>
         </Card>
         <P.PlusCircle size={32} />
         <Card>
@@ -208,7 +215,7 @@ export default function ValoresDeSaida() {
             <span>Saídas Mensais</span>
             <P.ArrowCircleDown size={32} color="#f75a68" />
           </div>
-          <h2>{formatMonetary(monthlyOutcomeTotal())}</h2>
+          <h2>{loading ? <Loading /> : formatMonetary(monthlyOutcomeTotal())}</h2>
         </Card>
         <P.Equals size={32} />
         <Card>
@@ -221,15 +228,17 @@ export default function ValoresDeSaida() {
         <NewTransactionForm method="post" type="outcome" triggerText="Novo Valor de Saída" />
       </S.ElementsContainer>
       <SearchTransactions transactionType="outcome" insertSearch={insertSearch} />
-      {handleTransactions()}
-      <Pagination
-        currentPage={currentPage}
-        itensPerPage={itensPerPage}
-        totalItens={
-          searchedTransactions.length === 0 ? outcomeValues.length : searchedTransactions.length
-        }
-        paginate={paginate}
-      />
+      {loading ? <Loading /> : handleTransactions()}
+      {!loading && (
+        <Pagination
+          currentPage={currentPage}
+          itensPerPage={itensPerPage}
+          totalItens={
+            searchedTransactions.length === 0 ? outcomeValues.length : searchedTransactions.length
+          }
+          paginate={paginate}
+        />
+      )}
     </S.Container>
   )
 }

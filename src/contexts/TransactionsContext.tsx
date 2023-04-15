@@ -1,8 +1,8 @@
 import { api } from '../../axios'
 import { ReactNode, createContext, useState, useEffect } from 'react'
-import { differenceInMonths, format, formatISO, isSameMonth, isWithinInterval } from 'date-fns'
+import { differenceInMonths, isSameMonth, isWithinInterval } from 'date-fns'
 import { FilterMonthDate, TransactionDate } from '../utils/DatesValidation'
-import { formatMonetary } from '../utils/FormatMonetaryValues'
+
 import {
   CreateFixedValues,
   CreateIncomeTransaction,
@@ -13,6 +13,7 @@ import {
 } from '../types/TransactionTypes'
 
 type TransactionContextType = {
+  loading: Boolean
   incomeValues: IncomeTransaction[]
   outcomeValues: OutcomeTransaction[]
   fixedValues: FixedValues[]
@@ -42,6 +43,7 @@ type CyclesContextProviderProps = {
 export const TransactionsContext = createContext({} as TransactionContextType)
 
 export function TransactionsContextProvider({ children }: CyclesContextProviderProps) {
+  const [loading, setLoading] = useState(false)
   const [incomeValues, setIncomeValues] = useState<IncomeTransaction[]>([])
   const [outcomeValues, setOutcomeValues] = useState<OutcomeTransaction[]>([])
   const [fixedValues, setFixedValues] = useState<FixedValues[]>([])
@@ -52,6 +54,7 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
   )
 
   const fetchTransactions = async () => {
+    setLoading(true)
     const incomeResponse = await api.get('incomeTransactions')
     const outcomeResponse = await api.get('outcomeTransactions')
     const fixedResponse = await api.get('fixedValues')
@@ -80,6 +83,7 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
     setIncomeValues(filteredIncomeResponse)
     setOutcomeValues(filteredOutcomeResponse)
     setFixedValues(fixedResponse.data)
+    setLoading(false)
   }
 
   const newTransaction = async (
@@ -238,6 +242,7 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
   return (
     <TransactionsContext.Provider
       value={{
+        loading,
         incomeValues,
         outcomeValues,
         fixedValues,

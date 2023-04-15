@@ -12,9 +12,10 @@ import { UpdateTransactionForm } from '../components/Dialog/UpdateTransaction'
 import { IncomeSearchProps, IncomeTransaction } from '../types/TransactionTypes'
 import { SearchTransactions } from '../components/SearchTransactions'
 import { handleIncomeSearch } from '../utils/HandleSearch'
+import { Loading } from '../components/Loading'
 
 export default function ValoresDeEntrada() {
-  const { incomeValues, fixedIncomeTotal, monthlyIncomeTotal, deleteTransaction } =
+  const { loading, incomeValues, fixedIncomeTotal, monthlyIncomeTotal, deleteTransaction } =
     useContext(TransactionsContext)
   const [currentPage, setCurrentPage] = useState(1)
   const [itensPerPage] = useState(8)
@@ -139,7 +140,7 @@ export default function ValoresDeEntrada() {
             <span>Entradas Fixas</span>
             <P.ArrowCircleUp size={32} color="#00b37e" />
           </div>
-          <h2>{formatMonetary(fixedIncomeTotal())}</h2>
+          <h2>{loading ? <Loading /> : formatMonetary(fixedIncomeTotal())}</h2>
         </Card>
         <P.PlusCircle size={32} />
         <Card>
@@ -147,7 +148,7 @@ export default function ValoresDeEntrada() {
             <span>Entradas Mensais</span>
             <P.ArrowCircleUp size={32} color="#00b37e" />
           </div>
-          <h2>{formatMonetary(monthlyIncomeTotal())}</h2>
+          <h2>{loading ? <Loading /> : formatMonetary(monthlyIncomeTotal())}</h2>
         </Card>
         <P.Equals size={32} />
         <Card>
@@ -160,15 +161,17 @@ export default function ValoresDeEntrada() {
         <NewTransactionForm method="post" type="income" triggerText="Novo Valor de Entrada" />
       </S.ElementsContainer>
       <SearchTransactions transactionType="income" insertSearch={insertSearch} />
-      {handleTransactions()}
-      <Pagination
-        currentPage={currentPage}
-        itensPerPage={itensPerPage}
-        totalItens={
-          searchedTransactions.length === 0 ? incomeValues.length : searchedTransactions.length
-        }
-        paginate={paginate}
-      />
+      {loading ? <Loading /> : handleTransactions()}
+      {!loading && (
+        <Pagination
+          currentPage={currentPage}
+          itensPerPage={itensPerPage}
+          totalItens={
+            searchedTransactions.length === 0 ? incomeValues.length : searchedTransactions.length
+          }
+          paginate={paginate}
+        />
+      )}
     </S.Container>
   )
 }
