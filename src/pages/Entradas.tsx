@@ -156,7 +156,9 @@ export default function ValoresDeEntrada() {
             <span>Total de entradas</span>
             <P.ArrowCircleUp size={32} color="#00b37e" />
           </div>
-          <h2>{formatMonetary(fixedIncomeTotal() + monthlyIncomeTotal())}</h2>
+          <h2>
+            {loading ? <Loading /> : formatMonetary(fixedIncomeTotal() + monthlyIncomeTotal())}
+          </h2>
         </Card>
         <NewTransactionForm method="post" type="income" triggerText="Novo Valor de Entrada" />
       </S.ElementsContainer>

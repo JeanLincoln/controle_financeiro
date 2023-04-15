@@ -223,7 +223,9 @@ export default function ValoresDeSaida() {
             <span>Total de Saídas</span>
             <P.ArrowCircleDown size={32} color="#f75a68" />
           </div>
-          <h2>{formatMonetary(fixedOutcomeTotal() + monthlyOutcomeTotal())}</h2>
+          <h2>
+            {loading ? <Loading /> : formatMonetary(fixedOutcomeTotal() + monthlyOutcomeTotal())}
+          </h2>
         </Card>
         <NewTransactionForm method="post" type="outcome" triggerText="Novo Valor de Saída" />
       </S.ElementsContainer>
