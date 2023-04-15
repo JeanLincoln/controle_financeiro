@@ -1,50 +1,134 @@
-import { Card } from '../components/Card';
-import * as S from '../styles/pages/Entradas';
-import * as P from 'phosphor-react';
-import { MonthSelector } from '../components/MonthSelector';
-import { useContext, useEffect, useState } from 'react';
-import { TransactionsContext } from '../contexts/TransactionsContext';
-import { NewTransactionForm } from '../components/Dialog/NewTransaction';
-import { format } from 'date-fns';
-import { formatMonetary } from '../utils/FormatMonetaryValues';
-import { Pagination } from '../components/Pagination';
-import { UpdateTransactionForm } from '../components/Dialog/UpdateTransaction';
-import { IncomeTransacion } from '../types/TransactionTypes';
+import { Card } from '../components/Card'
+import * as S from '../styles/pages/Entradas'
+import * as P from 'phosphor-react'
+import { MonthSelector } from '../components/MonthSelector'
+import { ChangeEvent, useContext, useEffect, useState } from 'react'
+import { TransactionsContext } from '../contexts/TransactionsContext'
+import { NewTransactionForm } from '../components/Dialog/NewTransaction'
+import { format } from 'date-fns'
+import { formatMonetary } from '../utils/FormatMonetaryValues'
+import { Pagination } from '../components/Pagination'
+import { UpdateTransactionForm } from '../components/Dialog/UpdateTransaction'
+import { IncomeSearchProps, IncomeTransaction } from '../types/TransactionTypes'
+import { SearchTransactions } from '../components/SearchTransactions'
+import { handleIncomeSearch } from '../utils/HandleSearch'
 
 export default function ValoresDeEntrada() {
   const { incomeValues, fixedIncomeTotal, monthlyIncomeTotal, deleteTransaction } =
-    useContext(TransactionsContext);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itensPerPage] = useState(8);
-  const [activeFilter, setActiveFilter] = useState('description');
-  const [search, setSearch] = useState('');
-  const [searchedTransactions, setSearchedTransanctions] = useState<IncomeTransacion[]>([]);
+    useContext(TransactionsContext)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [itensPerPage] = useState(8)
+  const [search, setSearch] = useState<IncomeSearchProps>({})
+  const [searchedTransactions, setSearchedTransanctions] = useState<IncomeTransaction[]>([])
 
-  const indexOfLastItem = currentPage * itensPerPage;
-  const indexOfFirstItem = indexOfLastItem - itensPerPage;
-  const currentItens =
-    search.length > 0
-      ? searchedTransactions.slice(indexOfFirstItem, indexOfLastItem)
-      : incomeValues.slice(indexOfFirstItem, indexOfLastItem);
+  const indexOfLastItem = currentPage * itensPerPage
+  const indexOfFirstItem = indexOfLastItem - itensPerPage
+  const currentItens = search
+    ? searchedTransactions.slice(indexOfFirstItem, indexOfLastItem)
+    : incomeValues.slice(indexOfFirstItem, indexOfLastItem)
 
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber)
+  const clearSearchedTransanctions = () => setSearchedTransanctions([])
+  const insertSearchedTransanctions = (transactions: IncomeTransaction[]) =>
+    setSearchedTransanctions(transactions)
+  const insertSearch = (
+    filter: string,
+    event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
+  ) => setSearch((state) => ({ ...state, [filter]: event.target.value }))
 
-  const handleSearch = () => {
-    if (search.length >= 1) {
-      const transactions = incomeValues.filter((transaction) =>
-        String(transaction[activeFilter]).toUpperCase().includes(search.toUpperCase())
-      );
-      setSearchedTransanctions(transactions);
-      setCurrentPage(1);
-      return;
+  const handleTransactions = () => {
+    if (search && currentItens.length > 0) {
+      return (
+        <S.IncomeValuesTable>
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Descrição</th>
+              <th>Procedência</th>
+              <th>Valor</th>
+            </tr>
+          </thead>
+          <tbody>
+            {currentItens.map((transaction) => {
+              return (
+                <tr key={transaction.id}>
+                  <td>{format(new Date(transaction.date), 'dd/MM/yyyy')}</td>
+                  <td>{transaction.description}</td>
+                  <td>{transaction.origin}</td>
+                  <td>{formatMonetary(transaction.value)}</td>
+                  <td>
+                    <button
+                      className="delete"
+                      onClick={() => {
+                        deleteTransaction('income', transaction.id)
+                      }}
+                    >
+                      <P.Trash size={32} />
+                    </button>
+                  </td>
+                  <td>
+                    <UpdateTransactionForm method="put" type="income" transaction={transaction} />
+                  </td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </S.IncomeValuesTable>
+      )
     }
-    setCurrentPage(1);
-    setSearchedTransanctions([]);
-  };
+
+    if (!search && currentItens.length === 0) {
+      return (
+        <S.IncomeValuesTable>
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Descrição</th>
+              <th>Procedência</th>
+              <th>Valor</th>
+            </tr>
+          </thead>
+          <tbody>
+            {currentItens.map((transaction) => {
+              return (
+                <tr key={transaction.id}>
+                  <td>{format(new Date(transaction.date), 'dd/MM/yyyy')}</td>
+                  <td>{transaction.description}</td>
+                  <td>{transaction.origin}</td>
+                  <td>{formatMonetary(transaction.value)}</td>
+                  <td>
+                    <button
+                      className="delete"
+                      onClick={() => {
+                        deleteTransaction('income', transaction.id)
+                      }}
+                    >
+                      <P.Trash size={32} />
+                    </button>
+                  </td>
+                  <td>
+                    <UpdateTransactionForm method="put" type="income" transaction={transaction} />
+                  </td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </S.IncomeValuesTable>
+      )
+    }
+
+    return <div>Nenhum lancamento encontrado!</div>
+  }
 
   useEffect(() => {
-    handleSearch();
-  }, [search]);
+    setCurrentPage(1)
+    handleIncomeSearch({
+      searchFilters: search,
+      clearSearchedTransanctions: clearSearchedTransanctions,
+      insertSearchedTransanctions: insertSearchedTransanctions,
+      transactionValues: incomeValues,
+    })
+  }, [search, incomeValues])
 
   return (
     <S.Container>
@@ -75,78 +159,8 @@ export default function ValoresDeEntrada() {
         </Card>
         <NewTransactionForm method="post" type="income" triggerText="Novo Valor de Entrada" />
       </S.ElementsContainer>
-      <S.FiltersContainers>
-        <S.FilterItem
-          onClick={(e) => setActiveFilter((e.target as HTMLInputElement).value)}
-          value="date"
-          className={activeFilter === 'date' ? 'activeFilter' : ''}
-        >
-          Data
-        </S.FilterItem>
-        <S.FilterItem
-          onClick={(e) => setActiveFilter((e.target as HTMLInputElement).value)}
-          value="description"
-          className={activeFilter === 'description' ? 'activeFilter' : ''}
-        >
-          Descrição
-        </S.FilterItem>
-        <S.FilterItem
-          onClick={(e) => setActiveFilter((e.target as HTMLInputElement).value)}
-          value="origin"
-          className={activeFilter === 'origin' ? 'activeFilter' : ''}
-        >
-          Procedência
-        </S.FilterItem>
-        <S.FilterItem
-          onClick={(e) => setActiveFilter((e.target as HTMLInputElement).value)}
-          value="value"
-          className={activeFilter === 'value' ? 'activeFilter' : ''}
-        >
-          Valor
-        </S.FilterItem>
-      </S.FiltersContainers>
-      <S.SearchTransactionForm>
-        <input
-          onChange={(e) => setSearch(e.target.value)}
-          type="text"
-          placeholder="Digite sua pesquisa aqui!"
-        />
-      </S.SearchTransactionForm>
-      <S.IncomeValuesTable>
-        <thead>
-          <tr>
-            <th>Data</th>
-            <th>Descrição</th>
-            <th>Procedência</th>
-            <th>Valor</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentItens.map((transaction) => {
-            return (
-              <tr key={transaction.id}>
-                <td>{format(new Date(transaction.date), 'dd/MM/yyyy')}</td>
-                <td>{transaction.description}</td>
-                <td>{transaction.origin}</td>
-                <td>{formatMonetary(transaction.value)}</td>
-                <td>
-                  <button
-                    className="delete"
-                    onClick={() => {
-                      deleteTransaction('income', transaction.id);
-                    }}
-                  >
-                    <P.Trash size={32} />
-                  </button>
-                </td>
-                <td>
-                  <UpdateTransactionForm method="put" type="income" transaction={transaction} />
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </S.IncomeValuesTable>
+      <SearchTransactions transactionType="income" insertSearch={insertSearch} />
+      {handleTransactions()}
       <Pagination
         currentPage={currentPage}
         itensPerPage={itensPerPage}
@@ -156,5 +170,5 @@ export default function ValoresDeEntrada() {
         paginate={paginate}
       />
     </S.Container>
-  );
+  )
 }

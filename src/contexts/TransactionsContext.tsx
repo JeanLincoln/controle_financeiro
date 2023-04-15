@@ -1,200 +1,200 @@
-import { api } from '../../axios';
-import { ReactNode, createContext, useState, useEffect } from 'react';
-import { differenceInMonths, format, formatISO, isSameMonth, isWithinInterval } from 'date-fns';
-import { FilterMonthDate, TransactionDate } from '../utils/DatesValidation';
-import { formatMonetary } from '../utils/FormatMonetaryValues';
+import { api } from '../../axios'
+import { ReactNode, createContext, useState, useEffect } from 'react'
+import { differenceInMonths, format, formatISO, isSameMonth, isWithinInterval } from 'date-fns'
+import { FilterMonthDate, TransactionDate } from '../utils/DatesValidation'
+import { formatMonetary } from '../utils/FormatMonetaryValues'
 import {
   CreateFixedValues,
   CreateIncomeTransaction,
   CreateOutcomeTransaction,
   FixedValues,
-  IncomeTransacion,
+  IncomeTransaction,
   OutcomeTransaction,
-} from '../types/TransactionTypes';
+} from '../types/TransactionTypes'
 
 type TransactionContextType = {
-  incomeValues: IncomeTransacion[];
-  outcomeValues: OutcomeTransaction[];
-  fixedValues: FixedValues[];
-  filterMonth: string;
-  setFilterMonth: (FilterMonth: string) => void;
-  fetchTransactions: () => void;
-  monthlyIncomeTotal: () => number;
-  monthlyOutcomeTotal: () => number;
-  fixedIncomeTotal: () => number;
-  fixedOutcomeTotal: () => number;
+  incomeValues: IncomeTransaction[]
+  outcomeValues: OutcomeTransaction[]
+  fixedValues: FixedValues[]
+  filterMonth: string
+  setFilterMonth: (FilterMonth: string) => void
+  fetchTransactions: () => void
+  monthlyIncomeTotal: () => number
+  monthlyOutcomeTotal: () => number
+  fixedIncomeTotal: () => number
+  fixedOutcomeTotal: () => number
   newTransaction: (
     type: string,
     data: CreateIncomeTransaction | CreateOutcomeTransaction | CreateFixedValues
-  ) => Promise<void>;
-  deleteTransaction: (type: string, transactionId: string) => Promise<void>;
+  ) => Promise<void>
+  deleteTransaction: (type: string, transactionId: string) => Promise<void>
   updateTransaction: (
     transactionToUpdateId: string,
     type: string,
     updateTransaction: CreateIncomeTransaction | CreateOutcomeTransaction | CreateFixedValues
-  ) => Promise<void>;
-};
+  ) => Promise<void>
+}
 
 type CyclesContextProviderProps = {
-  children: ReactNode;
-};
+  children: ReactNode
+}
 
-export const TransactionsContext = createContext({} as TransactionContextType);
+export const TransactionsContext = createContext({} as TransactionContextType)
 
 export function TransactionsContextProvider({ children }: CyclesContextProviderProps) {
-  const [incomeValues, setIncomeValues] = useState<IncomeTransacion[]>([]);
-  const [outcomeValues, setOutcomeValues] = useState<OutcomeTransaction[]>([]);
-  const [fixedValues, setFixedValues] = useState<FixedValues[]>([]);
+  const [incomeValues, setIncomeValues] = useState<IncomeTransaction[]>([])
+  const [outcomeValues, setOutcomeValues] = useState<OutcomeTransaction[]>([])
+  const [fixedValues, setFixedValues] = useState<FixedValues[]>([])
   const [filterMonth, setFilterMonth] = useState(
     `${new Date().getFullYear()}-${
       new Date().getMonth() + 1 > 9 ? new Date().getMonth() + 1 : `0${new Date().getMonth() + 1}`
     }`
-  );
+  )
 
   const fetchTransactions = async () => {
-    const incomeResponse = await api.get('incomeTransactions');
-    const outcomeResponse = await api.get('outcomeTransactions');
-    const fixedResponse = await api.get('fixedValues');
+    const incomeResponse = await api.get('incomeTransactions')
+    const outcomeResponse = await api.get('outcomeTransactions')
+    const fixedResponse = await api.get('fixedValues')
 
-    const filteredIncomeResponse = incomeResponse.data.filter((transaction: IncomeTransacion) =>
+    const filteredIncomeResponse = incomeResponse.data.filter((transaction: IncomeTransaction) =>
       isSameMonth(
         new Date(transaction.date),
         new Date(Number(filterMonth.split('-')[0]), Number(filterMonth.split('-')[1]) - 1)
       )
-    );
+    )
 
     const filteredOutcomeResponse = outcomeResponse.data.filter(
       (transaction: OutcomeTransaction) => {
         const datesDifference = differenceInMonths(
           FilterMonthDate(filterMonth),
           TransactionDate(transaction.date)
-        );
+        )
 
-        const ocorringPurchase = datesDifference >= 0 && datesDifference <= transaction.installment;
-        const paidPurchase = datesDifference > transaction.installment - 1;
+        const ocorringPurchase = datesDifference >= 0 && datesDifference <= transaction.installment
+        const paidPurchase = datesDifference > transaction.installment - 1
 
-        return ocorringPurchase && !paidPurchase;
+        return ocorringPurchase && !paidPurchase
       }
-    );
+    )
 
-    setIncomeValues(filteredIncomeResponse);
-    setOutcomeValues(filteredOutcomeResponse);
-    setFixedValues(fixedResponse.data);
-  };
+    setIncomeValues(filteredIncomeResponse)
+    setOutcomeValues(filteredOutcomeResponse)
+    setFixedValues(fixedResponse.data)
+  }
 
   const newTransaction = async (
     type: string,
     data: CreateIncomeTransaction | CreateOutcomeTransaction | CreateFixedValues
   ) => {
-    const incomeTransaction = type === 'income';
-    const outcomeTransaction = type === 'outcome';
-    const fixedTransaction = type === 'fixed';
+    const incomeTransaction = type === 'income'
+    const outcomeTransaction = type === 'outcome'
+    const fixedTransaction = type === 'fixed'
 
     if (incomeTransaction) {
-      const response = await api.post('incomeTransactions', data);
-      setIncomeValues((state) => [response.data, ...state]);
-      return;
+      const response = await api.post('incomeTransactions', data)
+      setIncomeValues((state) => [response.data, ...state])
+      return
     }
 
     if (outcomeTransaction) {
-      const response = await api.post('outcomeTransactions', data);
-      setOutcomeValues((state) => [response.data, ...state]);
-      return;
+      const response = await api.post('outcomeTransactions', data)
+      setOutcomeValues((state) => [response.data, ...state])
+      return
     }
 
     if (fixedTransaction) {
-      const response = await api.post('fixedValues', data);
-      setFixedValues((state) => [response.data, ...state]);
-      return;
+      const response = await api.post('fixedValues', data)
+      setFixedValues((state) => [response.data, ...state])
+      return
     }
-  };
+  }
 
   const deleteTransaction = async (type: string, transactionId: string) => {
-    const incomeTransaction = type === 'income';
-    const outcomeTransaction = type === 'outcome';
-    const fixedTransaction = type === 'fixed';
+    const incomeTransaction = type === 'income'
+    const outcomeTransaction = type === 'outcome'
+    const fixedTransaction = type === 'fixed'
 
     if (incomeTransaction) {
-      await api.delete(`incomeTransactions/${transactionId}`);
+      await api.delete(`incomeTransactions/${transactionId}`)
       const remainingTransactions = incomeValues.filter(
         (transaction) => transaction.id !== transactionId
-      );
-      setIncomeValues(remainingTransactions);
-      return;
+      )
+      setIncomeValues(remainingTransactions)
+      return
     }
     if (outcomeTransaction) {
-      await api.delete(`outcomeTransactions/${transactionId}`);
+      await api.delete(`outcomeTransactions/${transactionId}`)
       const remainingTransactions = outcomeValues.filter(
         (transaction) => transaction.id !== transactionId
-      );
-      setOutcomeValues(remainingTransactions);
+      )
+      setOutcomeValues(remainingTransactions)
     }
 
     if (fixedTransaction) {
-      await api.delete(`fixedValues/${transactionId}`);
+      await api.delete(`fixedValues/${transactionId}`)
       const remainingTransactions = fixedValues.filter(
         (transaction) => transaction.id !== transactionId
-      );
-      setFixedValues(remainingTransactions);
-      return;
+      )
+      setFixedValues(remainingTransactions)
+      return
     }
-  };
+  }
 
   const updateTransaction = async (
     transactionToUpdateId: string,
     type: string,
     Transactionupdate: CreateIncomeTransaction | CreateOutcomeTransaction | CreateFixedValues
   ) => {
-    const incomeTransaction = type === 'income';
-    const outcomeTransaction = type === 'outcome';
-    const fixedTransaction = type === 'fixed';
+    const incomeTransaction = type === 'income'
+    const outcomeTransaction = type === 'outcome'
+    const fixedTransaction = type === 'fixed'
 
     if (incomeTransaction) {
-      await api.put(`incomeTransactions/${transactionToUpdateId}`, Transactionupdate);
-      fetchTransactions();
-      return;
+      await api.put(`incomeTransactions/${transactionToUpdateId}`, Transactionupdate)
+      fetchTransactions()
+      return
     }
     if (outcomeTransaction) {
-      await api.put(`outcomeTransactions/${transactionToUpdateId}`, Transactionupdate);
-      fetchTransactions();
+      await api.put(`outcomeTransactions/${transactionToUpdateId}`, Transactionupdate)
+      fetchTransactions()
     }
 
     if (fixedTransaction) {
-      await api.put(`fixedValues/${transactionToUpdateId}`, Transactionupdate);
-      fetchTransactions();
-      return;
+      await api.put(`fixedValues/${transactionToUpdateId}`, Transactionupdate)
+      fetchTransactions()
+      return
     }
-  };
+  }
 
   useEffect(() => {
-    fetchTransactions();
-  }, [filterMonth]);
+    fetchTransactions()
+  }, [filterMonth])
 
   const monthlyIncomeTotal = () => {
     const total = incomeValues.reduce((acc, income) => {
-      acc = acc += income.value;
-      return acc;
-    }, 0);
-    return total;
-  };
+      acc = acc += income.value
+      return acc
+    }, 0)
+    return total
+  }
 
   const monthlyOutcomeTotal = () => {
     const total = outcomeValues.reduce((acc, income) => {
-      acc = acc += income.installment > 1 ? income.value / income.installment : income.value;
-      return acc;
-    }, 0);
-    return total;
-  };
+      acc = acc += income.installment > 1 ? income.value / income.installment : income.value
+      return acc
+    }, 0)
+    return total
+  }
 
   const fixedIncomeTotal = () => {
     const fixedIncomesTotal = fixedValues.reduce((acc, income) => {
-      const fixedIncome = income.type === 'Entrada';
-      const incomeInitialDate = new Date(income.initialDate);
-      const incomeFinalDate = income.finalDate ? new Date(income.finalDate) : new Date(2999, 1, 1);
+      const fixedIncome = income.type === 'Entrada'
+      const incomeInitialDate = new Date(income.initialDate)
+      const incomeFinalDate = income.finalDate ? new Date(income.finalDate) : new Date(2999, 1, 1)
       const filteredDate = new Date(
         Number(filterMonth.split('-')[0]),
         Number(filterMonth.split('-')[1]) - 1
-      );
+      )
 
       if (
         fixedIncome &&
@@ -203,23 +203,23 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
           end: incomeFinalDate,
         })
       ) {
-        acc = acc += income.value;
+        acc = acc += income.value
       }
-      return acc;
-    }, 0);
+      return acc
+    }, 0)
 
-    return fixedIncomesTotal;
-  };
+    return fixedIncomesTotal
+  }
 
   const fixedOutcomeTotal = () => {
     const fixedOutcomesTotal = fixedValues.reduce((acc, income) => {
-      const fixedOutcome = income.type === 'Saída';
-      const outcomeInitialDate = new Date(income.initialDate);
-      const outcomeFinalDate = income.finalDate ? new Date(income.finalDate) : new Date(2999, 1, 1);
+      const fixedOutcome = income.type === 'Saída'
+      const outcomeInitialDate = new Date(income.initialDate)
+      const outcomeFinalDate = income.finalDate ? new Date(income.finalDate) : new Date(2999, 1, 1)
       const filteredDate = new Date(
         Number(filterMonth.split('-')[0]),
         Number(filterMonth.split('-')[1]) - 1
-      );
+      )
       if (
         fixedOutcome &&
         isWithinInterval(filteredDate, {
@@ -227,13 +227,13 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
           end: outcomeFinalDate,
         })
       ) {
-        acc = acc += income.value;
+        acc = acc += income.value
       }
 
-      return acc;
-    }, 0);
-    return fixedOutcomesTotal;
-  };
+      return acc
+    }, 0)
+    return fixedOutcomesTotal
+  }
 
   return (
     <TransactionsContext.Provider
@@ -255,5 +255,5 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
     >
       {children}
     </TransactionsContext.Provider>
-  );
+  )
 }

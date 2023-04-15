@@ -4,6 +4,8 @@ import {
   OutcomeSearchProps,
   IncomeSearchProps,
   FixedSearchProps,
+  IncomeTransaction,
+  FixedValues,
 } from '../types/TransactionTypes'
 
 type handleOutcomeSearchProps = {
@@ -16,15 +18,15 @@ type handleOutcomeSearchProps = {
 type handleIncomeSearchProps = {
   searchFilters: IncomeSearchProps
   clearSearchedTransanctions: () => void
-  insertSearchedTransanctions: (transactions: OutcomeTransaction[]) => void
-  transactionValues: OutcomeTransaction[]
+  insertSearchedTransanctions: (transactions: IncomeTransaction[]) => void
+  transactionValues: IncomeTransaction[]
 }
 
 type handlefixedSearchProps = {
   searchFilters: FixedSearchProps
   clearSearchedTransanctions: () => void
-  insertSearchedTransanctions: (transactions: OutcomeTransaction[]) => void
-  transactionValues: OutcomeTransaction[]
+  insertSearchedTransanctions: (transactions: FixedValues[]) => void
+  transactionValues: FixedValues[]
 }
 
 export const handleOutcomeSearch = ({
@@ -113,7 +115,7 @@ export const handleIncomeSearch = ({
     })
   }
 
-  if (searchFilters.descriptionFilter) {
+  if (searchFilters.originFilter) {
     filteredTransactions = filteredTransactions.filter((transaction) => {
       return transaction.origin.toUpperCase().includes(searchFilters.originFilter.toUpperCase())
     })
@@ -146,13 +148,9 @@ export const handlefixedSearch = ({
 
   if (searchFilters.initialDateFilter) {
     filteredTransactions = filteredTransactions.filter((transaction) => {
-      return format(new Date(transaction.date), 'yyyy-MM-dd') === searchFilters.initialDateFilter
-    })
-  }
-
-  if (searchFilters.finalDateFilter) {
-    filteredTransactions = filteredTransactions.filter((transaction) => {
-      return format(new Date(transaction.date), 'yyyy-MM-dd') === searchFilters.finalDateFilter
+      return (
+        format(new Date(transaction.initialDate), 'yyyy-MM-dd') === searchFilters.initialDateFilter
+      )
     })
   }
 

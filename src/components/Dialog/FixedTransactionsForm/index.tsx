@@ -1,47 +1,47 @@
-import { format, formatISO } from 'date-fns';
-import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
-import CurrencyInput from 'react-currency-input-field';
-import { useForm } from 'react-hook-form';
-import { useTransaction } from '../../../hooks/useTransaction';
-import * as S from '../../../styles/components/Dialog';
-import { CreateFixedValues } from '../../../types/TransactionTypes';
-import { formatValue } from '../../../utils/FormatNumberValue';
-import { FixedValues, IncomeTransacion, OutcomeTransaction } from '../../../types/TransactionTypes';
+import { format, formatISO } from 'date-fns'
+import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
+import CurrencyInput from 'react-currency-input-field'
+import { useForm } from 'react-hook-form'
+import { useTransaction } from '../../../hooks/useTransaction'
+import * as S from '../../../styles/components/Dialog'
+import { CreateFixedValues } from '../../../types/TransactionTypes'
+import { formatValue } from '../../../utils/FormatNumberValue'
+import { FixedValues, IncomeTransaction, OutcomeTransaction } from '../../../types/TransactionTypes'
 
 type TriggerProps = {
-  type: 'income' | 'outcome' | 'fixed';
-  setOpen: Dispatch<SetStateAction<boolean>>;
-  transaction?: FixedValues;
-};
+  type: 'income' | 'outcome' | 'fixed'
+  setOpen: Dispatch<SetStateAction<boolean>>
+  transaction?: FixedValues
+}
 
 export const FixedTransactionsForm = ({ type, setOpen, transaction }: TriggerProps) => {
-  const { register, handleSubmit, reset } = useForm<CreateFixedValues>();
-  const { newTransaction, updateTransaction } = useTransaction();
+  const { register, handleSubmit, reset } = useForm<CreateFixedValues>()
+  const { newTransaction, updateTransaction } = useTransaction()
 
   const handleCreateFixedTransaction = async (data: CreateFixedValues) => {
-    const formattedValue = formatValue(data.value.toString());
+    const formattedValue = formatValue(data.value.toString())
 
     if (!transaction) {
       newTransaction(type, {
         ...data,
         value: formattedValue,
         finalDate: data.finalDate ? data.finalDate : undefined,
-      });
+      })
 
-      reset();
-      setOpen(false);
-      return;
+      reset()
+      setOpen(false)
+      return
     }
 
     updateTransaction(transaction.id, type, {
       ...data,
       value: formattedValue,
       finalDate: data.finalDate ? data.finalDate : undefined,
-    });
+    })
 
-    reset();
-    setOpen(false);
-  };
+    reset()
+    setOpen(false)
+  }
 
   return (
     <S.Content>
@@ -186,5 +186,5 @@ export const FixedTransactionsForm = ({ type, setOpen, transaction }: TriggerPro
         )}
       </form>
     </S.Content>
-  );
-};
+  )
+}

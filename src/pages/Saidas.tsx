@@ -35,10 +35,7 @@ export default function ValoresDeSaida() {
   const insertSearch = (
     filter: string,
     event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
-  ) => {
-    console.log({ [filter]: event.target.value })
-    setSearch((state) => ({ ...state, [filter]: event.target.value }))
-  }
+  ) => setSearch((state) => ({ ...state, [filter]: event.target.value }))
 
   const handleTransactions = () => {
     if (search && currentItens.length > 0) {

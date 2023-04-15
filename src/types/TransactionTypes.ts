@@ -5,7 +5,7 @@ export type CreateIncomeTransaction = {
   value: number
 }
 
-export type IncomeTransacion = {
+export type IncomeTransaction = {
   id: string
   [key: string]: string
 } & CreateIncomeTransaction

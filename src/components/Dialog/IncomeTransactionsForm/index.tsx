@@ -1,26 +1,26 @@
-import { Dispatch, SetStateAction } from 'react';
-import CurrencyInput from 'react-currency-input-field';
-import { useForm } from 'react-hook-form';
-import { useTransaction } from '../../../hooks/useTransaction';
-import * as S from '../../../styles/components/Dialog';
-import { CreateIncomeTransaction } from '../../../types/TransactionTypes';
-import { formatValue } from '../../../utils/FormatNumberValue';
-import { IncomeTransacion } from '../../../types/TransactionTypes';
-import { formatISO } from 'date-fns';
+import { Dispatch, SetStateAction } from 'react'
+import CurrencyInput from 'react-currency-input-field'
+import { useForm } from 'react-hook-form'
+import { useTransaction } from '../../../hooks/useTransaction'
+import * as S from '../../../styles/components/Dialog'
+import { CreateIncomeTransaction } from '../../../types/TransactionTypes'
+import { formatValue } from '../../../utils/FormatNumberValue'
+import { IncomeTransaction } from '../../../types/TransactionTypes'
+import { formatISO } from 'date-fns'
 
 type TriggerProps = {
-  type: 'income' | 'outcome' | 'fixed';
-  setOpen: Dispatch<SetStateAction<boolean>>;
-  transaction?: IncomeTransacion;
-};
+  type: 'income' | 'outcome' | 'fixed'
+  setOpen: Dispatch<SetStateAction<boolean>>
+  transaction?: IncomeTransaction
+}
 
 export const IncomeTransactionsForm = ({ type, setOpen, transaction }: TriggerProps) => {
-  const { register, handleSubmit, reset } = useForm<CreateIncomeTransaction>();
-  const { newTransaction, updateTransaction } = useTransaction();
+  const { register, handleSubmit, reset } = useForm<CreateIncomeTransaction>()
+  const { newTransaction, updateTransaction } = useTransaction()
 
   const handleCreateIncomeTransaction = async (data: CreateIncomeTransaction) => {
-    const formattedDate = new Date(data.date);
-    const formattedValue = formatValue(data.value.toString());
+    const formattedDate = new Date(data.date)
+    const formattedValue = formatValue(data.value.toString())
 
     if (!transaction) {
       newTransaction(type, {
@@ -33,11 +33,11 @@ export const IncomeTransactionsForm = ({ type, setOpen, transaction }: TriggerPr
             formattedDate.getDate() + 1
           )
         ),
-      });
+      })
 
-      reset();
-      setOpen(false);
-      return;
+      reset()
+      setOpen(false)
+      return
     }
 
     updateTransaction(transaction.id, type, {
@@ -46,11 +46,11 @@ export const IncomeTransactionsForm = ({ type, setOpen, transaction }: TriggerPr
       date: new Date(
         new Date(formattedDate.getFullYear(), formattedDate.getMonth(), formattedDate.getDate() + 1)
       ),
-    });
+    })
 
-    reset();
-    setOpen(false);
-  };
+    reset()
+    setOpen(false)
+  }
 
   return (
     <S.Content>
@@ -152,5 +152,5 @@ export const IncomeTransactionsForm = ({ type, setOpen, transaction }: TriggerPr
         )}
       </form>
     </S.Content>
-  );
-};
+  )
+}

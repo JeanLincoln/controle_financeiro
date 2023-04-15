@@ -1,20 +1,20 @@
-import * as Dialog from '@radix-ui/react-dialog';
-import * as S from '../../../styles/components/UpdateTransactionDialog';
-import * as P from 'phosphor-react';
-import { useState } from 'react';
-import { IncomeTransactionsForm } from '../IncomeTransactionsForm';
-import { OutcomeTransactionsForm } from '../OutcomeTransactionsForm';
-import { FixedTransactionsForm } from '../FixedTransactionsForm';
-import { FixedValues, IncomeTransacion, OutcomeTransaction } from '../../../types/TransactionTypes';
+import * as Dialog from '@radix-ui/react-dialog'
+import * as S from '../../../styles/components/UpdateTransactionDialog'
+import * as P from 'phosphor-react'
+import { useState } from 'react'
+import { IncomeTransactionsForm } from '../IncomeTransactionsForm'
+import { OutcomeTransactionsForm } from '../OutcomeTransactionsForm'
+import { FixedTransactionsForm } from '../FixedTransactionsForm'
+import { FixedValues, IncomeTransaction, OutcomeTransaction } from '../../../types/TransactionTypes'
 
 type TriggerProps = {
-  method: string;
-  type: 'income' | 'outcome' | 'fixed';
-  transaction?: IncomeTransacion | OutcomeTransaction | FixedValues;
-};
+  method: string
+  type: 'income' | 'outcome' | 'fixed'
+  transaction?: IncomeTransaction | OutcomeTransaction | FixedValues
+}
 
 export function UpdateTransactionForm({ method, type, transaction }: TriggerProps) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
 
   const HandleTransactionType = (type: string) => {
     if (type === 'income' && method === 'put') {
@@ -22,9 +22,9 @@ export function UpdateTransactionForm({ method, type, transaction }: TriggerProp
         <IncomeTransactionsForm
           type={type}
           setOpen={setOpen}
-          transaction={transaction as IncomeTransacion}
+          transaction={transaction as IncomeTransaction}
         />
-      );
+      )
     }
     if (type === 'outcome' && method === 'put') {
       return (
@@ -33,7 +33,7 @@ export function UpdateTransactionForm({ method, type, transaction }: TriggerProp
           setOpen={setOpen}
           transaction={transaction as OutcomeTransaction}
         />
-      );
+      )
     }
     if (type === 'fixed' && method === 'put') {
       return (
@@ -42,9 +42,9 @@ export function UpdateTransactionForm({ method, type, transaction }: TriggerProp
           setOpen={setOpen}
           transaction={transaction as FixedValues}
         />
-      );
+      )
     }
-  };
+  }
 
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
@@ -58,5 +58,5 @@ export function UpdateTransactionForm({ method, type, transaction }: TriggerProp
         {HandleTransactionType(type)}
       </Dialog.Portal>
     </Dialog.Root>
-  );
+  )
 }

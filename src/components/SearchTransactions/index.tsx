@@ -1,9 +1,4 @@
-import { ChangeEvent, Dispatch, SetStateAction } from 'react'
-import {
-  IncomeSearchProps,
-  OutcomeSearchProps,
-  FixedSearchProps,
-} from '../../types/TransactionTypes'
+import { ChangeEvent } from 'react'
 import * as S from '../../styles/components/SearchTransactions'
 
 type SearchTransactionsProps = {
@@ -76,7 +71,57 @@ export const SearchTransactions = ({ insertSearch, transactionType }: SearchTran
       )
     }
 
-    return <h1>FILTRO NAO APLICADO</h1>
+    if (transactionType === 'income') {
+      return (
+        <>
+          <S.ItemGroup>
+            <label htmlFor="">Data</label>
+            <input onChange={(e) => insertSearch('dateFilter', e)} type="date" />
+          </S.ItemGroup>
+          <S.ItemGroup>
+            <label htmlFor="">Descricão</label>
+            <input onChange={(e) => insertSearch('descriptionFilter', e)} type="text" />
+          </S.ItemGroup>
+          <S.ItemGroup>
+            <label htmlFor="">Procedência</label>
+            <input onChange={(e) => insertSearch('originFilter', e)} type="text" />
+          </S.ItemGroup>
+          <S.ItemGroup>
+            <label htmlFor="">Valor</label>
+            <input onChange={(e) => insertSearch('valueFilter', e)} type="number" />
+          </S.ItemGroup>
+        </>
+      )
+    }
+
+    if (transactionType === 'fixed') {
+      return (
+        <>
+          <S.ItemGroup>
+            <label htmlFor="">Data de inicio</label>
+            <input onChange={(e) => insertSearch('initialDateFilter', e)} type="date" />
+          </S.ItemGroup>
+          <S.ItemGroup>
+            <label htmlFor="">Descricão</label>
+            <input onChange={(e) => insertSearch('descriptionFilter', e)} type="text" />
+          </S.ItemGroup>
+          <S.ItemGroup>
+            <label htmlFor="">Tipo</label>
+            <select onChange={(e) => insertSearch('typeFilter', e)}>
+              <option value=""></option>
+              <option value="Entrada">Entrada</option>
+              <option value="Saída">Saída</option>
+            </select>
+          </S.ItemGroup>
+          <S.ItemGroup>
+            <label htmlFor="">Valor</label>
+            <input onChange={(e) => insertSearch('valueFilter', e)} type="number" />
+          </S.ItemGroup>
+        </>
+      )
+    }
+
+    return <h1>FILTRO NÃO DESENVOLVIDO.</h1>
   }
 
   return (
