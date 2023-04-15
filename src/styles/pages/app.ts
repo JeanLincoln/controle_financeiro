@@ -1,9 +1,9 @@
-import { styled } from '..';
+import { styled } from '..'
 
 export const AppContainer = styled('div', {
   display: 'flex',
   width: '100%',
-});
+})
 
 export const AsideContainer = styled('div', {
   display: 'flex',
@@ -43,7 +43,7 @@ export const AsideContainer = styled('div', {
       alignItems: 'start',
     },
   },
-});
+})
 
 export const LogoContainer = styled('div', {
   display: 'flex',
@@ -67,7 +67,7 @@ export const LogoContainer = styled('div', {
     textDecoration: 'none',
     color: '$gray200',
   },
-});
+})
 
 export const LinksContainer = styled('ul', {
   display: 'flex',
@@ -93,7 +93,7 @@ export const LinksContainer = styled('ul', {
     textDecoration: 'none',
     color: '$gray200',
   },
-});
+})
 
 export const LinkGroup = styled('div', {
   display: 'flex',
@@ -104,7 +104,7 @@ export const LinkGroup = styled('div', {
   svg: {
     height: '100%',
   },
-});
+})
 
 export const UserContainer = styled('div', {
   display: 'flex',
@@ -121,4 +121,4 @@ export const UserContainer = styled('div', {
   strong: {
     fontSize: '$lg',
   },
-});
+})

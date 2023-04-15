@@ -1,14 +1,14 @@
-import type { AppProps } from 'next/app';
-import * as P from 'phosphor-react';
-import * as S from '../styles/pages/app';
-import { globalStyles } from '../styles/global';
-import Image from 'next/image';
-import { TransactionsContextProvider } from '../contexts/TransactionsContext';
+import type { AppProps } from 'next/app'
+import * as P from 'phosphor-react'
+import * as S from '../styles/pages/app'
+import { globalStyles } from '../styles/global'
+import Image from 'next/image'
+import { TransactionsContextProvider } from '../contexts/TransactionsContext'
 
-globalStyles();
+globalStyles()
 
-import userImage from '../assets/images/jean.jpeg';
-import Link from 'next/link';
+import userImage from '../assets/images/jean.jpeg'
+import Link from 'next/link'
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -40,12 +40,12 @@ export default function App({ Component, pageProps }: AppProps) {
                 <h3>Saídas</h3>
               </Link>
             </S.LinkGroup>
-            <S.LinkGroup>
+            {/* <S.LinkGroup>
               <Link href="/investimentos">
                 <P.ChartLineUp size={25} color="#5abdf7" />
                 <h3>Investimentos</h3>
               </Link>
-            </S.LinkGroup>
+            </S.LinkGroup> */}
           </S.LinksContainer>
           <S.UserContainer>
             <Image src={userImage} alt="a user image" width={50} height={50} />
@@ -57,5 +57,5 @@ export default function App({ Component, pageProps }: AppProps) {
         </TransactionsContextProvider>
       </S.AppContainer>
     </>
-  );
+  )
 }
