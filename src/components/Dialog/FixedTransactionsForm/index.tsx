@@ -119,7 +119,7 @@ export const FixedTransactionsForm = ({ type, setOpen, transaction }: TriggerPro
               />
             </S.InputGroup>
             <S.TypeButton transactionType="fixed" type="submit">
-              Inserir Entrada
+              Inserir transação fixa
             </S.TypeButton>
           </>
         ) : (
@@ -180,7 +180,7 @@ export const FixedTransactionsForm = ({ type, setOpen, transaction }: TriggerPro
               />
             </S.InputGroup>
             <S.TypeButton transactionType="fixed" type="submit">
-              Inserir Entrada
+              Inserir transação fixa
             </S.TypeButton>
           </>
         )}
