@@ -38,7 +38,9 @@ export default function ValoresDeEntrada() {
   ) => setSearch((state) => ({ ...state, [filter]: event.target.value }))
 
   const handleTransactions = () => {
-    if (search && currentItens.length > 0) {
+    const searchIsEmpty = Object.values(search).every((value) => value === '')
+
+    if (!searchIsEmpty && currentItens.length > 0) {
       return (
         <S.IncomeValuesTable>
           <thead>
@@ -78,7 +80,7 @@ export default function ValoresDeEntrada() {
       )
     }
 
-    if (!search && currentItens.length === 0) {
+    if (searchIsEmpty) {
       return (
         <S.IncomeValuesTable>
           <thead>

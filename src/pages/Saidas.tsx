@@ -45,7 +45,9 @@ export default function ValoresDeSaida() {
   ) => setSearch((state) => ({ ...state, [filter]: event.target.value }))
 
   const handleTransactions = () => {
-    if (search && currentItens.length > 0) {
+    const searchIsEmpty = Object.values(search).every((value) => value === '')
+
+    if (!searchIsEmpty && currentItens.length > 0) {
       return (
         <S.OutputValuesTable>
           <thead>
@@ -112,7 +114,7 @@ export default function ValoresDeSaida() {
       )
     }
 
-    if (!search && currentItens.length === 0) {
+    if (searchIsEmpty) {
       return (
         <S.OutputValuesTable>
           <thead>
@@ -131,7 +133,7 @@ export default function ValoresDeSaida() {
             </tr>
           </thead>
           <tbody>
-            {outcomeValues.map((transaction) => {
+            {currentItens.map((transaction) => {
               return (
                 <tr key={transaction.id}>
                   <td>{format(new Date(transaction.date), 'dd/MM/yyyy')}</td>
