@@ -86,13 +86,14 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
     )
 
     const filteredFixedResponse = fixedResponse.data.filter((transaction: IncomeTransaction) => {
-      if (!transaction.finalDate) {
-        return true
-      }
+      const fixedInitialDate = new Date(transaction.initialDate)
+      const fixedFinalDate = transaction.finalDate
+        ? new Date(transaction.finalDate)
+        : new Date(2999, 1, 1)
 
       return isWithinInterval(filteredDate, {
-        start: new Date(transaction.initialDate),
-        end: new Date(transaction.finalDate),
+        start: new Date(fixedInitialDate),
+        end: new Date(fixedFinalDate),
       })
     })
 
