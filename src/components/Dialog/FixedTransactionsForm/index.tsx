@@ -20,12 +20,29 @@ export const FixedTransactionsForm = ({ type, setOpen, transaction }: TriggerPro
 
   const handleCreateFixedTransaction = async (data: CreateFixedValues) => {
     const formattedValue = formatValue(data.value.toString())
+    const formattedInitialDate = new Date(data.initialDate)
+    const formattedFinalDate = data.finalDate && new Date(data.finalDate)
 
     if (!transaction) {
       newTransaction(type, {
         ...data,
         value: formattedValue,
-        finalDate: data.finalDate ? data.finalDate : undefined,
+        initialDate: new Date(
+          new Date(
+            formattedInitialDate.getFullYear(),
+            formattedInitialDate.getMonth(),
+            formattedInitialDate.getDate() + 1
+          )
+        ),
+        finalDate: formattedFinalDate
+          ? new Date(
+              new Date(
+                formattedFinalDate.getFullYear(),
+                formattedFinalDate.getMonth(),
+                formattedFinalDate.getDate() + 1
+              )
+            )
+          : undefined,
       })
 
       reset()
@@ -36,7 +53,22 @@ export const FixedTransactionsForm = ({ type, setOpen, transaction }: TriggerPro
     updateTransaction(transaction.id, type, {
       ...data,
       value: formattedValue,
-      finalDate: data.finalDate ? data.finalDate : undefined,
+      initialDate: new Date(
+        new Date(
+          formattedInitialDate.getFullYear(),
+          formattedInitialDate.getMonth(),
+          formattedInitialDate.getDate() + 1
+        )
+      ),
+      finalDate: formattedFinalDate
+        ? new Date(
+            new Date(
+              formattedFinalDate.getFullYear(),
+              formattedFinalDate.getMonth(),
+              formattedFinalDate.getDate() + 1
+            )
+          )
+        : undefined,
     })
 
     reset()
@@ -71,9 +103,7 @@ export const FixedTransactionsForm = ({ type, setOpen, transaction }: TriggerPro
               <input
                 defaultValue={
                   transaction.finalDate &&
-                  formatISO(new Date(transaction.finalDate), {
-                    representation: 'date',
-                  })
+                  formatISO(new Date(transaction!.finalDate), { representation: 'date' })
                 }
                 {...register('finalDate')}
                 type="date"

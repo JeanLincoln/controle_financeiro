@@ -18,7 +18,7 @@ export default function ValoresDeEntrada() {
   const { loading, fixedValues, fixedIncomeTotal, fixedOutcomeTotal, deleteTransaction } =
     useContext(TransactionsContext)
   const [currentPage, setCurrentPage] = useState(1)
-  const [itensPerPage] = useState(6)
+  const [itensPerPage] = useState(7)
   const [search, setSearch] = useState<FixedSearchProps>({})
   const [searchedTransactions, setSearchedTransanctions] = useState<FixedValues[]>([])
 
