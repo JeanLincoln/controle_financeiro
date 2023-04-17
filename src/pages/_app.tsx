@@ -4,6 +4,7 @@ import * as S from '../styles/pages/app'
 import { globalStyles } from '../styles/global'
 import Image from 'next/image'
 import { TransactionsContextProvider } from '../contexts/TransactionsContext'
+import 'react-toastify/dist/ReactToastify.css'
 
 globalStyles()
 
@@ -53,6 +54,7 @@ export default function App({ Component, pageProps }: AppProps) {
           </S.UserContainer>
         </S.AsideContainer>
         <TransactionsContextProvider>
+          <S.StyledToastContainer />
           <Component {...pageProps} />
         </TransactionsContextProvider>
       </S.AppContainer>
