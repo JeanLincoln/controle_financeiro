@@ -12,29 +12,15 @@ import { FixedSearchProps, FixedValues } from '../types/TransactionTypes'
 import { handlefixedSearch } from '../utils/HandleSearch'
 import { SearchTransactions } from '../components/SearchTransactions'
 import { Loading } from '../components/Loading'
+import { MonthSelector } from '../components/MonthSelector'
 
 export default function ValoresDeEntrada() {
-  const { loading, fixedValues, deleteTransaction } = useContext(TransactionsContext)
+  const { loading, fixedValues, fixedIncomeTotal, fixedOutcomeTotal, deleteTransaction } =
+    useContext(TransactionsContext)
   const [currentPage, setCurrentPage] = useState(1)
   const [itensPerPage] = useState(6)
   const [search, setSearch] = useState<FixedSearchProps>({})
   const [searchedTransactions, setSearchedTransanctions] = useState<FixedValues[]>([])
-
-  const FixedSubTotal = (type: string) => {
-    if (type === 'incomes') {
-      const fixedIncomeSubTotal = fixedValues.reduce((acc, fixedValue) => {
-        acc = fixedValue.type === 'Entrada' ? (acc += fixedValue.value) : (acc += 0)
-        return acc
-      }, 0)
-      return formatMonetary(fixedIncomeSubTotal)
-    } else {
-      const fixedOutcomeSubTotal = fixedValues.reduce((acc, fixedValue) => {
-        acc = fixedValue.type === 'Saída' ? (acc += fixedValue.value) : (acc += 0)
-        return acc
-      }, 0)
-      return formatMonetary(fixedOutcomeSubTotal)
-    }
-  }
 
   const indexOfLastItem = currentPage * itensPerPage
   const indexOfFirstItem = indexOfLastItem - itensPerPage
@@ -184,6 +170,7 @@ export default function ValoresDeEntrada() {
   return (
     <S.Container>
       <S.ElementsContainer>
+        <MonthSelector setCurrentPage={setCurrentPage} />
         <S.CardsContainer>
           <Card>
             <div>
@@ -191,7 +178,7 @@ export default function ValoresDeEntrada() {
               <P.Infinity size={32} color="#00b37e" />
             </div>
             <S.VariantSubTotal subTotalType="positive">
-              {loading ? <Loading /> : FixedSubTotal('incomes')}
+              {loading ? <Loading /> : formatMonetary(fixedIncomeTotal())}
             </S.VariantSubTotal>
           </Card>
           <Card>
@@ -200,7 +187,7 @@ export default function ValoresDeEntrada() {
               <P.Infinity size={32} color="#f75a68" />
             </div>
             <S.VariantSubTotal subTotalType="negative">
-              {loading ? <Loading /> : <> - {FixedSubTotal('outcomes')}</>}
+              {loading ? <Loading /> : <> - {formatMonetary(fixedOutcomeTotal())}</>}
             </S.VariantSubTotal>
           </Card>
         </S.CardsContainer>

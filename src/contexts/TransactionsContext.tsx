@@ -11,6 +11,7 @@ import {
   IncomeTransaction,
   OutcomeTransaction,
 } from '../types/TransactionTypes'
+import { FixedSorts, sortFinalDates, sortTypes } from '../utils/SortFixedValues'
 
 type TransactionContextType = {
   loading: Boolean
@@ -58,6 +59,10 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
     const incomeResponse = await api.get('incomeTransactions')
     const outcomeResponse = await api.get('outcomeTransactions')
     const fixedResponse = await api.get('fixedValues')
+    const filteredDate = new Date(
+      Number(filterMonth.split('-')[0]),
+      Number(filterMonth.split('-')[1]) - 1
+    )
 
     const filteredIncomeResponse = incomeResponse.data.filter((transaction: IncomeTransaction) =>
       isSameMonth(
@@ -80,9 +85,22 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
       }
     )
 
+    const filteredFixedResponse = fixedResponse.data.filter((transaction: IncomeTransaction) => {
+      if (!transaction.finalDate) {
+        return true
+      }
+
+      return isWithinInterval(filteredDate, {
+        start: new Date(transaction.initialDate),
+        end: new Date(transaction.finalDate),
+      })
+    })
+
+    FixedSorts(filteredFixedResponse)
+
     setIncomeValues(filteredIncomeResponse)
     setOutcomeValues(filteredOutcomeResponse)
-    setFixedValues(fixedResponse.data)
+    setFixedValues(filteredFixedResponse)
     setLoading(false)
   }
 
