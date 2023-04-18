@@ -1,12 +1,13 @@
 import { format, formatISO } from 'date-fns'
-import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import CurrencyInput from 'react-currency-input-field'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { useTransaction } from '../../../hooks/useTransaction'
 import * as S from '../../../styles/components/Dialog'
+import * as P from 'phosphor-react'
 import { CreateFixedValues } from '../../../types/TransactionTypes'
 import { formatValue } from '../../../utils/FormatNumberValue'
-import { FixedValues, IncomeTransaction, OutcomeTransaction } from '../../../types/TransactionTypes'
+import { FixedValues } from '../../../types/TransactionTypes'
 
 type TriggerProps = {
   type: 'income' | 'outcome' | 'fixed'
@@ -15,7 +16,7 @@ type TriggerProps = {
 }
 
 export const FixedTransactionsForm = ({ type, setOpen, transaction }: TriggerProps) => {
-  const { register, handleSubmit, reset } = useForm<CreateFixedValues>()
+  const { register, handleSubmit, reset, control } = useForm<CreateFixedValues>()
   const { newTransaction, updateTransaction } = useTransaction()
 
   const handleCreateFixedTransaction = async (data: CreateFixedValues) => {
@@ -126,16 +127,30 @@ export const FixedTransactionsForm = ({ type, setOpen, transaction }: TriggerPro
               />
             </S.InputGroup>
             <S.InputGroup>
-              <label htmlFor="type">Tipo:</label>
-              <select {...register('type')} id="type" name="type" required>
-                <option value="">Entrada ou saída?</option>
-                <option selected={transaction?.type === 'Entrada' ? true : false} value="Entrada">
-                  Entrada
-                </option>
-                <option selected={transaction?.type === 'Saída' ? true : false} value="Saída">
-                  Saída
-                </option>
-              </select>
+              <label>Tipo:</label>
+              <Controller
+                control={control}
+                name="type"
+                render={({ field }) => {
+                  return (
+                    <S.RadioGroupRoot
+                      onValueChange={field.onChange}
+                      value={field.value}
+                      defaultValue={transaction.type}
+                    >
+                      <S.RadioGroupItem transactionType="Entrada" value="Entrada" id="Entrada">
+                        <P.ArrowCircleUp size={24} />
+                        Entrada
+                      </S.RadioGroupItem>
+
+                      <S.RadioGroupItem transactionType="Saída" value="Saída" id="Saída">
+                        <P.ArrowCircleDown size={24} />
+                        Saída
+                      </S.RadioGroupItem>
+                    </S.RadioGroupRoot>
+                  )
+                }}
+              />
             </S.InputGroup>
             <S.InputGroup>
               <label htmlFor="value">Valor:</label>
@@ -194,12 +209,26 @@ export const FixedTransactionsForm = ({ type, setOpen, transaction }: TriggerPro
               />
             </S.InputGroup>
             <S.InputGroup>
-              <label htmlFor="type">Tipo:</label>
-              <select {...register('type')} id="type" name="type" required>
-                <option value="">Entrada ou saída?</option>
-                <option value="Entrada">Entrada</option>
-                <option value="Saída">Saída</option>
-              </select>
+              <label>Tipo:</label>
+              <Controller
+                control={control}
+                name="type"
+                render={({ field }) => {
+                  return (
+                    <S.RadioGroupRoot onValueChange={field.onChange} value={field.value}>
+                      <S.RadioGroupItem transactionType="Entrada" value="Entrada" id="Entrada">
+                        <P.ArrowCircleUp size={24} />
+                        Entrada
+                      </S.RadioGroupItem>
+
+                      <S.RadioGroupItem transactionType="Saída" value="Saída" id="Saída">
+                        <P.ArrowCircleDown size={24} />
+                        Saída
+                      </S.RadioGroupItem>
+                    </S.RadioGroupRoot>
+                  )
+                }}
+              />
             </S.InputGroup>
             <S.InputGroup>
               <label htmlFor="value">Valor:</label>

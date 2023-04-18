@@ -1,5 +1,6 @@
-import * as Dialog from '@radix-ui/react-dialog';
-import { styled } from '..';
+import * as Dialog from '@radix-ui/react-dialog'
+import * as RadioGroup from '@radix-ui/react-radio-group'
+import { styled } from '..'
 
 export const Content = styled(Dialog.Content, {
   minWidth: '50rem',
@@ -17,21 +18,77 @@ export const Content = styled(Dialog.Content, {
     display: 'flex',
     flexDirection: 'column',
     gap: '1rem',
+  },
+})
 
-    'input, select': {
-      borderRadius: 6,
-      border: 0,
-      background: '$gray700',
-      color: '$gray300',
-      padding: '2rem',
+export const RadioGroupRoot = styled(RadioGroup.Root, {
+  width: '80.5%',
+  display: 'grid',
+  // placeItems: 'end',
+  gridTemplateColumns: 'repeat(2, 1fr)',
+  gap: '1rem',
+  margiTop: '0.5rem',
+})
+
+export const RadioGroupItem = styled(RadioGroup.Item, {
+  background: '$gray700',
+  padding: '1rem',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: '0.5rem',
+  borderRadius: 6,
+  cursor: 'pointer',
+  border: 0,
+  color: '$gray300',
+
+  '&[data-state="unchecked"]:hover ': {
+    background: '$gray500',
+  },
+  '&[data-state="checked"]': {
+    color: 'white',
+    svg: {
+      color: 'white',
     },
   },
-});
+
+  variants: {
+    transactionType: {
+      Entrada: {
+        svg: {
+          color: '$green600',
+        },
+        '&[data-state="checked"]': {
+          background: '$green300',
+        },
+      },
+      Saída: {
+        svg: {
+          color: '$red200',
+        },
+        '&[data-state="checked"]': {
+          background: '$red100',
+        },
+      },
+    },
+  },
+})
+
+export const Flex = styled('div', {
+  display: 'flex',
+
+  label: {
+    color: 'white',
+    fontSize: 15,
+    lineHeight: 1,
+    paddingLeft: 15,
+  },
+})
 
 export const Title = styled(Dialog.Title, {
   textAlign: 'center',
   fontSize: '$2xl',
-});
+})
 
 export const InputGroup = styled('div', {
   display: 'flex',
@@ -39,20 +96,36 @@ export const InputGroup = styled('div', {
   alignItems: 'center',
   gap: '2rem',
 
-  span: {
-    fontSize: '1.5rem',
+  label: {
+    fontSize: '$lg',
+  },
+
+  input: {
+    '&::-webkit-calendar-picker-indicator': {
+      backgroundColor: 'white',
+      padding: '5px',
+      cursor: 'pointer',
+      borderRadius: '10px',
+    },
   },
 
   'input,select': {
+    fontSize: '$lg',
+    borderRadius: 6,
+    border: 0,
+    background: '$gray700',
+    color: '$gray300',
+    padding: '2rem',
     width: '50rem',
   },
-});
+})
 
 export const TypeButton = styled('button', {
   height: 58,
   border: '0',
   color: '$white',
   fontWeight: 'bold',
+  fontSize: '$lg',
   padding: '0 1.25rem',
   borderRadius: 6,
   marginTop: '1.5rem',
@@ -87,7 +160,7 @@ export const TypeButton = styled('button', {
       },
     },
   },
-});
+})
 
 export const CloseButton = styled(Dialog.Close, {
   position: 'absolute',
@@ -98,4 +171,4 @@ export const CloseButton = styled(Dialog.Close, {
   lineHeight: '0%',
   cursor: 'pointer',
   color: '$gray300',
-});
+})
