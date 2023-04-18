@@ -1,38 +1,38 @@
-import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
-import CurrencyInput from 'react-currency-input-field';
-import { useForm } from 'react-hook-form';
-import { useTransaction } from '../../../hooks/useTransaction';
-import * as S from '../../../styles/components/Dialog';
-import { CreateOutcomeTransaction } from '../../../types/TransactionTypes';
-import { formatValue } from '../../../utils/FormatNumberValue';
-import { OutcomeTransaction } from '../../../types/TransactionTypes';
-import { formatISO } from 'date-fns';
+import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
+import CurrencyInput from 'react-currency-input-field'
+import { useForm } from 'react-hook-form'
+import { useTransaction } from '../../../hooks/useTransaction'
+import * as S from '../../../styles/components/Dialog'
+import { CreateOutcomeTransaction } from '../../../types/TransactionTypes'
+import { formatValue } from '../../../utils/FormatNumberValue'
+import { OutcomeTransaction } from '../../../types/TransactionTypes'
+import { formatISO } from 'date-fns'
 
 type TriggerProps = {
-  type: 'income' | 'outcome' | 'fixed';
-  setOpen: Dispatch<SetStateAction<boolean>>;
-  transaction?: OutcomeTransaction;
-};
+  type: 'income' | 'outcome' | 'fixed'
+  setOpen: Dispatch<SetStateAction<boolean>>
+  transaction?: OutcomeTransaction
+}
 
 export const OutcomeTransactionsForm = ({ type, setOpen, transaction }: TriggerProps) => {
-  const { register, handleSubmit, reset } = useForm<CreateOutcomeTransaction>();
-  const [isCard, setIsCard] = useState(false);
-  const [installmentPurchase, isInstallmentPurchase] = useState(false);
-  const { newTransaction, updateTransaction } = useTransaction();
+  const { register, handleSubmit, reset } = useForm<CreateOutcomeTransaction>()
+  const [isCard, setIsCard] = useState(false)
+  const [installmentPurchase, isInstallmentPurchase] = useState(false)
+  const { newTransaction, updateTransaction } = useTransaction()
 
   const handleMethod = (e: ChangeEvent<HTMLSelectElement>) => {
-    e.target.value === 'Cartão de crédito' ? setIsCard(true) : setIsCard(false);
-  };
+    e.target.value === 'Cartão de crédito' ? setIsCard(true) : setIsCard(false)
+  }
 
   const handlePaymentForm = (e: ChangeEvent<HTMLSelectElement>) => {
     e.target.value === 'Crédito parcelado'
       ? isInstallmentPurchase(true)
-      : isInstallmentPurchase(false);
-  };
+      : isInstallmentPurchase(false)
+  }
 
   const handleCreateOutcomeTransaction = async (data: CreateOutcomeTransaction) => {
-    const formattedDate = new Date(data.date);
-    const formattedValue = formatValue(data.value.toString());
+    const formattedDate = new Date(data.date)
+    const formattedValue = formatValue(data.value.toString())
 
     if (!transaction) {
       newTransaction(type, {
@@ -45,10 +45,10 @@ export const OutcomeTransactionsForm = ({ type, setOpen, transaction }: TriggerP
             formattedDate.getDate() + 1
           )
         ),
-      });
-      reset();
-      setOpen(false);
-      return;
+      })
+      reset()
+      setOpen(false)
+      return
     }
 
     updateTransaction(transaction.id, type, {
@@ -57,11 +57,11 @@ export const OutcomeTransactionsForm = ({ type, setOpen, transaction }: TriggerP
       date: new Date(
         new Date(formattedDate.getFullYear(), formattedDate.getMonth(), formattedDate.getDate() + 1)
       ),
-    });
+    })
 
-    reset();
-    setOpen(false);
-  };
+    reset()
+    setOpen(false)
+  }
 
   return (
     <S.Content>
@@ -73,30 +73,33 @@ export const OutcomeTransactionsForm = ({ type, setOpen, transaction }: TriggerP
         {transaction ? (
           <>
             <S.InputGroup>
-              <span>Data:</span>
+              <label htmlFor="date">Data:</label>
               <input
                 defaultValue={formatISO(new Date(transaction!.date), { representation: 'date' })}
                 {...register('date')}
                 type="date"
+                name="date"
                 id="date"
                 placeholder="Digite a data"
               />
             </S.InputGroup>
             <S.InputGroup>
-              <span>Descrição:</span>
+              <label htmlFor="description">Descrição:</label>
               <input
                 defaultValue={transaction?.description}
                 {...register('description')}
                 type="text"
+                name="description"
                 id="description"
                 placeholder="Digite a descrição"
                 autoComplete="off"
               />
             </S.InputGroup>
             <S.InputGroup>
-              <span>Tipo:</span>
+              <label htmlFor="type">Tipo:</label>
               <select
                 {...register('type')}
+                name="type"
                 id="type"
                 placeholder="Qual foi o tipo da compra/gasto?"
               >
@@ -158,10 +161,11 @@ export const OutcomeTransactionsForm = ({ type, setOpen, transaction }: TriggerP
               </select>
             </S.InputGroup>
             <S.InputGroup>
-              <span>Método:</span>
+              <label htmlFor="method">Método:</label>
               <select
                 {...register('method')}
                 onChange={handleMethod}
+                name="method"
                 id="method"
                 placeholder="Selecione o método"
               >
@@ -187,9 +191,10 @@ export const OutcomeTransactionsForm = ({ type, setOpen, transaction }: TriggerP
               </select>
             </S.InputGroup>
             <S.InputGroup>
-              <span>Forma de Pagamento:</span>
+              <label htmlFor="paymentForm">Forma de Pagamento:</label>
               <select
                 {...register('paymentForm')}
+                name="paymentForm"
                 id="paymentForm"
                 placeholder="Qual foi o método de pagamento?"
                 onChange={handlePaymentForm}
@@ -216,17 +221,18 @@ export const OutcomeTransactionsForm = ({ type, setOpen, transaction }: TriggerP
               </select>
             </S.InputGroup>
             <S.InputGroup>
-              <span>Número de parcelas:</span>
+              <label htmlFor="installment">Número de parcelas:</label>
               <input
                 {...register('installment', { valueAsNumber: true })}
                 type="number"
+                name="installment"
                 id="installment"
                 placeholder="Digite o número de parcelas"
                 defaultValue={transaction.installment}
               />
             </S.InputGroup>
             <S.InputGroup>
-              <span>Valor:</span>
+              <label htmlFor="value">Valor:</label>
               <CurrencyInput
                 {...register('value')}
                 prefix="R$"
@@ -245,23 +251,31 @@ export const OutcomeTransactionsForm = ({ type, setOpen, transaction }: TriggerP
         ) : (
           <>
             <S.InputGroup>
-              <span>Data:</span>
-              <input {...register('date')} type="date" id="date" placeholder="Digite a data" />
+              <label htmlFor="date">Data:</label>
+              <input
+                {...register('date')}
+                type="date"
+                name="date"
+                id="date"
+                placeholder="Digite a data"
+              />
             </S.InputGroup>
             <S.InputGroup>
-              <span>Descrição:</span>
+              <label htmlFor="description">Descrição:</label>
               <input
                 {...register('description')}
                 type="text"
+                name="description"
                 id="description"
                 placeholder="Digite a descrição"
                 autoComplete="off"
               />
             </S.InputGroup>
             <S.InputGroup>
-              <span>Tipo:</span>
+              <label htmlFor="type">Tipo:</label>
               <select
                 {...register('type')}
+                name="type"
                 id="type"
                 placeholder="Qual foi o tipo da compra/gasto?"
               >
@@ -281,10 +295,11 @@ export const OutcomeTransactionsForm = ({ type, setOpen, transaction }: TriggerP
               </select>
             </S.InputGroup>
             <S.InputGroup>
-              <span>Método:</span>
+              <label htmlFor="method">Método:</label>
               <select
                 {...register('method')}
                 onChange={handleMethod}
+                name="method"
                 id="method"
                 placeholder="Selecione o método"
               >
@@ -296,9 +311,10 @@ export const OutcomeTransactionsForm = ({ type, setOpen, transaction }: TriggerP
               </select>
             </S.InputGroup>
             <S.InputGroup style={!isCard ? { display: 'none' } : { display: 'flex' }}>
-              <span>Forma de Pagamento:</span>
+              <label htmlFor="paymentForm">Forma de Pagamento:</label>
               <select
                 {...register('paymentForm')}
+                name="paymentForm"
                 id="paymentForm"
                 placeholder="Qual foi o método de pagamento?"
                 onChange={handlePaymentForm}
@@ -310,17 +326,18 @@ export const OutcomeTransactionsForm = ({ type, setOpen, transaction }: TriggerP
               </select>
             </S.InputGroup>
             <S.InputGroup style={!installmentPurchase ? { display: 'none' } : { display: 'flex' }}>
-              <span>Número de parcelas:</span>
+              <label htmlFor="installment">Número de parcelas:</label>
               <input
                 {...register('installment', { valueAsNumber: true })}
                 type="number"
+                name="installment"
                 id="installment"
                 placeholder="Digite o número de parcelas"
                 defaultValue={1}
               />
             </S.InputGroup>
             <S.InputGroup>
-              <span>Valor:</span>
+              <label htmlFor="value">Valor:</label>
               <CurrencyInput
                 {...register('value')}
                 prefix="R$"
@@ -339,5 +356,5 @@ export const OutcomeTransactionsForm = ({ type, setOpen, transaction }: TriggerP
         )}
       </form>
     </S.Content>
-  );
-};
+  )
+}

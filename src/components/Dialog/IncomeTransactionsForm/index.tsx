@@ -62,37 +62,40 @@ export const IncomeTransactionsForm = ({ type, setOpen, transaction }: TriggerPr
         {transaction ? (
           <>
             <S.InputGroup>
-              <span>Data:</span>
+              <label htmlFor="date">Data:</label>
               <input
                 defaultValue={formatISO(new Date(transaction!.date), { representation: 'date' })}
                 {...register('date')}
                 type="date"
+                name="date"
                 id="date"
                 placeholder="Digite a data"
               />
             </S.InputGroup>
             <S.InputGroup>
-              <span>Descrição:</span>
+              <label htmlFor="description">Descrição:</label>
               <input
                 defaultValue={transaction.description}
                 {...register('description')}
                 type="text"
+                name="description"
                 id="description"
                 placeholder="Digite a descrição"
               />
             </S.InputGroup>
             <S.InputGroup>
-              <span>Origem:</span>
+              <label htmlFor="origin">Origem:</label>
               <input
                 defaultValue={transaction.origin}
                 {...register('origin')}
                 type="text"
+                name="origin"
                 id="origin"
                 placeholder="Digite a procedência"
               />
             </S.InputGroup>
             <S.InputGroup>
-              <span>Valor:</span>
+              <label htmlFor="value">Valor:</label>
               <CurrencyInput
                 {...register('value')}
                 prefix="R$"
@@ -111,29 +114,37 @@ export const IncomeTransactionsForm = ({ type, setOpen, transaction }: TriggerPr
         ) : (
           <>
             <S.InputGroup>
-              <span>Data:</span>
-              <input {...register('date')} type="date" id="date" placeholder="Digite a data" />
+              <label htmlFor="date">Data:</label>
+              <input
+                {...register('date')}
+                type="date"
+                name="date"
+                id="date"
+                placeholder="Digite a data"
+              />
             </S.InputGroup>
             <S.InputGroup>
-              <span>Descrição:</span>
+              <label htmlFor="description">Descrição:</label>
               <input
                 {...register('description')}
                 type="text"
+                name="description"
                 id="description"
                 placeholder="Digite a descrição"
               />
             </S.InputGroup>
             <S.InputGroup>
-              <span>Origem:</span>
+              <label htmlFor="origin">Origem:</label>
               <input
                 {...register('origin')}
                 type="text"
+                name="origin"
                 id="origin"
                 placeholder="Digite a procedência"
               />
             </S.InputGroup>
             <S.InputGroup>
-              <span>Valor:</span>
+              <label htmlFor="value">Valor:</label>
               <CurrencyInput
                 {...register('value')}
                 prefix="R$"

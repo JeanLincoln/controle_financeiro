@@ -86,7 +86,7 @@ export const FixedTransactionsForm = ({ type, setOpen, transaction }: TriggerPro
           <>
             {' '}
             <S.InputGroup>
-              <span>Data de inicio:</span>
+              <label htmlFor="initialDate">Data de inicio:</label>
               <input
                 {...register('initialDate')}
                 defaultValue={formatISO(new Date(transaction!.initialDate), {
@@ -94,12 +94,13 @@ export const FixedTransactionsForm = ({ type, setOpen, transaction }: TriggerPro
                 })}
                 required
                 type="date"
+                name="initialDate"
                 id="initialDate"
                 placeholder="Digite a data de inicio"
               />
             </S.InputGroup>
             <S.InputGroup>
-              <span>Data de fim:</span>
+              <label htmlFor="finalDate">Data de fim:</label>
               <input
                 defaultValue={
                   transaction.finalDate &&
@@ -107,24 +108,26 @@ export const FixedTransactionsForm = ({ type, setOpen, transaction }: TriggerPro
                 }
                 {...register('finalDate')}
                 type="date"
+                name="finalDate"
                 id="finalDate"
                 placeholder="Digite a data final"
               />
             </S.InputGroup>
             <S.InputGroup>
-              <span>Descrição:</span>
+              <label htmlFor="description">Descrição:</label>
               <input
                 defaultValue={transaction.description}
                 {...register('description')}
                 required
                 type="text"
+                name="description"
                 id="description"
                 placeholder="Digite a descrição"
               />
             </S.InputGroup>
             <S.InputGroup>
-              <span>Tipo:</span>
-              <select {...register('type')} id="type" required>
+              <label htmlFor="type">Tipo:</label>
+              <select {...register('type')} id="type" name="type" required>
                 <option value="">Entrada ou saída?</option>
                 <option selected={transaction?.type === 'Entrada' ? true : false} value="Entrada">
                   Entrada
@@ -135,7 +138,7 @@ export const FixedTransactionsForm = ({ type, setOpen, transaction }: TriggerPro
               </select>
             </S.InputGroup>
             <S.InputGroup>
-              <span>Valor:</span>
+              <label htmlFor="value">Valor:</label>
               <CurrencyInput
                 {...register('value')}
                 required
@@ -155,7 +158,7 @@ export const FixedTransactionsForm = ({ type, setOpen, transaction }: TriggerPro
         ) : (
           <>
             <S.InputGroup>
-              <span>Data de inicio:</span>
+              <label htmlFor="initialDate">Data de inicio:</label>
               <input
                 {...register('initialDate')}
                 defaultValue={format(
@@ -164,39 +167,42 @@ export const FixedTransactionsForm = ({ type, setOpen, transaction }: TriggerPro
                 )}
                 required
                 type="date"
+                name="initialDate"
                 id="initialDate"
                 placeholder="Digite a data de inicio"
               />
             </S.InputGroup>
             <S.InputGroup>
-              <span>Data de fim:</span>
+              <label htmlFor="finalDate">Data de fim:</label>
               <input
                 {...register('finalDate')}
                 type="date"
+                name="finalDate"
                 id="finalDate"
                 placeholder="Digite a data final"
               />
             </S.InputGroup>
             <S.InputGroup>
-              <span>Descrição:</span>
+              <label htmlFor="description">Descrição:</label>
               <input
                 {...register('description')}
                 required
                 type="text"
+                name="description"
                 id="description"
                 placeholder="Digite a descrição"
               />
             </S.InputGroup>
             <S.InputGroup>
-              <span>Tipo:</span>
-              <select {...register('type')} id="type" required>
+              <label htmlFor="type">Tipo:</label>
+              <select {...register('type')} id="type" name="type" required>
                 <option value="">Entrada ou saída?</option>
                 <option value="Entrada">Entrada</option>
                 <option value="Saída">Saída</option>
               </select>
             </S.InputGroup>
             <S.InputGroup>
-              <span>Valor:</span>
+              <label htmlFor="value">Valor:</label>
               <CurrencyInput
                 {...register('value')}
                 required
