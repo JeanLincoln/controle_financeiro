@@ -24,7 +24,6 @@ export const Content = styled(Dialog.Content, {
 export const RadioGroupRoot = styled(RadioGroup.Root, {
   width: '80.5%',
   display: 'grid',
-  // placeItems: 'end',
   gridTemplateColumns: 'repeat(2, 1fr)',
   gap: '1rem',
   margiTop: '0.5rem',
