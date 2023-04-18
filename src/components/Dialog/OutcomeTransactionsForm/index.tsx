@@ -1,8 +1,10 @@
+import * as S from '../../../styles/components/Dialog'
+import * as Z from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
 import CurrencyInput from 'react-currency-input-field'
 import { useForm } from 'react-hook-form'
 import { useTransaction } from '../../../hooks/useTransaction'
-import * as S from '../../../styles/components/Dialog'
 import { CreateOutcomeTransaction } from '../../../types/TransactionTypes'
 import { formatValue } from '../../../utils/FormatNumberValue'
 import { OutcomeTransaction } from '../../../types/TransactionTypes'
@@ -14,11 +16,28 @@ type TriggerProps = {
   transaction?: OutcomeTransaction
 }
 
+const newOutcomeFormValidationSchema = Z.object({
+  date: Z.string().min(10, { message: 'Informe a data da transação' }),
+  description: Z.string().min(1, { message: 'Informe a descrição' }),
+  type: Z.string().min(1, { message: 'Informe o tipo' }),
+  method: Z.string().min(1, { message: 'Informe o método' }),
+  paymentForm: Z.optional(Z.string().min(1, { message: 'Informe a forma de pagamento' })),
+  installment: Z.optional(Z.number().min(1, { message: 'Informe o n° de parcelas' })),
+  value: Z.string().min(1, { message: 'Informe o valor' }),
+})
+
 export const OutcomeTransactionsForm = ({ type, setOpen, transaction }: TriggerProps) => {
-  const { register, handleSubmit, reset } = useForm<CreateOutcomeTransaction>()
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<CreateOutcomeTransaction>({ resolver: zodResolver(newOutcomeFormValidationSchema) })
   const [isCard, setIsCard] = useState(false)
   const [installmentPurchase, isInstallmentPurchase] = useState(false)
   const { newTransaction, updateTransaction } = useTransaction()
+
+  console.log(errors)
 
   const handleMethod = (e: ChangeEvent<HTMLSelectElement>) => {
     e.target.value === 'Cartão de crédito' ? setIsCard(true) : setIsCard(false)
@@ -73,7 +92,9 @@ export const OutcomeTransactionsForm = ({ type, setOpen, transaction }: TriggerP
         {transaction ? (
           <>
             <S.InputGroup>
-              <label htmlFor="date">Data:</label>
+              <label htmlFor="date">
+                Data:{errors.date && <S.ErrorMessage>{errors.date.message}</S.ErrorMessage>}
+              </label>
               <input
                 defaultValue={formatISO(new Date(transaction!.date), { representation: 'date' })}
                 {...register('date')}
@@ -81,10 +102,16 @@ export const OutcomeTransactionsForm = ({ type, setOpen, transaction }: TriggerP
                 name="date"
                 id="date"
                 placeholder="Digite a data"
+                style={{ border: errors.date ? '2px solid red' : 'initial' }}
               />
             </S.InputGroup>
             <S.InputGroup>
-              <label htmlFor="description">Descrição:</label>
+              <label htmlFor="description">
+                Descrição:
+                {errors.description && (
+                  <S.ErrorMessage>{errors.description.message}</S.ErrorMessage>
+                )}
+              </label>
               <input
                 defaultValue={transaction?.description}
                 {...register('description')}
@@ -93,15 +120,19 @@ export const OutcomeTransactionsForm = ({ type, setOpen, transaction }: TriggerP
                 id="description"
                 placeholder="Digite a descrição"
                 autoComplete="off"
+                style={{ border: errors.description ? '2px solid red' : 'initial' }}
               />
             </S.InputGroup>
             <S.InputGroup>
-              <label htmlFor="type">Tipo:</label>
+              <label htmlFor="type">
+                Tipo:{errors.type && <S.ErrorMessage>{errors.type.message}</S.ErrorMessage>}
+              </label>
               <select
                 {...register('type')}
                 name="type"
                 id="type"
                 placeholder="Qual foi o tipo da compra/gasto?"
+                style={{ border: errors.type ? '2px solid red' : 'initial' }}
               >
                 <option value="">Qual foi o tipo da compra/gasto?</option>
                 <option selected={transaction?.type === 'Alcool' ? true : false} value="Alcool">
@@ -161,13 +192,16 @@ export const OutcomeTransactionsForm = ({ type, setOpen, transaction }: TriggerP
               </select>
             </S.InputGroup>
             <S.InputGroup>
-              <label htmlFor="method">Método:</label>
+              <label htmlFor="method">
+                Método:{errors.method && <S.ErrorMessage>{errors.method.message}</S.ErrorMessage>}
+              </label>
               <select
                 {...register('method')}
                 onChange={handleMethod}
                 name="method"
                 id="method"
                 placeholder="Selecione o método"
+                style={{ border: errors.method ? '2px solid red' : 'initial' }}
               >
                 <option value="">Qual foi o método?</option>
                 <option
@@ -199,7 +233,7 @@ export const OutcomeTransactionsForm = ({ type, setOpen, transaction }: TriggerP
                 placeholder="Qual foi o método de pagamento?"
                 onChange={handlePaymentForm}
               >
-                <option value="Débito">Qual foi o método de pagamento?</option>
+                <option value="">Qual foi o método de pagamento?</option>
                 <option
                   selected={transaction?.paymentForm === 'Crédito à vista' ? true : false}
                   value="Crédito à vista"
@@ -232,7 +266,12 @@ export const OutcomeTransactionsForm = ({ type, setOpen, transaction }: TriggerP
               />
             </S.InputGroup>
             <S.InputGroup>
-              <label htmlFor="value">Valor:</label>
+              <label htmlFor="value">
+                Valor:
+                {errors.paymentForm && (
+                  <S.ErrorMessage>{errors.paymentForm.message}</S.ErrorMessage>
+                )}
+              </label>
               <CurrencyInput
                 {...register('value')}
                 prefix="R$"
@@ -242,6 +281,7 @@ export const OutcomeTransactionsForm = ({ type, setOpen, transaction }: TriggerP
                 placeholder="R$ 000,00"
                 defaultValue={transaction.value}
                 decimalsLimit={2}
+                style={{ border: errors.paymentForm ? '2px solid red' : 'initial' }}
               />
             </S.InputGroup>
             <S.TypeButton transactionType="outcome" type="submit">
@@ -251,17 +291,25 @@ export const OutcomeTransactionsForm = ({ type, setOpen, transaction }: TriggerP
         ) : (
           <>
             <S.InputGroup>
-              <label htmlFor="date">Data:</label>
+              <label htmlFor="date">
+                Data:{errors.date && <S.ErrorMessage>{errors.date.message}</S.ErrorMessage>}
+              </label>
               <input
                 {...register('date')}
                 type="date"
                 name="date"
                 id="date"
                 placeholder="Digite a data"
+                style={{ border: errors.date ? '2px solid red' : 'initial' }}
               />
             </S.InputGroup>
             <S.InputGroup>
-              <label htmlFor="description">Descrição:</label>
+              <label htmlFor="description">
+                Descrição:
+                {errors.description && (
+                  <S.ErrorMessage>{errors.description.message}</S.ErrorMessage>
+                )}
+              </label>
               <input
                 {...register('description')}
                 type="text"
@@ -269,15 +317,19 @@ export const OutcomeTransactionsForm = ({ type, setOpen, transaction }: TriggerP
                 id="description"
                 placeholder="Digite a descrição"
                 autoComplete="off"
+                style={{ border: errors.description ? '2px solid red' : 'initial' }}
               />
             </S.InputGroup>
             <S.InputGroup>
-              <label htmlFor="type">Tipo:</label>
+              <label htmlFor="type">
+                Tipo:{errors.type && <S.ErrorMessage>{errors.type.message}</S.ErrorMessage>}
+              </label>
               <select
                 {...register('type')}
                 name="type"
                 id="type"
                 placeholder="Qual foi o tipo da compra/gasto?"
+                style={{ border: errors.type ? '2px solid red' : 'initial' }}
               >
                 <option value="">Qual foi o tipo da compra/gasto?</option>
                 <option value="Alcool">Alcool</option>
@@ -295,13 +347,16 @@ export const OutcomeTransactionsForm = ({ type, setOpen, transaction }: TriggerP
               </select>
             </S.InputGroup>
             <S.InputGroup>
-              <label htmlFor="method">Método:</label>
+              <label htmlFor="method">
+                Método:{errors.method && <S.ErrorMessage>{errors.method.message}</S.ErrorMessage>}
+              </label>
               <select
                 {...register('method')}
                 onChange={handleMethod}
                 name="method"
                 id="method"
                 placeholder="Selecione o método"
+                style={{ border: errors.method ? '2px solid red' : 'initial' }}
               >
                 <option value="">Qual foi o método?</option>
                 <option value="Cartão de crédito">Cartão de crédito</option>
@@ -319,7 +374,7 @@ export const OutcomeTransactionsForm = ({ type, setOpen, transaction }: TriggerP
                 placeholder="Qual foi o método de pagamento?"
                 onChange={handlePaymentForm}
               >
-                <option value="Débito">Qual foi o método de pagamento?</option>
+                <option value="">Qual foi o método de pagamento?</option>
                 <option value="Crédito à vista">Crédito à vista</option>
                 <option value="Crédito parcelado">Crédito parcelado</option>
                 <option value="Débito">Débito</option>
@@ -331,22 +386,26 @@ export const OutcomeTransactionsForm = ({ type, setOpen, transaction }: TriggerP
                 {...register('installment', { valueAsNumber: true })}
                 type="number"
                 name="installment"
+                min={1}
                 id="installment"
                 placeholder="Digite o número de parcelas"
                 defaultValue={1}
               />
             </S.InputGroup>
             <S.InputGroup>
-              <label htmlFor="value">Valor:</label>
+              <label htmlFor="value">
+                Valor:{errors.value && <S.ErrorMessage>{errors.value.message}</S.ErrorMessage>}
+              </label>
               <CurrencyInput
                 {...register('value')}
                 prefix="R$"
                 id="value"
                 name="value"
+                min={0}
                 fixedDecimalLength={2}
                 placeholder="R$ 000,00"
-                defaultValue={0}
                 decimalsLimit={2}
+                style={{ border: errors.value ? '2px solid red' : 'initial' }}
               />
             </S.InputGroup>
             <S.TypeButton transactionType="outcome" type="submit">

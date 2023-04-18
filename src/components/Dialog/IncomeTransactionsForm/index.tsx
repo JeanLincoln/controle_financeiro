@@ -18,7 +18,7 @@ type TriggerProps = {
 
 const newIncomeFormValidationSchema = Z.object({
   date: Z.string().min(10, { message: 'Informe a data da transação' }),
-  description: Z.coerce.string().min(1, { message: 'Informe a descrição' }),
+  description: Z.string().min(1, { message: 'Informe a descrição' }),
   origin: Z.coerce.string().min(1, { message: 'Informe a procedência' }),
   value: Z.string().min(1, { message: 'Informe o valor' }),
 })

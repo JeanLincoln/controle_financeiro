@@ -21,9 +21,6 @@ export const Content = styled(Dialog.Content, {
   },
 })
 
-// style={{ border: errors.initialDate ? '2px solid red' : 'initial' }}
-// {errors.initialDate && <S.ErrorMessage>{errors.initialDate.message}</S.ErrorMessage>}
-
 export const RadioGroupRoot = styled(RadioGroup.Root, {
   width: '100%',
   display: 'grid',
@@ -101,6 +98,11 @@ export const InputGroup = styled('div', {
     },
   },
 
+  'input::-webkit-outer-spin-button,input::-webkit-inner-spin-button': {
+    opacity: 0,
+    margin: 0,
+  },
+
   'input,select': {
     fontSize: '$lg',
     borderRadius: 6,
@@ -109,7 +111,7 @@ export const InputGroup = styled('div', {
     color: '$gray300',
     padding: '2rem',
     width: '50rem',
-    height: '5rem',
+    height: '5.9rem',
   },
 
   span: {
