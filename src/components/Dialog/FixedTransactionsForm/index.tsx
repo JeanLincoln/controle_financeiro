@@ -1,10 +1,12 @@
+import * as S from '../../../styles/components/Dialog'
+import * as P from 'phosphor-react'
+import * as Z from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { format, formatISO } from 'date-fns'
 import { Dispatch, SetStateAction, useState } from 'react'
 import CurrencyInput from 'react-currency-input-field'
 import { useForm, Controller } from 'react-hook-form'
 import { useTransaction } from '../../../hooks/useTransaction'
-import * as S from '../../../styles/components/Dialog'
-import * as P from 'phosphor-react'
 import { CreateFixedValues } from '../../../types/TransactionTypes'
 import { formatValue } from '../../../utils/FormatNumberValue'
 import { FixedValues } from '../../../types/TransactionTypes'
@@ -15,8 +17,29 @@ type TriggerProps = {
   transaction?: FixedValues
 }
 
+const newFixedFormValidationSchema = Z.object({
+  initialDate: Z.string().min(10, { message: 'Informe a data inicial' }),
+  finalDate: Z.coerce.string(),
+  description: Z.coerce.string().min(1, { message: 'Informe a descrição' }),
+  type: Z.string().min(1, { message: 'Informe se é uma entrada ou saída' }),
+  value: Z.string().min(1, { message: 'Informe o valor' }),
+})
+
 export const FixedTransactionsForm = ({ type, setOpen, transaction }: TriggerProps) => {
-  const { register, handleSubmit, reset, control } = useForm<CreateFixedValues>()
+  const {
+    register,
+    handleSubmit,
+    reset,
+    control,
+    formState: { errors },
+  } = useForm<CreateFixedValues>({
+    resolver: zodResolver(newFixedFormValidationSchema),
+    defaultValues: {
+      description: transaction?.description,
+      type: transaction?.type,
+    },
+  })
+  console.log(errors)
   const { newTransaction, updateTransaction } = useTransaction()
 
   const handleCreateFixedTransaction = async (data: CreateFixedValues) => {
@@ -87,17 +110,22 @@ export const FixedTransactionsForm = ({ type, setOpen, transaction }: TriggerPro
           <>
             {' '}
             <S.InputGroup>
-              <label htmlFor="initialDate">Data de inicio:</label>
+              <label htmlFor="initialDate">
+                Data de inicio:
+                {errors.initialDate && (
+                  <S.ErrorMessage>{errors.initialDate.message}</S.ErrorMessage>
+                )}
+              </label>
               <input
                 {...register('initialDate')}
                 defaultValue={formatISO(new Date(transaction!.initialDate), {
                   representation: 'date',
                 })}
-                required
                 type="date"
                 name="initialDate"
                 id="initialDate"
                 placeholder="Digite a data de inicio"
+                style={{ border: errors.initialDate ? '2px solid red' : 'initial' }}
               />
             </S.InputGroup>
             <S.InputGroup>
@@ -115,28 +143,35 @@ export const FixedTransactionsForm = ({ type, setOpen, transaction }: TriggerPro
               />
             </S.InputGroup>
             <S.InputGroup>
-              <label htmlFor="description">Descrição:</label>
+              <label htmlFor="description">
+                Descrição:
+                {errors.description && (
+                  <S.ErrorMessage>{errors.description.message}</S.ErrorMessage>
+                )}
+              </label>
               <input
-                defaultValue={transaction.description}
                 {...register('description')}
-                required
                 type="text"
                 name="description"
                 id="description"
                 placeholder="Digite a descrição"
+                style={{ border: errors.description ? '2px solid red' : 'initial' }}
               />
             </S.InputGroup>
             <S.InputGroup>
-              <label>Tipo:</label>
+              <label>
+                Tipo:{' '}
+                {errors.type && <S.ErrorMessage>Informe se é uma entrada ou saída</S.ErrorMessage>}
+              </label>
               <Controller
                 control={control}
                 name="type"
                 render={({ field }) => {
                   return (
                     <S.RadioGroupRoot
+                      style={{ border: errors.type ? '2px solid red' : 'initial' }}
                       onValueChange={field.onChange}
                       value={field.value}
-                      defaultValue={transaction.type}
                     >
                       <S.RadioGroupItem transactionType="Entrada" value="Entrada" id="Entrada">
                         <P.ArrowCircleUp size={24} />
@@ -153,16 +188,18 @@ export const FixedTransactionsForm = ({ type, setOpen, transaction }: TriggerPro
               />
             </S.InputGroup>
             <S.InputGroup>
-              <label htmlFor="value">Valor:</label>
+              <label htmlFor="value">
+                Valor:{errors.value && <S.ErrorMessage>{errors.value.message}</S.ErrorMessage>}
+              </label>
               <CurrencyInput
                 {...register('value')}
-                required
                 prefix="R$"
                 id="value"
                 name="value"
                 fixedDecimalLength={2}
                 placeholder="R$ 000,00"
                 defaultValue={transaction.value}
+                style={{ border: errors.initialDate ? '2px solid red' : 'initial' }}
                 decimalsLimit={2}
               />
             </S.InputGroup>
@@ -173,18 +210,23 @@ export const FixedTransactionsForm = ({ type, setOpen, transaction }: TriggerPro
         ) : (
           <>
             <S.InputGroup>
-              <label htmlFor="initialDate">Data de inicio:</label>
+              <label htmlFor="initialDate">
+                Data de inicio:{' '}
+                {errors.initialDate && (
+                  <S.ErrorMessage>{errors.initialDate.message}</S.ErrorMessage>
+                )}
+              </label>
               <input
                 {...register('initialDate')}
                 defaultValue={format(
                   new Date(new Date().getFullYear(), new Date().getMonth(), 1),
                   'yyyy-MM-dd'
                 )}
-                required
                 type="date"
                 name="initialDate"
                 id="initialDate"
                 placeholder="Digite a data de inicio"
+                style={{ border: errors.initialDate ? '2px solid red' : 'initial' }}
               />
             </S.InputGroup>
             <S.InputGroup>
@@ -198,24 +240,36 @@ export const FixedTransactionsForm = ({ type, setOpen, transaction }: TriggerPro
               />
             </S.InputGroup>
             <S.InputGroup>
-              <label htmlFor="description">Descrição:</label>
+              <label htmlFor="description">
+                Descrição:{' '}
+                {errors.description && (
+                  <S.ErrorMessage>{errors.description.message}</S.ErrorMessage>
+                )}
+              </label>
               <input
                 {...register('description')}
-                required
                 type="text"
                 name="description"
                 id="description"
                 placeholder="Digite a descrição"
+                style={{ border: errors.description ? '2px solid red' : 'initial' }}
               />
             </S.InputGroup>
             <S.InputGroup>
-              <label>Tipo:</label>
+              <label>
+                Tipo:{' '}
+                {errors.type && <S.ErrorMessage>Informe se é uma entrada ou saída</S.ErrorMessage>}
+              </label>
               <Controller
                 control={control}
                 name="type"
                 render={({ field }) => {
                   return (
-                    <S.RadioGroupRoot onValueChange={field.onChange} value={field.value}>
+                    <S.RadioGroupRoot
+                      onValueChange={field.onChange}
+                      value={field.value}
+                      style={{ border: errors.type ? '2px solid red' : 'initial' }}
+                    >
                       <S.RadioGroupItem transactionType="Entrada" value="Entrada" id="Entrada">
                         <P.ArrowCircleUp size={24} />
                         Entrada
@@ -231,16 +285,17 @@ export const FixedTransactionsForm = ({ type, setOpen, transaction }: TriggerPro
               />
             </S.InputGroup>
             <S.InputGroup>
-              <label htmlFor="value">Valor:</label>
+              <label htmlFor="value">
+                Valor:{errors.value && <S.ErrorMessage>{errors.value.message}</S.ErrorMessage>}
+              </label>
               <CurrencyInput
                 {...register('value')}
-                required
                 prefix="R$"
                 id="value"
                 name="value"
                 fixedDecimalLength={2}
                 placeholder="R$ 000,00"
-                defaultValue={0}
+                style={{ border: errors.value ? '2px solid red' : 'initial' }}
                 decimalsLimit={2}
               />
             </S.InputGroup>

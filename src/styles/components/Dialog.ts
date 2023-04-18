@@ -21,12 +21,17 @@ export const Content = styled(Dialog.Content, {
   },
 })
 
+// style={{ border: errors.initialDate ? '2px solid red' : 'initial' }}
+// {errors.initialDate && <S.ErrorMessage>{errors.initialDate.message}</S.ErrorMessage>}
+
 export const RadioGroupRoot = styled(RadioGroup.Root, {
-  width: '80.5%',
+  width: '100%',
   display: 'grid',
   gridTemplateColumns: 'repeat(2, 1fr)',
   gap: '1rem',
   margiTop: '0.5rem',
+  borderRadius: '10px',
+  padding: '.5rem',
 })
 
 export const RadioGroupItem = styled(RadioGroup.Item, {
@@ -73,17 +78,6 @@ export const RadioGroupItem = styled(RadioGroup.Item, {
   },
 })
 
-export const Flex = styled('div', {
-  display: 'flex',
-
-  label: {
-    color: 'white',
-    fontSize: 15,
-    lineHeight: 1,
-    paddingLeft: 15,
-  },
-})
-
 export const Title = styled(Dialog.Title, {
   textAlign: 'center',
   fontSize: '$2xl',
@@ -91,9 +85,8 @@ export const Title = styled(Dialog.Title, {
 
 export const InputGroup = styled('div', {
   display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  gap: '2rem',
+  flexDirection: 'column',
+  gap: '1rem',
 
   label: {
     fontSize: '$lg',
@@ -116,6 +109,13 @@ export const InputGroup = styled('div', {
     color: '$gray300',
     padding: '2rem',
     width: '50rem',
+    height: '5rem',
+  },
+
+  span: {
+    fontSize: '$md',
+    marginLeft: '1rem',
+    alignSelf: 'center',
   },
 })
 
@@ -170,4 +170,10 @@ export const CloseButton = styled(Dialog.Close, {
   lineHeight: '0%',
   cursor: 'pointer',
   color: '$gray300',
+})
+
+export const ErrorMessage = styled('span', {
+  fontSize: '1.1rem',
+  color: '$red100',
+  fontWeight: 'bold',
 })
