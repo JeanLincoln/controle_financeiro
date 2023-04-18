@@ -26,6 +26,7 @@ const newFixedFormValidationSchema = Z.object({
 })
 
 export const FixedTransactionsForm = ({ type, setOpen, transaction }: TriggerProps) => {
+  const { newTransaction, updateTransaction } = useTransaction()
   const {
     register,
     handleSubmit,
@@ -34,13 +35,7 @@ export const FixedTransactionsForm = ({ type, setOpen, transaction }: TriggerPro
     formState: { errors },
   } = useForm<CreateFixedValues>({
     resolver: zodResolver(newFixedFormValidationSchema),
-    defaultValues: {
-      description: transaction?.description,
-      type: transaction?.type,
-    },
   })
-  console.log(errors)
-  const { newTransaction, updateTransaction } = useTransaction()
 
   const handleCreateFixedTransaction = async (data: CreateFixedValues) => {
     const formattedValue = formatValue(data.value.toString())
@@ -152,6 +147,7 @@ export const FixedTransactionsForm = ({ type, setOpen, transaction }: TriggerPro
               <input
                 {...register('description')}
                 type="text"
+                defaultValue={transaction.description}
                 name="description"
                 id="description"
                 placeholder="Digite a descrição"
@@ -172,6 +168,7 @@ export const FixedTransactionsForm = ({ type, setOpen, transaction }: TriggerPro
                       style={{ border: errors.type ? '2px solid red' : 'initial' }}
                       onValueChange={field.onChange}
                       value={field.value}
+                      defaultValue={transaction.type}
                     >
                       <S.RadioGroupItem transactionType="Entrada" value="Entrada" id="Entrada">
                         <P.ArrowCircleUp size={24} />
