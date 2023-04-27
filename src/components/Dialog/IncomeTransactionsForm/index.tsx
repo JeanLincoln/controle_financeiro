@@ -24,7 +24,7 @@ const newIncomeFormValidationSchema = Z.object({
 })
 
 export const IncomeTransactionsForm = ({ type, setOpen, transaction }: TriggerProps) => {
-  const { newTransaction, updateTransaction } = useTransaction()
+  const { createNewTransaction, updateTransaction } = useTransaction()
   const {
     register,
     handleSubmit,
@@ -39,7 +39,7 @@ export const IncomeTransactionsForm = ({ type, setOpen, transaction }: TriggerPr
     const formattedValue = formatValue(data.value.toString())
 
     if (!transaction) {
-      newTransaction(type, {
+      createNewTransaction(type, {
         ...data,
         value: formattedValue,
         date: new Date(

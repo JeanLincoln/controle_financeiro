@@ -11,8 +11,22 @@ import {
   IncomeTransaction,
   OutcomeTransaction,
 } from '../types/TransactionTypes'
-import { FixedSorts, sortFinalDates, sortTypes } from '../utils/SortFixedValues'
+import { FixedSorts } from '../utils/SortFixedValues'
 import { toast } from 'react-toastify'
+import {
+  createNewFixedTransactions,
+  createNewIncomeTransactions,
+  createNewOutcomeTransactions,
+  deleteFixedTransactions,
+  deleteIncomeTransactions,
+  deleteOutcomeTransactions,
+  fetchFixedTransactions,
+  fetchIncomeTransactions,
+  fetchOutcomeTransactions,
+  updateFixedTransactions,
+  updateIncomeTransactions,
+  updateOutcomeTransactions,
+} from '../services/API'
 
 type TransactionContextType = {
   loading: Boolean
@@ -21,15 +35,14 @@ type TransactionContextType = {
   fixedValues: FixedValues[]
   filterMonth: string
   setFilterMonth: (FilterMonth: string) => void
-  fetchTransactions: () => void
   monthlyIncomeTotal: () => number
   monthlyOutcomeTotal: () => number
   fixedIncomeTotal: () => number
   fixedOutcomeTotal: () => number
-  newTransaction: (
+  createNewTransaction: (
     type: string,
     data: CreateIncomeTransaction | CreateOutcomeTransaction | CreateFixedValues
-  ) => Promise<void>
+  ) => void
   deleteTransaction: (type: string, transactionId: string) => Promise<void>
   updateTransaction: (
     transactionToUpdateId: string,
@@ -48,6 +61,7 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
   const [loading, setLoading] = useState(false)
   const [incomeValues, setIncomeValues] = useState<IncomeTransaction[]>([])
   const [outcomeValues, setOutcomeValues] = useState<OutcomeTransaction[]>([])
+  const [allOutcomeValues, setAllOutcomeValues] = useState<OutcomeTransaction[]>([])
   const [fixedValues, setFixedValues] = useState<FixedValues[]>([])
   const [filterMonth, setFilterMonth] = useState(
     `${new Date().getFullYear()}-${
@@ -55,41 +69,39 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
     }`
   )
 
-  const fetchTransactions = async () => {
+  const fetchFilteredMonthTransactions = async () => {
     setLoading(true)
     try {
-      const incomeResponse = await api.get('incomeTransactions')
-      const outcomeResponse = await api.get('outcomeTransactions')
-      const fixedResponse = await api.get('fixedValues')
+      debugger
+      const incomeResponse = await fetchIncomeTransactions()
+      const outcomeResponse = await fetchOutcomeTransactions()
+      const fixedResponse = await fetchFixedTransactions()
 
       const filteredDate = new Date(
         Number(filterMonth.split('-')[0]),
         Number(filterMonth.split('-')[1]) - 1
       )
 
-      const filteredIncomeResponse = incomeResponse.data.filter((transaction: IncomeTransaction) =>
+      const filteredIncomeResponse = incomeResponse.filter((transaction: IncomeTransaction) =>
         isSameMonth(
           new Date(transaction.date),
           new Date(Number(filterMonth.split('-')[0]), Number(filterMonth.split('-')[1]) - 1)
         )
       )
 
-      const filteredOutcomeResponse = outcomeResponse.data.filter(
-        (transaction: OutcomeTransaction) => {
-          const datesDifference = differenceInMonths(
-            FilterMonthDate(filterMonth),
-            TransactionDate(transaction.date)
-          )
+      const filteredOutcomeResponse = outcomeResponse.filter((transaction: OutcomeTransaction) => {
+        const datesDifference = differenceInMonths(
+          FilterMonthDate(filterMonth),
+          TransactionDate(transaction.date)
+        )
 
-          const ocorringPurchase =
-            datesDifference >= 0 && datesDifference <= transaction.installment
-          const paidPurchase = datesDifference > transaction.installment - 1
+        const ocorringPurchase = datesDifference >= 0 && datesDifference <= transaction.installment
+        const paidPurchase = datesDifference > transaction.installment - 1
 
-          return ocorringPurchase && !paidPurchase
-        }
-      )
+        return ocorringPurchase && !paidPurchase
+      })
 
-      const filteredFixedResponse = fixedResponse.data.filter((transaction: IncomeTransaction) => {
+      const filteredFixedResponse = fixedResponse.filter((transaction: IncomeTransaction) => {
         const fixedInitialDate = new Date(transaction.initialDate)
         const fixedFinalDate = transaction.finalDate
           ? new Date(transaction.finalDate)
@@ -114,7 +126,7 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
     }
   }
 
-  const newTransaction = async (
+  const createNewTransaction = async (
     type: string,
     data: CreateIncomeTransaction | CreateOutcomeTransaction | CreateFixedValues
   ) => {
@@ -123,42 +135,18 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
     const fixedTransaction = type === 'fixed'
 
     if (incomeTransaction) {
-      try {
-        const response = await api.post('incomeTransactions', data)
-        setIncomeValues((state) => [response.data, ...state])
-        toast('Transação de entrada inserida !', { className: 'success' })
-        return
-      } catch ({ message, error }: any) {
-        toast('Houve um erro ao criar a transação de entrada:\n' + `${message}:${error}`, {
-          className: 'error',
-        })
-      }
+      const response = await createNewIncomeTransactions(data as CreateIncomeTransaction)
+      setIncomeValues((state) => [response, ...state])
     }
 
     if (outcomeTransaction) {
-      try {
-        const response = await api.post('outcomeTransactions', data)
-        setOutcomeValues((state) => [response.data, ...state])
-        toast('Transação de saída inserida !', { className: 'success' })
-        return
-      } catch ({ message, error }: any) {
-        toast('Houve um erro ao criar a transação de saída:\n' + `${message}:${error}`, {
-          className: 'error',
-        })
-      }
+      const response = await createNewOutcomeTransactions(data as CreateOutcomeTransaction)
+      setOutcomeValues((state) => [response, ...state])
     }
 
     if (fixedTransaction) {
-      try {
-        const response = await api.post('fixedValues', data)
-        setFixedValues((state) => [response.data, ...state])
-        toast('Transação fixa inserida !', { className: 'success' })
-        return
-      } catch ({ message, error }: any) {
-        toast('Houve um erro ao criar a transação fixa:\n' + `${message}:${error}`, {
-          className: 'error',
-        })
-      }
+      const response = await createNewFixedTransactions(data as CreateFixedValues)
+      setFixedValues((state) => [response, ...state])
     }
   }
 
@@ -168,48 +156,31 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
     const fixedTransaction = type === 'fixed'
 
     if (incomeTransaction) {
-      try {
-        await api.delete(`incomeTransactions/${transactionId}`)
-        const remainingTransactions = incomeValues.filter(
-          (transaction) => transaction.id !== transactionId
-        )
-        setIncomeValues(remainingTransactions)
-        toast('Transação de entrada excluída !', { className: 'success' })
-      } catch ({ message, error }: any) {
-        toast('Houve um erro ao deletar a transação de entrada:\n' + `${message}:${error}`, {
-          className: 'error',
-        })
-      }
+      await deleteIncomeTransactions(transactionId)
+
+      const remainingTransactions = incomeValues.filter(
+        (transaction) => transaction.id !== transactionId
+      )
+      setIncomeValues(remainingTransactions)
       return
     }
     if (outcomeTransaction) {
-      try {
-        await api.delete(`outcomeTransactions/${transactionId}`)
-        const remainingTransactions = outcomeValues.filter(
-          (transaction) => transaction.id !== transactionId
-        )
-        setOutcomeValues(remainingTransactions)
-        toast('Transação de saída excluída !', { className: 'success' })
-      } catch ({ message, error }: any) {
-        toast('Houve um erro ao deletar a transação de saída:\n' + `${message}:${error}`, {
-          className: 'error',
-        })
-      }
+      await deleteOutcomeTransactions(transactionId)
+
+      const remainingTransactions = outcomeValues.filter(
+        (transaction) => transaction.id !== transactionId
+      )
+      setOutcomeValues(remainingTransactions)
+      return
     }
 
     if (fixedTransaction) {
-      try {
-        await api.delete(`fixedValues/${transactionId}`)
-        const remainingTransactions = fixedValues.filter(
-          (transaction) => transaction.id !== transactionId
-        )
-        setFixedValues(remainingTransactions)
-        toast('Transação fixa excluída !', { className: 'success' })
-      } catch ({ message, error }: any) {
-        toast('Houve um erro ao deletar a transação fixa:\n' + `${message}:${error}`, {
-          className: 'error',
-        })
-      }
+      await deleteFixedTransactions(transactionId)
+
+      const remainingTransactions = fixedValues.filter(
+        (transaction) => transaction.id !== transactionId
+      )
+      setFixedValues(remainingTransactions)
       return
     }
   }
@@ -224,46 +195,28 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
     const fixedTransaction = type === 'fixed'
 
     if (incomeTransaction) {
-      try {
-        await api.put(`incomeTransactions/${transactionToUpdateId}`, Transactionupdate)
-        fetchTransactions()
-        toast('Transação de entrada atualizada !', { className: 'success' })
-        return
-      } catch ({ error, message }: any) {
-        toast('Houve um erro ao atualizar a transação de entrada:\n' + `${message}:${error}`, {
-          className: 'error',
-        })
-      }
+      await updateIncomeTransactions(
+        transactionToUpdateId,
+        Transactionupdate as CreateIncomeTransaction
+      )
+      fetchFilteredMonthTransactions()
     }
     if (outcomeTransaction) {
-      try {
-        await api.put(`outcomeTransactions/${transactionToUpdateId}`, Transactionupdate)
-        fetchTransactions()
-        toast('Transação de saída atualizada !', { className: 'success' })
-        return
-      } catch ({ error, message }: any) {
-        toast('Houve um erro ao atualizar a transação de saída:\n' + `${message}:${error}`, {
-          className: 'error',
-        })
-      }
+      await updateOutcomeTransactions(
+        transactionToUpdateId,
+        Transactionupdate as CreateOutcomeTransaction
+      )
+      fetchFilteredMonthTransactions()
     }
 
     if (fixedTransaction) {
-      try {
-        await api.put(`fixedValues/${transactionToUpdateId}`, Transactionupdate)
-        fetchTransactions()
-        toast('Transação fixa atualizada !', { className: 'success' })
-        return
-      } catch ({ error, message }: any) {
-        toast('Houve um erro ao atualizar a transação fixa:\n' + `${message}:${error}`, {
-          className: 'error',
-        })
-      }
+      await updateFixedTransactions(transactionToUpdateId, Transactionupdate as CreateFixedValues)
+      fetchFilteredMonthTransactions()
     }
   }
 
   useEffect(() => {
-    fetchTransactions()
+    fetchFilteredMonthTransactions()
   }, [filterMonth])
 
   const monthlyIncomeTotal = () => {
@@ -340,12 +293,11 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
         fixedValues,
         filterMonth,
         setFilterMonth,
-        fetchTransactions,
         monthlyIncomeTotal,
         monthlyOutcomeTotal,
         fixedIncomeTotal,
         fixedOutcomeTotal,
-        newTransaction,
+        createNewTransaction,
         deleteTransaction,
         updateTransaction,
       }}

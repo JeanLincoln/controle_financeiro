@@ -3,7 +3,7 @@ import * as P from 'phosphor-react'
 import * as Z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { format, formatISO } from 'date-fns'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Dispatch, SetStateAction } from 'react'
 import CurrencyInput from 'react-currency-input-field'
 import { useForm, Controller } from 'react-hook-form'
 import { useTransaction } from '../../../hooks/useTransaction'
@@ -26,7 +26,7 @@ const newFixedFormValidationSchema = Z.object({
 })
 
 export const FixedTransactionsForm = ({ type, setOpen, transaction }: TriggerProps) => {
-  const { newTransaction, updateTransaction } = useTransaction()
+  const { createNewTransaction, updateTransaction } = useTransaction()
   const {
     register,
     handleSubmit,
@@ -43,7 +43,7 @@ export const FixedTransactionsForm = ({ type, setOpen, transaction }: TriggerPro
     const formattedFinalDate = data.finalDate && new Date(data.finalDate)
 
     if (!transaction) {
-      newTransaction(type, {
+      createNewTransaction(type, {
         ...data,
         value: formattedValue,
         initialDate: new Date(

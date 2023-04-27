@@ -21,8 +21,8 @@ const newOutcomeFormValidationSchema = Z.object({
   description: Z.string().min(1, { message: 'Informe a descrição' }),
   type: Z.string().min(1, { message: 'Informe o tipo' }),
   method: Z.string().min(1, { message: 'Informe o método' }),
-  paymentForm: Z.optional(Z.string().min(1, { message: 'Informe a forma de pagamento' })),
-  installment: Z.optional(Z.number().min(1, { message: 'Informe o n° de parcelas' })),
+  paymentForm: Z.coerce.string(),
+  installment: Z.coerce.number(),
   value: Z.string().min(1, { message: 'Informe o valor' }),
 })
 
@@ -35,7 +35,7 @@ export const OutcomeTransactionsForm = ({ type, setOpen, transaction }: TriggerP
   } = useForm<CreateOutcomeTransaction>({ resolver: zodResolver(newOutcomeFormValidationSchema) })
   const [isCard, setIsCard] = useState(false)
   const [installmentPurchase, isInstallmentPurchase] = useState(false)
-  const { newTransaction, updateTransaction } = useTransaction()
+  const { createNewTransaction, updateTransaction } = useTransaction()
 
   console.log(errors)
 
@@ -54,7 +54,7 @@ export const OutcomeTransactionsForm = ({ type, setOpen, transaction }: TriggerP
     const formattedValue = formatValue(data.value.toString())
 
     if (!transaction) {
-      newTransaction(type, {
+      createNewTransaction(type, {
         ...data,
         value: formattedValue,
         date: new Date(
