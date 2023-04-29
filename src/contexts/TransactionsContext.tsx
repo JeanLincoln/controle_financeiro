@@ -1,5 +1,5 @@
 import { api } from '../../axios'
-import { ReactNode, createContext, useState, useEffect } from 'react'
+import { ReactNode, createContext, useState, useEffect, Dispatch, SetStateAction } from 'react'
 import { differenceInMonths, isSameMonth, isWithinInterval } from 'date-fns'
 import { FilterMonthDate, TransactionDate } from '../utils/DatesValidation'
 
@@ -30,6 +30,7 @@ import {
 
 type TransactionContextType = {
   loading: Boolean
+  setLoading: Dispatch<SetStateAction<boolean>>
   incomeValues: IncomeTransaction[]
   outcomeValues: OutcomeTransaction[]
   fixedValues: FixedValues[]
@@ -61,7 +62,6 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
   const [loading, setLoading] = useState(false)
   const [incomeValues, setIncomeValues] = useState<IncomeTransaction[]>([])
   const [outcomeValues, setOutcomeValues] = useState<OutcomeTransaction[]>([])
-  const [allOutcomeValues, setAllOutcomeValues] = useState<OutcomeTransaction[]>([])
   const [fixedValues, setFixedValues] = useState<FixedValues[]>([])
   const [filterMonth, setFilterMonth] = useState(
     `${new Date().getFullYear()}-${
@@ -72,7 +72,6 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
   const fetchFilteredMonthTransactions = async () => {
     setLoading(true)
     try {
-      debugger
       const incomeResponse = await fetchIncomeTransactions()
       const outcomeResponse = await fetchOutcomeTransactions()
       const fixedResponse = await fetchFixedTransactions()
@@ -288,6 +287,7 @@ export function TransactionsContextProvider({ children }: CyclesContextProviderP
     <TransactionsContext.Provider
       value={{
         loading,
+        setLoading,
         incomeValues,
         outcomeValues,
         fixedValues,

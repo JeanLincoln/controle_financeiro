@@ -13,7 +13,17 @@ export const ChartContainer = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  padding: '5rem 3rem 0px',
+  justifyContent: 'center',
+  padding: '5rem 1rem 0px',
+
+  '.recharts-legend-wrapper': {
+    display: 'flex',
+    justifyContent: 'center',
+  },
+
+  h1: {
+    marginBottom: 10,
+  },
 
   p: {
     fontSize: '$md',

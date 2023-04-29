@@ -2,13 +2,9 @@ import {
   CreateFixedValues,
   CreateIncomeTransaction,
   CreateOutcomeTransaction,
-  FixedValues,
-  IncomeTransaction,
-  OutcomeTransaction,
 } from '../types/TransactionTypes'
 import { toast } from 'react-toastify'
 import { api } from '../../axios'
-import { Dispatch, SetStateAction } from 'react'
 
 export const fetchIncomeTransactions = async () => {
   try {

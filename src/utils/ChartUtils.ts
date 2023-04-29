@@ -1,3 +1,5 @@
+import { differenceInMonths, isWithinInterval } from 'date-fns'
+import { fetchOutcomeTransactions } from '../services/API'
 import { OutcomeTransaction } from '../types/TransactionTypes'
 
 type totalOutcomeTypesArrayProps = {
@@ -9,46 +11,88 @@ export const totalOutcomeTypes = (outcomeValues: OutcomeTransaction[]) => {
   const totalOutcomeTypesArray = outcomeValues.reduce(
     (acc: totalOutcomeTypesArrayProps, value: OutcomeTransaction) => {
       const typeExists = acc.some((element, index) => element.name === value.type)
-
       if (typeExists) {
         acc.forEach((element) => {
           if (element.name === value.type) {
-            element.value += value.value
+            element.value += value.value / value.installment
           }
         })
         return acc
       }
 
-      acc.push({ name: value.type, value: value.value })
+      acc.push({ name: value.type, value: value.value / value.installment })
 
       return acc
     },
     []
   )
-  return totalOutcomeTypesArray
+  return totalOutcomeTypesArray.sort((a, b) => a.value - b.value)
 }
 
-export const totalOutcomePerMonth = (outcomeValues: OutcomeTransaction[]) => {
-  const totalOutcomeTypesArray = outcomeValues.reduce(
-    (acc: totalOutcomeTypesArrayProps, value: OutcomeTransaction) => {
-      const typeExists = acc.some((element, index) => element.name === value.type)
+export const totalOutcomePerMonth = async () => {
+  const data = await fetchOutcomeTransactions()
+  const thisYear = new Date().getFullYear()
 
-      if (typeExists) {
-        acc.forEach((element) => {
-          if (element.name === value.type) {
-            element.value += value.value
-          }
-        })
-        return acc
-      }
+  const monthNames = [
+    'Janeiro',
+    'Fevereiro',
+    'Março',
+    'Abril',
+    'Maio',
+    'Junho',
+    'Julho',
+    'Agosto',
+    'Setembro',
+    'Outubro',
+    'Novembro',
+    'Dezembro',
+  ]
 
-      acc.push({ name: value.type, value: value.value })
+  const resultArray = [
+    { name: 'Janeiro', total: 0 },
+    { name: 'Fevereiro', total: 0 },
+    { name: 'Março', total: 0 },
+    { name: 'Abril', total: 0 },
+    { name: 'Maio', total: 0 },
+    { name: 'Junho', total: 0 },
+    { name: 'Julho', total: 0 },
+    { name: 'Agosto', total: 0 },
+    { name: 'Setembro', total: 0 },
+    { name: 'Outubro', total: 0 },
+    { name: 'Novembro', total: 0 },
+    { name: 'Dezembro', total: 0 },
+  ]
 
-      return acc
-    },
-    []
-  )
-  return totalOutcomeTypesArray
+  for (let i = 0; i <= monthNames.length; i++) {
+    const filteredTransations = data.filter((transaction: OutcomeTransaction) => {
+      const datesDifference = differenceInMonths(
+        new Date(thisYear, i, new Date(transaction.date).getDate()),
+        new Date(
+          new Date(transaction.date).getFullYear(),
+          new Date(transaction.date).getMonth(),
+          new Date(transaction.date).getDate()
+        )
+      )
+
+      const ocorringPurchase = datesDifference >= 0 && datesDifference <= transaction.installment
+      const paidPurchase = datesDifference > transaction.installment - 1
+
+      return ocorringPurchase && !paidPurchase
+    })
+
+    if (filteredTransations.length > 0) {
+      const monthTotal = filteredTransations.reduce(
+        (acc: number, transaction: OutcomeTransaction) => {
+          acc += transaction.value / transaction.installment
+          return acc
+        },
+        0
+      )
+      resultArray[i].total = monthTotal
+    }
+  }
+
+  return resultArray
 }
 
 export const getColors = (outcomeValues: OutcomeTransaction[]) => {
