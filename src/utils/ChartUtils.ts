@@ -96,11 +96,31 @@ export const totalOutcomePerMonth = async () => {
   return resultArray
 }
 
-export const getColors = (outcomeValues: OutcomeTransaction[]) => {
-  const colors = [] as string[]
-  const totalOutcomeTypesArray = totalOutcomeTypes(outcomeValues)
-  totalOutcomeTypesArray.forEach(() => {
-    colors.push(`#${((Math.random() * 0xffffff) << 0).toString(16).padStart(6, '0')}`)
-  })
-  return colors
+export const fillCells = (index: number, array: { name: string; value: number }[]) => {
+  const red = (index / array.length) * 100 >= 75
+  const yellow = (index / array.length) * 100 < 75 && (index / array.length) * 100 > 25
+  const green = (index / array.length) * 100 <= 25
+
+  if (red) {
+    return '#DB5461'
+  }
+
+  if (yellow) {
+    return '#F7DC6F'
+  }
+
+  if (green) {
+    return '#82E0AA'
+  }
 }
+
+// export const getColors = (outcomeValues: OutcomeTransaction[]) => {
+//   // const colors = [] as string[]
+//   // const totalOutcomeTypesArray = totalOutcomeTypes(outcomeValues)
+//   // totalOutcomeTypesArray.forEach(() => {
+//   //   colors.push(`#${((Math.random() * 0xffffff) << 0).toString(16).padStart(6, '0')}`)
+//   // })
+
+//   const colors = ['#DB5461', '#F7DC6F', '#82E0AA']
+//   return colors.reverse()
+// }

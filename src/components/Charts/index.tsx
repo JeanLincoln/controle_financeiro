@@ -15,7 +15,7 @@ import {
 import { TransactionsContext } from '../../contexts/TransactionsContext'
 import { Loading } from '../Loading'
 import { CustomTooltip } from './CustomTooltip'
-import { getColors, totalOutcomePerMonth, totalOutcomeTypes } from '../../utils/ChartUtils'
+import { fillCells, totalOutcomePerMonth, totalOutcomeTypes } from '../../utils/ChartUtils'
 
 type outcomePerMonthProps = {
   name: string
@@ -25,13 +25,12 @@ type outcomePerMonthProps = {
 export default function Charts() {
   const { loading, outcomeValues } = useContext(TransactionsContext)
   const [outcomePerMonth, setOutcomePerMonth] = useState<outcomePerMonthProps[]>([])
-  const colors = getColors(outcomeValues)
 
   const fetchTotalOutcomePerMonth = async () => {
     const response = await totalOutcomePerMonth()
     setOutcomePerMonth(response)
   }
-  console.log(outcomePerMonth)
+
   useEffect(() => {
     fetchTotalOutcomePerMonth()
   }, [])
@@ -55,9 +54,9 @@ export default function Charts() {
                 outerRadius={150}
                 fill="#8884d8"
               >
-                {totalOutcomeTypes(outcomeValues).map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
-                ))}
+                {totalOutcomeTypes(outcomeValues).map((entry, index, array) => {
+                  return <Cell key={`cell-${index}`} fill={fillCells(index, array)} />
+                })}
               </Pie>
               <Tooltip content={<CustomTooltip />} />
               <Legend />
@@ -70,7 +69,6 @@ export default function Charts() {
               <XAxis dataKey="name" />
               <YAxis />
               <Tooltip content={<CustomTooltip />} />
-              <Legend />
               <Bar dataKey="total" fill="#8884d8" />
             </BarChart>
           </S.ChartContainer>
