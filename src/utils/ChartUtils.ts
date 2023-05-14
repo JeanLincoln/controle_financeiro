@@ -76,8 +76,8 @@ export const totalOutcomePerMonth = async () => {
 
       const ocorringPurchase = datesDifference >= 0 && datesDifference <= transaction.installment
       const paidPurchase = datesDifference > transaction.installment - 1
-
-      return ocorringPurchase && !paidPurchase
+      const beyondThisYear = i <= 11
+      return ocorringPurchase && !paidPurchase && beyondThisYear
     })
 
     if (filteredTransations.length > 0) {
@@ -88,6 +88,7 @@ export const totalOutcomePerMonth = async () => {
         },
         0
       )
+
       resultArray[i].total = monthTotal
     }
   }

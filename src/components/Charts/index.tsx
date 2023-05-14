@@ -64,7 +64,7 @@ export default function Charts() {
             </PieChart>
           </S.ChartContainer>
           <S.ChartContainer>
-            <h1>Gastos x Mês:</h1>
+            <h1>Gastos x Mês em {new Date().getFullYear()}:</h1>
             <BarChart width={800} height={430} data={outcomePerMonth}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
