@@ -4,6 +4,7 @@ export const ChartsContainer = styled('div', {
   display: 'flex',
   justifyContent: 'center',
   backgroundColor: '$gray400',
+  boxShadow: '-5px 5px 5px #121214',
   borderRadius: 10,
   margin: '50px 50px 0 50px',
   padding: '20px 0',

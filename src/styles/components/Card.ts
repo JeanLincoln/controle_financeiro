@@ -1,4 +1,4 @@
-import { styled } from '..';
+import { styled } from '..'
 
 export const Card = styled('div', {
   display: 'flex',
@@ -11,6 +11,7 @@ export const Card = styled('div', {
   borderRadius: 8,
 
   backgroundColor: '$gray400',
+  boxShadow: '-5px 5px 5px #121214',
 
   div: {
     display: 'flex',
@@ -28,4 +29,4 @@ export const Card = styled('div', {
     fontWeight: 'bold',
     fontSize: '$2xl',
   },
-});
+})

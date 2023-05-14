@@ -1,4 +1,4 @@
-import { styled } from '..';
+import { styled } from '..'
 
 export const Container = styled('div', {
   display: 'flex',
@@ -8,12 +8,13 @@ export const Container = styled('div', {
   gap: '3rem',
   padding: '5rem 4rem 0',
   width: '100%',
-});
+  marginLeft: '10rem',
+})
 
 export const FiltersContainers = styled('div', {
   display: 'flex',
   justifyContent: 'space-around',
-});
+})
 
 export const FilterItem = styled('button', {
   padding: '1.5rem',
@@ -34,14 +35,14 @@ export const FilterItem = styled('button', {
   '&.activeFilter': {
     backgroundColor: '$gray400',
   },
-});
+})
 
 export const ElementsContainer = styled('div', {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
   width: '100%',
-});
+})
 
 export const SearchTransactionForm = styled('form', {
   display: 'flex',
@@ -57,7 +58,7 @@ export const SearchTransactionForm = styled('form', {
 
     flex: 1,
   },
-});
+})
 
 export const IncomeValuesTable = styled('table', {
   textAlign: 'center',
@@ -96,4 +97,4 @@ export const IncomeValuesTable = styled('table', {
       },
     },
   },
-});
+})

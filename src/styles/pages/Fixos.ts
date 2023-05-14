@@ -8,6 +8,7 @@ export const Container = styled('div', {
   gap: '3rem',
   padding: '5rem 4rem 0',
   width: '100%',
+  marginLeft: '10rem',
 
   '.loader': {
     top: '0 !important',

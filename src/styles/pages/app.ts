@@ -3,15 +3,20 @@ import { styled } from '..'
 
 export const AppContainer = styled('div', {
   display: 'flex',
-  width: '100%',
 })
 
 export const AsideContainer = styled('div', {
   display: 'flex',
+  position: 'fixed',
   flexDirection: 'column',
   alignItems: 'center',
 
-  backgroundColor: '$gray700',
+  boxShadow: '5px 5px 5px #121214',
+
+  borderTopRightRadius: '10px',
+  borderBottomRightRadius: '10px',
+
+  backgroundColor: '$gray600',
 
   height: '100vh',
   padding: '3rem 2rem',

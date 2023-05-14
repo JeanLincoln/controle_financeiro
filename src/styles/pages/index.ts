@@ -5,4 +5,5 @@ export const Container = styled('div', {
   flexDirection: 'column',
   width: '100%',
   marginTop: '3rem',
+  marginLeft: '10rem',
 })
