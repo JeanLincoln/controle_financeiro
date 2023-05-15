@@ -43,7 +43,7 @@ export default function Charts() {
         <>
           <S.ChartContainer>
             <h1>Tipos de gastos referente a este mês:</h1>
-            <PieChart width={430} height={430}>
+            <S.PieChartContainer width={430} height={430}>
               <Pie
                 data={totalOutcomeTypes(outcomeValues)}
                 nameKey="name"
@@ -60,17 +60,17 @@ export default function Charts() {
               </Pie>
               <Tooltip content={<CustomTooltip />} />
               <Legend />
-            </PieChart>
+            </S.PieChartContainer>
           </S.ChartContainer>
           <S.ChartContainer>
             <h1>Gastos x Mês em {new Date().getFullYear()}:</h1>
-            <BarChart width={800} height={430} data={outcomePerMonth}>
+            <S.BarChartContainer width={800} height={430} data={outcomePerMonth}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
               <YAxis />
               <Tooltip content={<CustomTooltip />} />
               <Bar dataKey="total" fill="#8884d8" />
-            </BarChart>
+            </S.BarChartContainer>
           </S.ChartContainer>
         </>
       )}
