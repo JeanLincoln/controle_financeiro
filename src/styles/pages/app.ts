@@ -22,6 +22,7 @@ export const AsideContainer = styled('div', {
   padding: '3rem 2rem',
   gap: '8rem',
   width: '10rem',
+  zIndex: 1,
 
   transition: 'all ease 0.2s',
 
