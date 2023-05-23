@@ -1,30 +1,33 @@
-import * as S from '../../../styles/components/Dialog'
-import * as Z from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Dispatch, SetStateAction } from 'react'
-import CurrencyInput from 'react-currency-input-field'
-import { useForm } from 'react-hook-form'
-import { useTransaction } from '../../../hooks/useTransaction'
-import { CreateIncomeTransaction } from '../../../types/TransactionTypes'
-import { formatValue } from '../../../utils/FormatNumberValue'
-import { IncomeTransaction } from '../../../types/TransactionTypes'
-import { formatISO } from 'date-fns'
+import * as S from "../../../styles/components/Dialog";
+import * as Z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Dispatch, SetStateAction } from "react";
+import CurrencyInput from "react-currency-input-field";
+import { useForm } from "react-hook-form";
+import { useTransaction } from "../../../hooks/useTransaction";
+import { CreateIncomeTransaction } from "../../../types/TransactionTypes";
+import { formatValue } from "../../../utils/FormatNumberValue";
+import { formatISO } from "date-fns";
 
 type TriggerProps = {
-  type: 'income' | 'outcome' | 'fixed'
-  setOpen: Dispatch<SetStateAction<boolean>>
-  transaction?: IncomeTransaction
-}
+  type: "income" | "outcome" | "fixed";
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  transaction?: CreateIncomeTransaction;
+};
 
 const newIncomeFormValidationSchema = Z.object({
-  date: Z.string().min(10, { message: 'Informe a data da transação' }),
-  description: Z.string().min(1, { message: 'Informe a descrição' }),
-  origin: Z.coerce.string().min(1, { message: 'Informe a procedência' }),
-  value: Z.string().min(1, { message: 'Informe o valor' }),
-})
+  date: Z.string().min(10, { message: "Informe a data da transação" }),
+  description: Z.string().min(1, { message: "Informe a descrição" }),
+  origin: Z.coerce.string().min(1, { message: "Informe a procedência" }),
+  value: Z.string().min(1, { message: "Informe o valor" }),
+});
 
-export const IncomeTransactionsForm = ({ type, setOpen, transaction }: TriggerProps) => {
-  const { createNewTransaction, updateTransaction } = useTransaction()
+export const IncomeTransactionsForm = ({
+  type,
+  setOpen,
+  transaction,
+}: TriggerProps) => {
+  const { createNewTransaction, updateTransaction } = useTransaction();
   const {
     register,
     handleSubmit,
@@ -32,15 +35,23 @@ export const IncomeTransactionsForm = ({ type, setOpen, transaction }: TriggerPr
     formState: { errors },
   } = useForm<CreateIncomeTransaction>({
     resolver: zodResolver(newIncomeFormValidationSchema),
-  })
+  });
 
-  const handleCreateIncomeTransaction = async (data: CreateIncomeTransaction) => {
-    const formattedDate = new Date(data.date)
-    const formattedValue = formatValue(data.value.toString())
+  function generateUniqueId() {
+    return Math.random().toString(36).substr(2, 9);
+  }
+
+  const handleCreateIncomeTransaction = async (
+    data: CreateIncomeTransaction
+  ) => {
+    const generateId = generateUniqueId();
+    const formattedDate = new Date(data.date);
+    const formattedValue = formatValue(data.value.toString());
 
     if (!transaction) {
       createNewTransaction(type, {
         ...data,
+        id: generateId,
         value: formattedValue,
         date: new Date(
           new Date(
@@ -49,24 +60,28 @@ export const IncomeTransactionsForm = ({ type, setOpen, transaction }: TriggerPr
             formattedDate.getDate() + 1
           )
         ),
-      })
+      });
 
-      reset()
-      setOpen(false)
-      return
+      reset();
+      setOpen(false);
+      return;
     }
 
     updateTransaction(transaction.id, type, {
       ...data,
       value: formattedValue,
       date: new Date(
-        new Date(formattedDate.getFullYear(), formattedDate.getMonth(), formattedDate.getDate() + 1)
+        new Date(
+          formattedDate.getFullYear(),
+          formattedDate.getMonth(),
+          formattedDate.getDate() + 1
+        )
       ),
-    })
+    });
 
-    reset()
-    setOpen(false)
-  }
+    reset();
+    setOpen(false);
+  };
 
   return (
     <S.Content>
@@ -79,16 +94,21 @@ export const IncomeTransactionsForm = ({ type, setOpen, transaction }: TriggerPr
           <>
             <S.InputGroup>
               <label htmlFor="date">
-                Data:{errors.date && <S.ErrorMessage>{errors.date.message}</S.ErrorMessage>}
+                Data:
+                {errors.date && (
+                  <S.ErrorMessage>{errors.date.message}</S.ErrorMessage>
+                )}
               </label>
               <input
-                defaultValue={formatISO(new Date(transaction!.date), { representation: 'date' })}
-                {...register('date')}
+                defaultValue={formatISO(new Date(transaction!.date), {
+                  representation: "date",
+                })}
+                {...register("date")}
                 type="date"
                 name="date"
                 id="date"
                 placeholder="Digite a data"
-                style={{ border: errors.date ? '2px solid red' : 'initial' }}
+                style={{ border: errors.date ? "2px solid red" : "initial" }}
               />
             </S.InputGroup>
             <S.InputGroup>
@@ -100,40 +120,48 @@ export const IncomeTransactionsForm = ({ type, setOpen, transaction }: TriggerPr
               </label>
               <input
                 defaultValue={transaction.description}
-                {...register('description')}
+                {...register("description")}
                 type="text"
                 name="description"
                 id="description"
                 placeholder="Digite a descrição"
-                style={{ border: errors.description ? '2px solid red' : 'initial' }}
+                style={{
+                  border: errors.description ? "2px solid red" : "initial",
+                }}
               />
             </S.InputGroup>
             <S.InputGroup>
               <label htmlFor="origin">
-                Origem:{errors.origin && <S.ErrorMessage>{errors.origin.message}</S.ErrorMessage>}
+                Origem:
+                {errors.origin && (
+                  <S.ErrorMessage>{errors.origin.message}</S.ErrorMessage>
+                )}
               </label>
               <input
                 defaultValue={transaction.origin}
-                {...register('origin')}
+                {...register("origin")}
                 type="text"
                 name="origin"
                 id="origin"
                 placeholder="Digite a procedência"
-                style={{ border: errors.origin ? '2px solid red' : 'initial' }}
+                style={{ border: errors.origin ? "2px solid red" : "initial" }}
               />
             </S.InputGroup>
             <S.InputGroup>
               <label htmlFor="value">
-                Valor:{errors.value && <S.ErrorMessage>{errors.value.message}</S.ErrorMessage>}
+                Valor:
+                {errors.value && (
+                  <S.ErrorMessage>{errors.value.message}</S.ErrorMessage>
+                )}
               </label>
               <CurrencyInput
-                {...register('value')}
+                {...register("value")}
                 prefix="R$"
                 id="value"
                 name="value"
                 fixedDecimalLength={2}
                 placeholder="R$ 000,00"
-                style={{ border: errors.value ? '2px solid red' : 'initial' }}
+                style={{ border: errors.value ? "2px solid red" : "initial" }}
                 defaultValue={transaction.value}
                 decimalsLimit={2}
               />
@@ -146,15 +174,18 @@ export const IncomeTransactionsForm = ({ type, setOpen, transaction }: TriggerPr
           <>
             <S.InputGroup>
               <label htmlFor="date">
-                Data:{errors.date && <S.ErrorMessage>{errors.date.message}</S.ErrorMessage>}
+                Data:
+                {errors.date && (
+                  <S.ErrorMessage>{errors.date.message}</S.ErrorMessage>
+                )}
               </label>
               <input
-                {...register('date')}
+                {...register("date")}
                 type="date"
                 name="date"
                 id="date"
                 placeholder="Digite a data"
-                style={{ border: errors.date ? '2px solid red' : 'initial' }}
+                style={{ border: errors.date ? "2px solid red" : "initial" }}
               />
             </S.InputGroup>
             <S.InputGroup>
@@ -165,39 +196,47 @@ export const IncomeTransactionsForm = ({ type, setOpen, transaction }: TriggerPr
                 )}
               </label>
               <input
-                {...register('description')}
+                {...register("description")}
                 type="text"
                 name="description"
                 id="description"
                 placeholder="Digite a descrição"
-                style={{ border: errors.description ? '2px solid red' : 'initial' }}
+                style={{
+                  border: errors.description ? "2px solid red" : "initial",
+                }}
               />
             </S.InputGroup>
             <S.InputGroup>
               <label htmlFor="origin">
-                Origem:{errors.origin && <S.ErrorMessage>{errors.origin.message}</S.ErrorMessage>}
+                Origem:
+                {errors.origin && (
+                  <S.ErrorMessage>{errors.origin.message}</S.ErrorMessage>
+                )}
               </label>
               <input
-                {...register('origin')}
+                {...register("origin")}
                 type="text"
                 name="origin"
                 id="origin"
                 placeholder="Digite a procedência"
-                style={{ border: errors.origin ? '2px solid red' : 'initial' }}
+                style={{ border: errors.origin ? "2px solid red" : "initial" }}
               />
             </S.InputGroup>
             <S.InputGroup>
               <label htmlFor="value">
-                Valor:{errors.value && <S.ErrorMessage>{errors.value.message}</S.ErrorMessage>}
+                Valor:
+                {errors.value && (
+                  <S.ErrorMessage>{errors.value.message}</S.ErrorMessage>
+                )}
               </label>
               <CurrencyInput
-                {...register('value')}
+                {...register("value")}
                 prefix="R$"
                 id="value"
                 name="value"
                 fixedDecimalLength={2}
                 placeholder="R$ 000,00"
-                style={{ border: errors.value ? '2px solid red' : 'initial' }}
+                style={{ border: errors.value ? "2px solid red" : "initial" }}
                 decimalsLimit={2}
               />
             </S.InputGroup>
@@ -208,5 +247,5 @@ export const IncomeTransactionsForm = ({ type, setOpen, transaction }: TriggerPr
         )}
       </form>
     </S.Content>
-  )
-}
+  );
+};

@@ -54,7 +54,7 @@ export default function App({ Component, pageProps }: AppProps) {
           </S.UserContainer>
         </S.AsideContainer>
         <TransactionsContextProvider>
-          <S.StyledToastContainer />
+          <S.StyledToastContainer autoClose={500000000} />
           <Component {...pageProps} />
         </TransactionsContextProvider>
       </S.AppContainer>

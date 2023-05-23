@@ -1,6 +1,6 @@
-import Charts from '../components/Charts'
-import Summary from '../components/Summary'
-import * as S from '../styles/pages/index'
+import Charts from "../components/Charts";
+import Summary from "../components/Summary";
+import * as S from "../styles/pages/index";
 
 export default function Home() {
   return (
@@ -8,5 +8,5 @@ export default function Home() {
       <Summary />
       <Charts />
     </S.Container>
-  )
+  );
 }
