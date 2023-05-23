@@ -16,7 +16,19 @@ export type FirebaseIncomeTransaction = {
   value: number;
 };
 
+export type FirebaseOutcomeTransaction = {
+  id: string;
+  date: Timestamp;
+  description: string;
+  installment: number;
+  method: string;
+  paymentForm: string;
+  type:string;
+  value: number;
+};
+
 export type CreateOutcomeTransaction = {
+  id: string;
   date: Date;
   description: string;
   method: string;
@@ -32,6 +44,7 @@ export type OutcomeTransaction = {
 } & CreateOutcomeTransaction;
 
 export type CreateFixedValues = {
+  id: string;
   initialDate: Date;
   finalDate: Date | undefined;
   description: string;
@@ -39,10 +52,14 @@ export type CreateFixedValues = {
   value: number;
 };
 
-export type FixedValues = {
+export type FirebaseFixedTransaction = {
   id: string;
-  [key: string]: string;
-} & CreateFixedValues;
+  initialDate: Timestamp;
+  finalDate: Timestamp;
+  description: string;
+  type:string;
+  value: number;
+};
 
 export type IncomeSearchProps = {
   dateFilter: string;

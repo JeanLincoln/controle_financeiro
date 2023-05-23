@@ -14,7 +14,6 @@ import {
   CreateFixedValues,
   CreateIncomeTransaction,
   CreateOutcomeTransaction,
-  FixedValues,
   OutcomeTransaction,
 } from "../types/TransactionTypes";
 import { FixedSorts } from "../utils/SortFixedValues";
@@ -35,15 +34,17 @@ import {
 } from "../services/API";
 import {
   createNewIncomeTransactionsFirebase,
+  fetchFixedTransactionsFirebase,
   fetchIncomeTransactionsFirebase,
+  fetchOutcomeTransactionsFirebase,
 } from "../services/firestoreDatabase";
 
 type TransactionContextType = {
   loading: Boolean;
   setLoading: Dispatch<SetStateAction<boolean>>;
   incomeValues: CreateIncomeTransaction[];
-  outcomeValues: OutcomeTransaction[];
-  fixedValues: FixedValues[];
+  outcomeValues: CreateOutcomeTransaction[];
+  fixedValues: CreateFixedValues[];
   filterMonth: string;
   setFilterMonth: (FilterMonth: string) => void;
   monthlyIncomeTotal: () => number;
@@ -78,8 +79,10 @@ export function TransactionsContextProvider({
   const [incomeValues, setIncomeValues] = useState<CreateIncomeTransaction[]>(
     []
   );
-  const [outcomeValues, setOutcomeValues] = useState<OutcomeTransaction[]>([]);
-  const [fixedValues, setFixedValues] = useState<FixedValues[]>([]);
+  const [outcomeValues, setOutcomeValues] = useState<
+    CreateOutcomeTransaction[]
+  >([]);
+  const [fixedValues, setFixedValues] = useState<CreateFixedValues[]>([]);
   const [filterMonth, setFilterMonth] = useState(
     `${new Date().getFullYear()}-${
       new Date().getMonth() + 1 > 9
@@ -91,19 +94,15 @@ export function TransactionsContextProvider({
   const fetchFilteredMonthTransactions = async () => {
     setLoading(true);
     try {
-      // const test = await fetchIncomeTransactionsFirebase()
-      const incomeResponse = (await fetchIncomeTransactionsFirebase(
-        filterMonth,
-        setIncomeValues
-      )) as unknown as CreateIncomeTransaction[];
-      debugger;
-      const outcomeResponse = await fetchOutcomeTransactions();
-      const fixedResponse = await fetchFixedTransactions();
+      await fetchIncomeTransactionsFirebase(filterMonth, setIncomeValues);
+      await fetchOutcomeTransactionsFirebase(filterMonth, setOutcomeValues);
+      // const outcomeResponse = await fetchOutcomeTransactions();
+      await fetchFixedTransactionsFirebase(filterMonth, setFixedValues);
 
-      const filteredDate = new Date(
-        Number(filterMonth.split("-")[0]),
-        Number(filterMonth.split("-")[1]) - 1
-      );
+      // const filteredDate = new Date(
+      //   Number(filterMonth.split("-")[0]),
+      //   Number(filterMonth.split("-")[1]) - 1
+      // );
 
       // const filteredIncomeResponse = incomeResponse.filter((transaction: IncomeTransaction) =>
       //   isSameMonth(
@@ -112,40 +111,40 @@ export function TransactionsContextProvider({
       //   )
       // )
 
-      const filteredOutcomeResponse = outcomeResponse.filter(
-        (transaction: OutcomeTransaction) => {
-          const datesDifference = differenceInMonths(
-            FilterMonthDate(filterMonth),
-            TransactionDate(transaction.date)
-          );
+      // const filteredOutcomeResponse = outcomeResponse.filter(
+      //   (transaction: OutcomeTransaction) => {
+      //     const datesDifference = differenceInMonths(
+      //       FilterMonthDate(filterMonth),
+      //       TransactionDate(transaction.date)
+      //     );
 
-          const ocorringPurchase =
-            datesDifference >= 0 && datesDifference <= transaction.installment;
-          const paidPurchase = datesDifference > transaction.installment - 1;
+      //     const ocorringPurchase =
+      //       datesDifference >= 0 && datesDifference <= transaction.installment;
+      //     const paidPurchase = datesDifference > transaction.installment - 1;
 
-          return ocorringPurchase && !paidPurchase;
-        }
-      );
+      //     return ocorringPurchase && !paidPurchase;
+      //   }
+      // );
 
-      const filteredFixedResponse = fixedResponse.filter(
-        (transaction: CreateFixedValues) => {
-          const fixedInitialDate = new Date(transaction.initialDate);
-          const fixedFinalDate = transaction.finalDate
-            ? new Date(transaction.finalDate)
-            : new Date(2999, 1, 1);
+      // const filteredFixedResponse = fixedResponse.filter(
+      //   (transaction: CreateFixedValues) => {
+      //     const fixedInitialDate = new Date(transaction.initialDate);
+      //     const fixedFinalDate = transaction.finalDate
+      //       ? new Date(transaction.finalDate)
+      //       : new Date(2999, 1, 1);
 
-          return isWithinInterval(filteredDate, {
-            start: new Date(fixedInitialDate),
-            end: new Date(fixedFinalDate),
-          });
-        }
-      );
+      //     return isWithinInterval(filteredDate, {
+      //       start: new Date(fixedInitialDate),
+      //       end: new Date(fixedFinalDate),
+      //     });
+      //   }
+      // );
 
-      FixedSorts(filteredFixedResponse);
+      // FixedSorts(filteredFixedResponse);
 
       // setIncomeValues(filteredIncomeResponse)
-      setOutcomeValues(filteredOutcomeResponse);
-      setFixedValues(filteredFixedResponse);
+      // setOutcomeValues(filteredOutcomeResponse);
+      // setFixedValues(filteredFixedResponse);
       setLoading(false);
     } catch ({ message, error }: any) {
       toast(

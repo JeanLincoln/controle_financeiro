@@ -1,6 +1,6 @@
-import { FixedValues } from '../types/TransactionTypes'
+import { CreateFixedValues } from '../types/TransactionTypes'
 
-export const sortTypes = (a: FixedValues, b: FixedValues) => {
+export const sortTypes = (a: CreateFixedValues, b: CreateFixedValues) => {
   const nameA = a.type.toUpperCase()
   const nameB = b.type.toUpperCase()
   if (nameA < nameB) {
@@ -12,7 +12,7 @@ export const sortTypes = (a: FixedValues, b: FixedValues) => {
   return 0
 }
 
-export const sortFinalDates = (a: FixedValues, b: FixedValues) => {
+export const sortFinalDates = (a: CreateFixedValues, b: CreateFixedValues) => {
   if (!a.finalDate) {
     return 1
   }
@@ -24,7 +24,7 @@ export const sortFinalDates = (a: FixedValues, b: FixedValues) => {
   return new Date(a.finalDate).getTime() - new Date(b.finalDate).getTime()
 }
 
-export const FixedSorts = (array: FixedValues[]) => {
+export const FixedSorts = (array: CreateFixedValues[]) => {
   array.sort(sortTypes)
   array.sort(sortFinalDates)
 }
