@@ -8,10 +8,10 @@ import {
   where,
   collection,
   getDocs,
-  Timestamp,
 } from "firebase/firestore";
 import { toast } from "react-toastify";
 import {
+  db,
   fixedValuesCollection,
   incomeTransactionsCollection,
   outcomeTransactionsCollection,
@@ -127,6 +127,32 @@ export const fetchOutcomeTransactionsFirebase = async (
   }
 };
 
+export const fetchChartOutcomeTransactions = async () => {
+  const chartOutcomeTransactions = [] as FirebaseOutcomeTransaction[];
+  const q = query(collection(db, "outcomeTransactions"));
+
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    console.log(doc.id, " => ", doc.data());
+    chartOutcomeTransactions.push(doc.data() as FirebaseOutcomeTransaction);
+  });
+
+  const transformedOutcomeTransactions = chartOutcomeTransactions.map(
+    (transaction) => ({
+      ...transaction,
+      date: transaction.date.toDate(),
+    })
+  );
+
+  const orderedOutcomeTransactions = transformedOutcomeTransactions.sort(
+    (a, b) => {
+      return b.date.getTime() - a.date.getTime();
+    }
+  );
+
+  return orderedOutcomeTransactions;
+};
+
 export const fetchFixedTransactionsFirebase = async (
   filterMonth: string,
   setFixedValues: Dispatch<SetStateAction<CreateFixedValues[]>>
@@ -199,6 +225,23 @@ export const createNewIncomeTransactionsFirebase = async (
   }
 };
 
+export const createNewOutcomeTransactionsFirebase = async (
+  vehicleToPost: CreateOutcomeTransaction
+) => {
+  try {
+    await addDoc(outcomeTransactionsCollection, vehicleToPost);
+    toast("Transação de Saida inserida !", { className: "success" });
+    return vehicleToPost;
+  } catch ({ message, error }: any) {
+    toast(
+      "Houve um erro ao criar a transação de saída:\n" + `${message}:${error}`,
+      {
+        className: "error",
+      }
+    );
+  }
+};
+
 export const createNewFixedTransactionsFirebase = async (
   vehicleToPost: CreateFixedValues
 ) => {
@@ -217,16 +260,32 @@ export const createNewFixedTransactionsFirebase = async (
   }
 };
 
-export const createNewOutcomeTransactionsFirebase = async (
-  vehicleToPost: CreateOutcomeTransaction
+// Criar Transações /
+
+// Deletar Transações
+
+export const deleteIncomeTransactionsFirebase = async (
+  transactionToDeleteId: string
 ) => {
   try {
-    await addDoc(outcomeTransactionsCollection, vehicleToPost);
-    toast("Transação de Saida inserida !", { className: "success" });
-    return vehicleToPost;
-  } catch ({ message, error }: any) {
+    const q = query(
+      collection(db, "incomeTransactions"),
+      where("id", "==", transactionToDeleteId)
+    );
+    const querySnapshot = await getDocs(q);
+    let docId = "";
+    querySnapshot.forEach(async (doc) => {
+      docId = doc.id;
+    });
+    const TransactionToDelete = doc(db, "incomeTransactions", docId);
+    await deleteDoc(TransactionToDelete);
+    toast("A transação de entrada foi excluída!", {
+      className: "success",
+    });
+  } catch ({ message, name }: any) {
     toast(
-      "Houve um erro ao criar a transação de saída:\n" + `${message}:${error}`,
+      "Houve um erro com a exclusão da transação de entrada:\n" +
+        `${message}:${name}`,
       {
         className: "error",
       }
@@ -234,4 +293,156 @@ export const createNewOutcomeTransactionsFirebase = async (
   }
 };
 
-// Criar Transações /
+export const deleteOutcomeTransactionsFirebase = async (
+  transactionToDeleteId: string
+) => {
+  try {
+    const q = query(
+      collection(db, "outcomeTransactions"),
+      where("id", "==", transactionToDeleteId)
+    );
+    const querySnapshot = await getDocs(q);
+    let docId = "";
+    querySnapshot.forEach(async (doc) => {
+      docId = doc.id;
+    });
+    const TransactionToDelete = doc(db, "outcomeTransactions", docId);
+    await deleteDoc(TransactionToDelete);
+    toast("A transação de Saída foi excluída!", {
+      className: "success",
+    });
+  } catch ({ message, name }: any) {
+    toast(
+      "Houve um erro com a exclusão da transação de Saída:\n" +
+        `${message}:${name}`,
+      {
+        className: "error",
+      }
+    );
+  }
+};
+
+export const deleteFixedTransactionsFirebase = async (
+  transactionToDeleteId: string
+) => {
+  try {
+    const q = query(
+      collection(db, "fixedValues"),
+      where("id", "==", transactionToDeleteId)
+    );
+    const querySnapshot = await getDocs(q);
+    let docId = "";
+    querySnapshot.forEach(async (doc) => {
+      docId = doc.id;
+    });
+    const TransactionToDelete = doc(db, "fixedValues", docId);
+    await deleteDoc(TransactionToDelete);
+    toast("A transação fixa foi excluída!", {
+      className: "success",
+    });
+  } catch ({ message, name }: any) {
+    toast(
+      "Houve um erro com a exclusão da transação fixa:\n" +
+        `${message}:${name}`,
+      {
+        className: "error",
+      }
+    );
+  }
+};
+
+// Deletar Transações /
+
+// Atualizar Transações
+
+export const updateIncomeTransactionsFirebase = async (
+  transactionToUpdateid: string,
+  UpdateData: CreateIncomeTransaction
+) => {
+  try {
+    const q = query(
+      collection(db, "incomeTransactions"),
+      where("id", "==", transactionToUpdateid)
+    );
+    const querySnapshot = await getDocs(q);
+    let docId = "";
+    querySnapshot.forEach(async (doc) => {
+      docId = doc.id;
+    });
+    const transactionDoc = doc(db, "incomeTransactions", docId);
+    await updateDoc(transactionDoc, UpdateData);
+    toast("A transação de entrada foi atualizada!", {
+      className: "success",
+    });
+  } catch ({ message, name }: any) {
+    toast(
+      "Houve um erro com a atualização da transação de entrada!:\n" +
+        `${message}:${name}`,
+      {
+        className: "error",
+      }
+    );
+  }
+};
+
+export const updateOutcomeTransactionsFirebase = async (
+  transactionToUpdateid: string,
+  UpdateData: CreateOutcomeTransaction
+) => {
+  try {
+    const q = query(
+      collection(db, "outcomeTransactions"),
+      where("id", "==", transactionToUpdateid)
+    );
+    const querySnapshot = await getDocs(q);
+    let docId = "";
+    querySnapshot.forEach(async (doc) => {
+      docId = doc.id;
+    });
+    const transactionDoc = doc(db, "outcomeTransactions", docId);
+    await updateDoc(transactionDoc, UpdateData);
+    toast("A transação de Sáida foi atualizada!", {
+      className: "success",
+    });
+  } catch ({ message, name }: any) {
+    toast(
+      "Houve um erro com a atualização da transação de Saída!:\n" +
+        `${message}:${name}`,
+      {
+        className: "error",
+      }
+    );
+  }
+};
+
+export const updateFixedTransactionsFirebase = async (
+  transactionToUpdateid: string,
+  UpdateData: CreateFixedValues
+) => {
+  try {
+    const q = query(
+      collection(db, "fixedValues"),
+      where("id", "==", transactionToUpdateid)
+    );
+    const querySnapshot = await getDocs(q);
+    let docId = "";
+    querySnapshot.forEach(async (doc) => {
+      docId = doc.id;
+    });
+    const transactionDoc = doc(db, "fixedValues", docId);
+    await updateDoc(transactionDoc, UpdateData);
+    toast("A transação fixa foi atualizada!", {
+      className: "success",
+    });
+  } catch ({ message, name }: any) {
+    toast(
+      "Houve um erro com a atualização da transação fixa!:\n" +
+        `${message}:${name}`,
+      {
+        className: "error",
+      }
+    );
+  }
+};
+
+// Atualizar Transações /

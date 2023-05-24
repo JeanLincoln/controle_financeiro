@@ -1,15 +1,15 @@
-import type { AppProps } from 'next/app'
-import * as P from 'phosphor-react'
-import * as S from '../styles/pages/app'
-import { globalStyles } from '../styles/global'
-import Image from 'next/image'
-import { TransactionsContextProvider } from '../contexts/TransactionsContext'
-import 'react-toastify/dist/ReactToastify.css'
+import type { AppProps } from "next/app";
+import * as P from "phosphor-react";
+import * as S from "../styles/pages/app";
+import { globalStyles } from "../styles/global";
+import Image from "next/image";
+import { TransactionsContextProvider } from "../contexts/TransactionsContext";
+import "react-toastify/dist/ReactToastify.css";
 
-globalStyles()
+globalStyles();
 
-import userImage from '../assets/images/jean.jpeg'
-import Link from 'next/link'
+import userImage from "../assets/images/jean.jpeg";
+import Link from "next/link";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -54,10 +54,10 @@ export default function App({ Component, pageProps }: AppProps) {
           </S.UserContainer>
         </S.AsideContainer>
         <TransactionsContextProvider>
-          <S.StyledToastContainer autoClose={500000000} />
+          <S.StyledToastContainer />
           <Component {...pageProps} />
         </TransactionsContextProvider>
       </S.AppContainer>
     </>
-  )
+  );
 }

@@ -1,18 +1,20 @@
 import { format } from "date-fns";
 import {
-  OutcomeTransaction,
+  CreateOutcomeTransaction,
   OutcomeSearchProps,
   IncomeSearchProps,
   FixedSearchProps,
   CreateIncomeTransaction,
-  FixedValues,
+  CreateFixedValues,
 } from "../types/TransactionTypes";
 
 type handleOutcomeSearchProps = {
   searchFilters: OutcomeSearchProps;
   clearSearchedTransanctions: () => void;
-  insertSearchedTransanctions: (transactions: OutcomeTransaction[]) => void;
-  transactionValues: OutcomeTransaction[];
+  insertSearchedTransanctions: (
+    transactions: CreateOutcomeTransaction[]
+  ) => void;
+  transactionValues: CreateOutcomeTransaction[];
 };
 
 type handleIncomeSearchProps = {
@@ -27,8 +29,8 @@ type handleIncomeSearchProps = {
 type handlefixedSearchProps = {
   searchFilters: FixedSearchProps;
   clearSearchedTransanctions: () => void;
-  insertSearchedTransanctions: (transactions: FixedValues[]) => void;
-  transactionValues: FixedValues[];
+  insertSearchedTransanctions: (transactions: CreateFixedValues[]) => void;
+  transactionValues: CreateFixedValues[];
 };
 
 export const handleOutcomeSearch = ({

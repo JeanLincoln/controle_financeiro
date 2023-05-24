@@ -8,7 +8,7 @@ import { format } from "date-fns";
 import { formatMonetary } from "../utils/FormatMonetaryValues";
 import { Pagination } from "../components/Pagination";
 import { UpdateTransactionForm } from "../components/Dialog/UpdateTransaction";
-import { FixedSearchProps, FixedValues } from "../types/TransactionTypes";
+import { FixedSearchProps, CreateFixedValues } from "../types/TransactionTypes";
 import { handlefixedSearch } from "../utils/HandleSearch";
 import { SearchTransactions } from "../components/SearchTransactions";
 import { Loading } from "../components/Loading";
@@ -26,7 +26,7 @@ export default function ValoresDeEntrada() {
   const [itensPerPage] = useState(7);
   const [search, setSearch] = useState<FixedSearchProps>({});
   const [searchedTransactions, setSearchedTransanctions] = useState<
-    FixedValues[]
+    CreateFixedValues[]
   >([]);
 
   const indexOfLastItem = currentPage * itensPerPage;
@@ -37,7 +37,7 @@ export default function ValoresDeEntrada() {
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
   const clearSearchedTransanctions = () => setSearchedTransanctions([]);
-  const insertSearchedTransanctions = (transactions: FixedValues[]) =>
+  const insertSearchedTransanctions = (transactions: CreateFixedValues[]) =>
     setSearchedTransanctions(transactions);
   const insertSearch = (
     filter: string,

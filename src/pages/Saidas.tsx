@@ -11,7 +11,7 @@ import { formatMonetary } from "../utils/FormatMonetaryValues";
 import { Pagination } from "../components/Pagination";
 import { UpdateTransactionForm } from "../components/Dialog/UpdateTransaction";
 import {
-  OutcomeTransaction,
+  CreateOutcomeTransaction,
   OutcomeSearchProps,
 } from "../types/TransactionTypes";
 import { SearchTransactions } from "../components/SearchTransactions";
@@ -31,7 +31,7 @@ export default function ValoresDeSaida() {
   const [itensPerPage] = useState(8);
   const [search, setSearch] = useState<OutcomeSearchProps>({});
   const [searchedTransactions, setSearchedTransanctions] = useState<
-    OutcomeTransaction[]
+    CreateOutcomeTransaction[]
   >([]);
 
   const indexOfLastItem = currentPage * itensPerPage;
@@ -42,8 +42,9 @@ export default function ValoresDeSaida() {
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
   const clearSearchedTransanctions = () => setSearchedTransanctions([]);
-  const insertSearchedTransanctions = (transactions: OutcomeTransaction[]) =>
-    setSearchedTransanctions(transactions);
+  const insertSearchedTransanctions = (
+    transactions: CreateOutcomeTransaction[]
+  ) => setSearchedTransanctions(transactions);
   const insertSearch = (
     filter: string,
     event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>

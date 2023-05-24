@@ -1,39 +1,43 @@
-import { useContext, useEffect, useState } from 'react'
-import * as S from '../../styles/components/Charts'
+import { useContext, useEffect, useState } from "react";
+import * as S from "../../styles/components/Charts";
 import {
-  PieChart,
   Pie,
   Cell,
   Tooltip,
   Legend,
-  BarChart,
   Bar,
   XAxis,
   YAxis,
   CartesianGrid,
-} from 'recharts'
-import { TransactionsContext } from '../../contexts/TransactionsContext'
-import { Loading } from '../Loading'
-import { CustomTooltip } from './CustomTooltip'
-import { fillCells, totalOutcomePerMonth, totalOutcomeTypes } from '../../utils/ChartUtils'
+} from "recharts";
+import { TransactionsContext } from "../../contexts/TransactionsContext";
+import { Loading } from "../Loading";
+import { CustomTooltip } from "./CustomTooltip";
+import {
+  fillCells,
+  totalOutcomePerMonth,
+  totalOutcomeTypes,
+} from "../../utils/ChartUtils";
 
 type outcomePerMonthProps = {
-  name: string
-  total: number
-}
+  name: string;
+  total: number;
+};
 
 export default function Charts() {
-  const { loading, outcomeValues } = useContext(TransactionsContext)
-  const [outcomePerMonth, setOutcomePerMonth] = useState<outcomePerMonthProps[]>([])
+  const { loading, outcomeValues } = useContext(TransactionsContext);
+  const [outcomePerMonth, setOutcomePerMonth] = useState<
+    outcomePerMonthProps[]
+  >([]);
 
   const fetchTotalOutcomePerMonth = async () => {
-    const response = await totalOutcomePerMonth()
-    setOutcomePerMonth(response)
-  }
+    const response = await totalOutcomePerMonth();
+    setOutcomePerMonth(response);
+  };
 
   useEffect(() => {
-    fetchTotalOutcomePerMonth()
-  }, [])
+    fetchTotalOutcomePerMonth();
+  }, []);
 
   return (
     <S.ChartsContainer>
@@ -55,7 +59,12 @@ export default function Charts() {
                 fill="#8884d8"
               >
                 {totalOutcomeTypes(outcomeValues).map((entry, index, array) => {
-                  return <Cell key={`cell-${index}`} fill={fillCells(index, array)} />
+                  return (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={fillCells(index, array)}
+                    />
+                  );
                 })}
               </Pie>
               <Tooltip content={<CustomTooltip />} />
@@ -64,7 +73,11 @@ export default function Charts() {
           </S.ChartContainer>
           <S.ChartContainer>
             <h1>Gastos x Mês em {new Date().getFullYear()}:</h1>
-            <S.BarChartContainer width={800} height={430} data={outcomePerMonth}>
+            <S.BarChartContainer
+              width={800}
+              height={430}
+              data={outcomePerMonth}
+            >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
               <YAxis />
@@ -75,5 +88,5 @@ export default function Charts() {
         </>
       )}
     </S.ChartsContainer>
-  )
+  );
 }

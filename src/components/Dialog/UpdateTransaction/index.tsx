@@ -6,7 +6,7 @@ import { IncomeTransactionsForm } from "../IncomeTransactionsForm";
 import { OutcomeTransactionsForm } from "../OutcomeTransactionsForm";
 import { FixedTransactionsForm } from "../FixedTransactionsForm";
 import {
-  FixedValues,
+  CreateFixedValues,
   CreateIncomeTransaction,
   OutcomeTransaction,
 } from "../../../types/TransactionTypes";
@@ -14,7 +14,10 @@ import {
 type TriggerProps = {
   method: string;
   type: "income" | "outcome" | "fixed";
-  transaction?: CreateIncomeTransaction | OutcomeTransaction | FixedValues;
+  transaction?:
+    | CreateIncomeTransaction
+    | OutcomeTransaction
+    | CreateFixedValues;
 };
 
 export function UpdateTransactionForm({
@@ -48,7 +51,7 @@ export function UpdateTransactionForm({
         <FixedTransactionsForm
           type={type}
           setOpen={setOpen}
-          transaction={transaction as FixedValues}
+          transaction={transaction as CreateFixedValues}
         />
       );
     }

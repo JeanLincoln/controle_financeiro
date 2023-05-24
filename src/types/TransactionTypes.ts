@@ -23,7 +23,7 @@ export type FirebaseOutcomeTransaction = {
   installment: number;
   method: string;
   paymentForm: string;
-  type:string;
+  type: string;
   value: number;
 };
 
@@ -37,11 +37,6 @@ export type CreateOutcomeTransaction = {
   installment: number;
   value: number;
 };
-
-export type OutcomeTransaction = {
-  id: string;
-  [key: string]: string;
-} & CreateOutcomeTransaction;
 
 export type CreateFixedValues = {
   id: string;
@@ -57,7 +52,7 @@ export type FirebaseFixedTransaction = {
   initialDate: Timestamp;
   finalDate: Timestamp;
   description: string;
-  type:string;
+  type: string;
   value: number;
 };
 

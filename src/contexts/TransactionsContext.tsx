@@ -14,20 +14,18 @@ import {
 } from "../types/TransactionTypes";
 import { toast } from "react-toastify";
 import {
-  deleteFixedTransactions,
-  deleteIncomeTransactions,
-  deleteOutcomeTransactions,
-  updateFixedTransactions,
-  updateIncomeTransactions,
-  updateOutcomeTransactions,
-} from "../services/API";
-import {
   createNewFixedTransactionsFirebase,
   createNewIncomeTransactionsFirebase,
   createNewOutcomeTransactionsFirebase,
+  deleteFixedTransactionsFirebase,
+  deleteIncomeTransactionsFirebase,
+  deleteOutcomeTransactionsFirebase,
   fetchFixedTransactionsFirebase,
   fetchIncomeTransactionsFirebase,
   fetchOutcomeTransactionsFirebase,
+  updateFixedTransactionsFirebase,
+  updateIncomeTransactionsFirebase,
+  updateOutcomeTransactionsFirebase,
 } from "../services/firestoreDatabase";
 
 type TransactionContextType = {
@@ -130,31 +128,16 @@ export function TransactionsContextProvider({
     const fixedTransaction = type === "fixed";
 
     if (incomeTransaction) {
-      await deleteIncomeTransactions(transactionId);
-
-      const remainingTransactions = incomeValues.filter(
-        (transaction) => transaction.id !== transactionId
-      );
-      setIncomeValues(remainingTransactions);
+      await deleteIncomeTransactionsFirebase(transactionId);
       return;
     }
     if (outcomeTransaction) {
-      await deleteOutcomeTransactions(transactionId);
-
-      const remainingTransactions = outcomeValues.filter(
-        (transaction) => transaction.id !== transactionId
-      );
-      setOutcomeValues(remainingTransactions);
+      await deleteOutcomeTransactionsFirebase(transactionId);
       return;
     }
 
     if (fixedTransaction) {
-      await deleteFixedTransactions(transactionId);
-
-      const remainingTransactions = fixedValues.filter(
-        (transaction) => transaction.id !== transactionId
-      );
-      setFixedValues(remainingTransactions);
+      await deleteFixedTransactionsFirebase(transactionId);
       return;
     }
   };
@@ -172,26 +155,23 @@ export function TransactionsContextProvider({
     const fixedTransaction = type === "fixed";
 
     if (incomeTransaction) {
-      await updateIncomeTransactions(
+      await updateIncomeTransactionsFirebase(
         transactionToUpdateId,
         Transactionupdate as CreateIncomeTransaction
       );
-      fetchFilteredMonthTransactions();
     }
     if (outcomeTransaction) {
-      await updateOutcomeTransactions(
+      await updateOutcomeTransactionsFirebase(
         transactionToUpdateId,
         Transactionupdate as CreateOutcomeTransaction
       );
-      fetchFilteredMonthTransactions();
     }
 
     if (fixedTransaction) {
-      await updateFixedTransactions(
+      await updateFixedTransactionsFirebase(
         transactionToUpdateId,
         Transactionupdate as CreateFixedValues
       );
-      fetchFilteredMonthTransactions();
     }
   };
 
