@@ -1,4 +1,3 @@
-import { api } from "../../axios";
 import {
   ReactNode,
   createContext,
@@ -7,32 +6,23 @@ import {
   Dispatch,
   SetStateAction,
 } from "react";
-import { differenceInMonths, isSameMonth, isWithinInterval } from "date-fns";
-import { FilterMonthDate, TransactionDate } from "../utils/DatesValidation";
-
+import { isWithinInterval } from "date-fns";
 import {
   CreateFixedValues,
   CreateIncomeTransaction,
   CreateOutcomeTransaction,
-  OutcomeTransaction,
 } from "../types/TransactionTypes";
-import { FixedSorts } from "../utils/SortFixedValues";
 import { toast } from "react-toastify";
 import {
-  createNewFixedTransactions,
-  createNewIncomeTransactions,
-  createNewOutcomeTransactions,
   deleteFixedTransactions,
   deleteIncomeTransactions,
   deleteOutcomeTransactions,
-  fetchFixedTransactions,
-  fetchIncomeTransactions,
-  fetchOutcomeTransactions,
   updateFixedTransactions,
   updateIncomeTransactions,
   updateOutcomeTransactions,
 } from "../services/API";
 import {
+  createNewFixedTransactionsFirebase,
   createNewIncomeTransactionsFirebase,
   createNewOutcomeTransactionsFirebase,
   fetchFixedTransactionsFirebase,
@@ -97,55 +87,7 @@ export function TransactionsContextProvider({
     try {
       await fetchIncomeTransactionsFirebase(filterMonth, setIncomeValues);
       await fetchOutcomeTransactionsFirebase(filterMonth, setOutcomeValues);
-      // const outcomeResponse = await fetchOutcomeTransactions();
       await fetchFixedTransactionsFirebase(filterMonth, setFixedValues);
-
-      // const filteredDate = new Date(
-      //   Number(filterMonth.split("-")[0]),
-      //   Number(filterMonth.split("-")[1]) - 1
-      // );
-
-      // const filteredIncomeResponse = incomeResponse.filter((transaction: IncomeTransaction) =>
-      //   isSameMonth(
-      //     new Date(transaction.date),
-      //     new Date(Number(filterMonth.split('-')[0]), Number(filterMonth.split('-')[1]) - 1)
-      //   )
-      // )
-
-      // const filteredOutcomeResponse = outcomeResponse.filter(
-      //   (transaction: OutcomeTransaction) => {
-      //     const datesDifference = differenceInMonths(
-      //       FilterMonthDate(filterMonth),
-      //       TransactionDate(transaction.date)
-      //     );
-
-      //     const ocorringPurchase =
-      //       datesDifference >= 0 && datesDifference <= transaction.installment;
-      //     const paidPurchase = datesDifference > transaction.installment - 1;
-
-      //     return ocorringPurchase && !paidPurchase;
-      //   }
-      // );
-
-      // const filteredFixedResponse = fixedResponse.filter(
-      //   (transaction: CreateFixedValues) => {
-      //     const fixedInitialDate = new Date(transaction.initialDate);
-      //     const fixedFinalDate = transaction.finalDate
-      //       ? new Date(transaction.finalDate)
-      //       : new Date(2999, 1, 1);
-
-      //     return isWithinInterval(filteredDate, {
-      //       start: new Date(fixedInitialDate),
-      //       end: new Date(fixedFinalDate),
-      //     });
-      //   }
-      // );
-
-      // FixedSorts(filteredFixedResponse);
-
-      // setIncomeValues(filteredIncomeResponse)
-      // setOutcomeValues(filteredOutcomeResponse);
-      // setFixedValues(filteredFixedResponse);
       setLoading(false);
     } catch ({ message, error }: any) {
       toast(
@@ -166,27 +108,19 @@ export function TransactionsContextProvider({
     const fixedTransaction = type === "fixed";
 
     if (incomeTransaction) {
-      const response = await createNewIncomeTransactionsFirebase(
+      await createNewIncomeTransactionsFirebase(
         data as CreateIncomeTransaction
       );
-      setIncomeValues((state) => [
-        response as CreateIncomeTransaction,
-        ...state,
-      ]);
     }
 
     if (outcomeTransaction) {
-      const response = await createNewOutcomeTransactionsFirebase(
+      await createNewOutcomeTransactionsFirebase(
         data as CreateOutcomeTransaction
       );
-      setOutcomeValues((state) => [response!, ...state]);
     }
 
     if (fixedTransaction) {
-      const response = await createNewFixedTransactions(
-        data as CreateFixedValues
-      );
-      setFixedValues((state) => [response, ...state]);
+      await createNewFixedTransactionsFirebase(data as CreateFixedValues);
     }
   };
 

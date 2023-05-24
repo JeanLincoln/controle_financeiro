@@ -29,6 +29,8 @@ import { Dispatch, SetStateAction } from "react";
 import { FilterMonthDate, TransactionDate } from "../utils/DatesValidation";
 import { FixedSorts } from "../utils/SortFixedValues";
 
+// Buscar transações
+
 export const fetchIncomeTransactionsFirebase = async (
   filterMonth: string,
   setIncomeValues: Dispatch<SetStateAction<CreateIncomeTransaction[]>>
@@ -67,24 +69,6 @@ export const fetchIncomeTransactionsFirebase = async (
   } catch ({ message, error }: any) {
     toast(
       "Houve um erro ao carregar as transações de entrada:\n" +
-        `${message}:${error}`,
-      {
-        className: "error",
-      }
-    );
-  }
-};
-
-export const createNewIncomeTransactionsFirebase = async (
-  vehicleToPost: CreateIncomeTransaction
-) => {
-  try {
-    await addDoc(incomeTransactionsCollection, vehicleToPost);
-    toast("Transação de entrada inserida !", { className: "success" });
-    return vehicleToPost;
-  } catch ({ message, error }: any) {
-    toast(
-      "Houve um erro ao criar a transação de entrada:\n" +
         `${message}:${error}`,
       {
         className: "error",
@@ -143,24 +127,6 @@ export const fetchOutcomeTransactionsFirebase = async (
   }
 };
 
-export const createNewOutcomeTransactionsFirebase = async (
-  vehicleToPost: CreateOutcomeTransaction
-) => {
-  try {
-    await addDoc(outcomeTransactionsCollection, vehicleToPost);
-    toast("Transação de Saida inserida !", { className: "success" });
-    return vehicleToPost;
-  } catch ({ message, error }: any) {
-    toast(
-      "Houve um erro ao criar a transação de saída:\n" +
-        `${message}:${error}`,
-      {
-        className: "error",
-      }
-    );
-  }
-};
-
 export const fetchFixedTransactionsFirebase = async (
   filterMonth: string,
   setFixedValues: Dispatch<SetStateAction<CreateFixedValues[]>>
@@ -187,9 +153,7 @@ export const fetchFixedTransactionsFirebase = async (
       const filteredFixedResponse = transformedFixedTransactions.filter(
         (transaction: CreateFixedValues) => {
           const fixedInitialDate = new Date(transaction.initialDate);
-          const fixedFinalDate = transaction.finalDate
-            ? new Date(transaction.finalDate)
-            : new Date(2999, 1, 1);
+          const fixedFinalDate = new Date(transaction.finalDate);
 
           return isWithinInterval(filteredDate, {
             start: new Date(fixedInitialDate),
@@ -212,3 +176,62 @@ export const fetchFixedTransactionsFirebase = async (
     );
   }
 };
+
+// Buscar transações /
+
+// Criar Transações
+
+export const createNewIncomeTransactionsFirebase = async (
+  vehicleToPost: CreateIncomeTransaction
+) => {
+  try {
+    await addDoc(incomeTransactionsCollection, vehicleToPost);
+    toast("Transação de entrada inserida !", { className: "success" });
+    return vehicleToPost;
+  } catch ({ message, error }: any) {
+    toast(
+      "Houve um erro ao criar a transação de entrada:\n" +
+        `${message}:${error}`,
+      {
+        className: "error",
+      }
+    );
+  }
+};
+
+export const createNewFixedTransactionsFirebase = async (
+  vehicleToPost: CreateFixedValues
+) => {
+  try {
+    debugger;
+    await addDoc(fixedValuesCollection, vehicleToPost);
+    toast("Transação fixa inserida !", { className: "success" });
+    return vehicleToPost;
+  } catch ({ message, error }: any) {
+    toast(
+      "Houve um erro ao criar a transação fixa:\n" + `${message}:${error}`,
+      {
+        className: "error",
+      }
+    );
+  }
+};
+
+export const createNewOutcomeTransactionsFirebase = async (
+  vehicleToPost: CreateOutcomeTransaction
+) => {
+  try {
+    await addDoc(outcomeTransactionsCollection, vehicleToPost);
+    toast("Transação de Saida inserida !", { className: "success" });
+    return vehicleToPost;
+  } catch ({ message, error }: any) {
+    toast(
+      "Houve um erro ao criar a transação de saída:\n" + `${message}:${error}`,
+      {
+        className: "error",
+      }
+    );
+  }
+};
+
+// Criar Transações /

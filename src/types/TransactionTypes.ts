@@ -46,7 +46,7 @@ export type OutcomeTransaction = {
 export type CreateFixedValues = {
   id: string;
   initialDate: Date;
-  finalDate: Date | undefined;
+  finalDate: Date;
   description: string;
   type: string;
   value: number;

@@ -135,7 +135,7 @@ export default function ValoresDeEntrada() {
                     {format(new Date(transaction.initialDate), "dd/MM/yyyy")}
                   </td>
                   <td>
-                    {transaction.finalDate
+                    {new Date(transaction.finalDate).getFullYear() !== 9999
                       ? format(new Date(transaction.finalDate), "dd/MM/yyyy")
                       : "Não determinado"}
                   </td>
