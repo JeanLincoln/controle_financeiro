@@ -143,6 +143,24 @@ export const fetchOutcomeTransactionsFirebase = async (
   }
 };
 
+export const createNewOutcomeTransactionsFirebase = async (
+  vehicleToPost: CreateOutcomeTransaction
+) => {
+  try {
+    await addDoc(outcomeTransactionsCollection, vehicleToPost);
+    toast("Transação de Saida inserida !", { className: "success" });
+    return vehicleToPost;
+  } catch ({ message, error }: any) {
+    toast(
+      "Houve um erro ao criar a transação de saída:\n" +
+        `${message}:${error}`,
+      {
+        className: "error",
+      }
+    );
+  }
+};
+
 export const fetchFixedTransactionsFirebase = async (
   filterMonth: string,
   setFixedValues: Dispatch<SetStateAction<CreateFixedValues[]>>

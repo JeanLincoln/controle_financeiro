@@ -34,6 +34,7 @@ import {
 } from "../services/API";
 import {
   createNewIncomeTransactionsFirebase,
+  createNewOutcomeTransactionsFirebase,
   fetchFixedTransactionsFirebase,
   fetchIncomeTransactionsFirebase,
   fetchOutcomeTransactionsFirebase,
@@ -175,10 +176,10 @@ export function TransactionsContextProvider({
     }
 
     if (outcomeTransaction) {
-      const response = await createNewOutcomeTransactions(
+      const response = await createNewOutcomeTransactionsFirebase(
         data as CreateOutcomeTransaction
       );
-      setOutcomeValues((state) => [response, ...state]);
+      setOutcomeValues((state) => [response!, ...state]);
     }
 
     if (fixedTransaction) {

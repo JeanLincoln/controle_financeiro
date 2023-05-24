@@ -49,13 +49,19 @@ export const OutcomeTransactionsForm = ({ type, setOpen, transaction }: TriggerP
       : isInstallmentPurchase(false)
   }
 
+  function generateUniqueId() {
+    return Math.random().toString(36).substr(2, 9);
+  }
+
   const handleCreateOutcomeTransaction = async (data: CreateOutcomeTransaction) => {
+    const generateId = generateUniqueId();
     const formattedDate = new Date(data.date)
     const formattedValue = formatValue(data.value.toString())
 
     if (!transaction) {
       createNewTransaction(type, {
         ...data,
+        id:generateId,
         value: formattedValue,
         date: new Date(
           new Date(
