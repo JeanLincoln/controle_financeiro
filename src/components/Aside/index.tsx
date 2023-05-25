@@ -9,7 +9,7 @@ import { useContext } from "react";
 
 export function Aside({ children }: any) {
   const { user } = useContext(AuthContext);
-
+  console.log(user);
   return (
     <>
       {user && (
@@ -47,8 +47,13 @@ export function Aside({ children }: any) {
 </S.LinkGroup> */}
           </S.LinksContainer>
           <S.UserContainer>
-            <Image src={userImage} alt="a user image" width={50} height={50} />
-            <strong>Jean Lincoln</strong>
+            <Image
+              src={user.photoURL}
+              alt="a user image"
+              width={50}
+              height={50}
+            />
+            <strong>{user.displayName}</strong>
           </S.UserContainer>
         </S.AsideContainer>
       )}
