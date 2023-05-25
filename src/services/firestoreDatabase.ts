@@ -133,7 +133,6 @@ export const fetchChartOutcomeTransactions = async () => {
 
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((doc) => {
-    console.log(doc.id, " => ", doc.data());
     chartOutcomeTransactions.push(doc.data() as FirebaseOutcomeTransaction);
   });
 
