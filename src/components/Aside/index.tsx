@@ -9,7 +9,7 @@ import { useContext } from "react";
 
 export function Aside({ children }: any) {
   const { user } = useContext(AuthContext);
-  console.log(user);
+
   return (
     <>
       {user && (

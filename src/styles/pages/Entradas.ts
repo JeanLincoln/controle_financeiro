@@ -1,100 +1,114 @@
-import { styled } from '..'
+import { keyframes, styled } from "..";
 
-export const Container = styled('div', {
-  display: 'flex',
-  flexDirection: 'column',
+const shakeBottom = keyframes({
+  "0%, 100%": {
+    transform: "rotate(0deg)",
+    transformOrigin: " 50% 100%",
+    animationTimingFunction: "cubic-bezier(0.5, 0, 1, 0.5)",
+  },
+  "10%": { transform: "rotate(2deg)" },
+  "20%,  40%,  60%": { transform: "rotate(-4deg)" },
+  "30%,  50%,  70%": { transform: "rotate(4deg);" },
+  "80%": { transform: "rotate(-2deg)" },
+  "90%": { transform: "rotate(2deg)" },
+});
 
-  marginTop: '3rem',
-  gap: '3rem',
-  padding: '5rem 4rem 0',
-  width: '100%',
-  marginLeft: '10rem',
-})
+export const Container = styled("div", {
+  display: "flex",
+  flexDirection: "column",
 
-export const FiltersContainers = styled('div', {
-  display: 'flex',
-  justifyContent: 'space-around',
-})
+  marginTop: "3rem",
+  gap: "3rem",
+  padding: "5rem 4rem 0",
+  width: "100%",
+  marginLeft: "10rem",
+});
 
-export const FilterItem = styled('button', {
-  padding: '1.5rem',
-  height: '1rem',
+export const FiltersContainers = styled("div", {
+  display: "flex",
+  justifyContent: "space-around",
+});
+
+export const FilterItem = styled("button", {
+  padding: "1.5rem",
+  height: "1rem",
   borderRadius: 8,
-  border: 'none',
-  backgroundColor: '$gray700',
-  color: '$white',
-  fontWeight: 'bold',
-  fontSize: '$md',
-  cursor: 'pointer',
+  border: "none",
+  backgroundColor: "$gray700",
+  color: "$white",
+  fontWeight: "bold",
+  fontSize: "$md",
+  cursor: "pointer",
   lineHeight: 0,
 
-  '&:hover': {
-    backgroundColor: '$gray400',
+  "&:hover": {
+    backgroundColor: "$gray400",
   },
 
-  '&.activeFilter': {
-    backgroundColor: '$gray400',
+  "&.activeFilter": {
+    backgroundColor: "$gray400",
   },
-})
+});
 
-export const ElementsContainer = styled('div', {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  width: '100%',
-})
+export const ElementsContainer = styled("div", {
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  width: "100%",
+});
 
-export const SearchTransactionForm = styled('form', {
-  display: 'flex',
-  width: '100%',
-  gap: '1rem',
+export const SearchTransactionForm = styled("form", {
+  display: "flex",
+  width: "100%",
+  gap: "1rem",
 
   input: {
-    backgroundColor: '$gray700',
-    border: '1px solid $gray400',
-    padding: '1rem',
-    borderRadius: '10px',
-    color: 'white',
+    backgroundColor: "$gray700",
+    border: "1px solid $gray400",
+    padding: "1rem",
+    borderRadius: "10px",
+    color: "white",
 
     flex: 1,
   },
-})
+});
 
-export const IncomeValuesTable = styled('table', {
-  textAlign: 'center',
+export const IncomeValuesTable = styled("table", {
+  textAlign: "center",
 
-  width: '100%',
-  borderCollapse: 'separate',
-  borderSpacing: '0 0.5rem',
-  marginTop: '1rem',
+  width: "100%",
+  borderCollapse: "separate",
+  borderSpacing: "0 0.5rem",
+  marginTop: "1rem",
 
-  fontSize: '$lg',
+  fontSize: "$lg",
 
   td: {
-    padding: '1.25rem 2rem',
-    backgroundColor: '$gray700',
+    padding: "1.25rem 2rem",
+    backgroundColor: "$gray700",
 
-    '&:first-child': {
+    "&:first-child": {
       borderTopLeftRadius: 6,
       borderBottomLeftRadius: 6,
     },
 
-    '&:last-child': {
+    "&:last-child": {
       borderTopRightRadius: 6,
       borderBottomRightRadius: 6,
-      color: '$green500',
+      color: "$green500",
     },
 
-    'button.delete': {
-      backgroundColor: 'transparent',
-      border: 'none',
+    "button.delete": {
+      backgroundColor: "transparent",
+      border: "none",
       svg: {
-        color: '$gray300',
-        cursor: 'pointer',
-        '&:hover': {
-          color: '$red100',
+        color: "$gray300",
+        cursor: "pointer",
+        "&:hover": {
+          color: "$red100",
+          animation: `${shakeBottom} 0.8s cubic-bezier(0.455, 0.030, 0.515, 0.955) both`,
         },
       },
     },
   },
-})
+});

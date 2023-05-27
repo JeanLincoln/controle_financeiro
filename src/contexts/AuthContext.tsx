@@ -2,11 +2,10 @@ import { createContext, ReactNode, useEffect, useState } from "react";
 import { auth, provider } from "../services/Firebase";
 import { signInWithPopup, signOut, onAuthStateChanged } from "firebase/auth";
 import { toast } from "react-toastify";
-import router, { Router } from "next/router";
-import { redirect } from "next/navigation";
+import router from "next/router";
 
 type User = {
-  uid: string | undefined;
+  uid: string;
 };
 
 type AuthContextType = {

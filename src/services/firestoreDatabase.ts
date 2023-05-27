@@ -33,10 +33,15 @@ import { FixedSorts } from "../utils/SortFixedValues";
 
 export const fetchIncomeTransactionsFirebase = async (
   filterMonth: string,
-  setIncomeValues: Dispatch<SetStateAction<CreateIncomeTransaction[]>>
+  setIncomeValues: Dispatch<SetStateAction<CreateIncomeTransaction[]>>,
+  userUid: string
 ) => {
   try {
-    onSnapshot(incomeTransactionsCollection, (snapshot) => {
+    const q = query(
+      collection(db, "incomeTransactions"),
+      where("userId", "==", userUid)
+    );
+    onSnapshot(q, (snapshot) => {
       const incomeTransactions = snapshot.docs.map((doc) =>
         doc.data()
       ) as FirebaseIncomeTransaction[];

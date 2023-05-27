@@ -5,6 +5,7 @@ import {
   useEffect,
   Dispatch,
   SetStateAction,
+  useContext,
 } from "react";
 import { isWithinInterval } from "date-fns";
 import {
@@ -27,6 +28,7 @@ import {
   updateIncomeTransactionsFirebase,
   updateOutcomeTransactionsFirebase,
 } from "../services/firestoreDatabase";
+import { AuthContext } from "./AuthContext";
 
 type TransactionContextType = {
   loading: Boolean;
@@ -64,6 +66,8 @@ export const TransactionsContext = createContext({} as TransactionContextType);
 export function TransactionsContextProvider({
   children,
 }: CyclesContextProviderProps) {
+  const { user } = useContext(AuthContext);
+
   const [loading, setLoading] = useState(false);
   const [incomeValues, setIncomeValues] = useState<CreateIncomeTransaction[]>(
     []
@@ -83,7 +87,13 @@ export function TransactionsContextProvider({
   const fetchFilteredMonthTransactions = async () => {
     setLoading(true);
     try {
-      await fetchIncomeTransactionsFirebase(filterMonth, setIncomeValues);
+      if (user) {
+        await fetchIncomeTransactionsFirebase(
+          filterMonth,
+          setIncomeValues,
+          user.uid
+        );
+      }
       await fetchOutcomeTransactionsFirebase(filterMonth, setOutcomeValues);
       await fetchFixedTransactionsFirebase(filterMonth, setFixedValues);
       setLoading(false);
@@ -177,7 +187,7 @@ export function TransactionsContextProvider({
 
   useEffect(() => {
     fetchFilteredMonthTransactions();
-  }, [filterMonth]);
+  }, [filterMonth, user]);
 
   const monthlyIncomeTotal = () => {
     const total = incomeValues.reduce((acc, income) => {

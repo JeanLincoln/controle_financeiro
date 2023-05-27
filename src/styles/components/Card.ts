@@ -5,7 +5,7 @@ export const Card = styled("div", {
   flexDirection: "column",
   justifyContent: "space-between",
 
-  width: "30rem",
+  width: "35rem",
   minHeight: "13rem",
   padding: "3.2rem",
   borderRadius: 8,
@@ -23,6 +23,7 @@ export const Card = styled("div", {
 
   span: {
     fontSize: "$md",
+    fontWeight: "bolder",
   },
 
   h2: {

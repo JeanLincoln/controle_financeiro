@@ -68,15 +68,27 @@ export default function Summary() {
             <span>Saldo</span>
             <P.Wallet size={32} color="#00887f" />
           </div>
-          <h2
-            style={
-              formatMonetary(pickings()).includes("-")
-                ? { color: "#f75a68" }
-                : { color: "#00b37e" }
-            }
-          >
-            {loading ? <Loading /> : formatMonetary(pickings())}
-          </h2>
+          {loading ? (
+            <Loading />
+          ) : (
+            <S.TransactionsDetails>
+              <h2
+                style={
+                  formatMonetary(pickings()).includes("-")
+                    ? { color: "#f75a68" }
+                    : { color: "#00b37e" }
+                }
+              >
+                {formatMonetary(pickings())}
+              </h2>
+              <span>
+                Entradas:{" "}
+                {formatMonetary(fixedIncomeTotal() + monthlyIncomeTotal())} -
+                Saídas:{" "}
+                {formatMonetary(fixedOutcomeTotal() + monthlyOutcomeTotal())}
+              </span>
+            </S.TransactionsDetails>
+          )}
         </Card>
       </S.Container>
     </>

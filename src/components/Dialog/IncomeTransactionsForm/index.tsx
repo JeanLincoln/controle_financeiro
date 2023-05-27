@@ -1,13 +1,14 @@
 import * as S from "../../../styles/components/Dialog";
 import * as Z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useContext } from "react";
 import CurrencyInput from "react-currency-input-field";
 import { useForm } from "react-hook-form";
 import { useTransaction } from "../../../hooks/useTransaction";
 import { CreateIncomeTransaction } from "../../../types/TransactionTypes";
 import { formatValue } from "../../../utils/FormatNumberValue";
 import { formatISO } from "date-fns";
+import { AuthContext } from "../../../contexts/AuthContext";
 
 type TriggerProps = {
   type: "income" | "outcome" | "fixed";
@@ -27,6 +28,7 @@ export const IncomeTransactionsForm = ({
   setOpen,
   transaction,
 }: TriggerProps) => {
+  const { user } = useContext(AuthContext);
   const { createNewTransaction, updateTransaction } = useTransaction();
   const {
     register,
@@ -51,6 +53,7 @@ export const IncomeTransactionsForm = ({
     if (!transaction) {
       createNewTransaction(type, {
         ...data,
+        userId: user!.uid,
         id: generateId,
         value: formattedValue,
         date: new Date(
