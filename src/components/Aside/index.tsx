@@ -1,6 +1,5 @@
 import * as S from "../../styles/components/Aside";
 
-import userImage from "../../assets/images/jean.jpeg";
 import * as P from "phosphor-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,7 +8,6 @@ import { useContext } from "react";
 
 export function Aside({ children }: any) {
   const { user } = useContext(AuthContext);
-
   return (
     <>
       {user && (

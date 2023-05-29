@@ -8,15 +8,19 @@ import { FixedTransactionsForm } from "../FixedTransactionsForm";
 import {
   CreateFixedValues,
   CreateIncomeTransaction,
-  OutcomeTransaction,
+  CreateOutcomeTransaction,
 } from "../../../types/TransactionTypes";
+import Image from "next/image";
+import cadernoAnimado from "../../../assets/images/caderno.gif";
+import googleImage from "../../../assets/images/google.png";
+import { Pencil } from "../../Icons/Pencil";
 
 type TriggerProps = {
   method: string;
   type: "income" | "outcome" | "fixed";
   transaction?:
     | CreateIncomeTransaction
-    | OutcomeTransaction
+    | CreateOutcomeTransaction
     | CreateFixedValues;
 };
 
@@ -42,7 +46,7 @@ export function UpdateTransactionForm({
         <OutcomeTransactionsForm
           type={type}
           setOpen={setOpen}
-          transaction={transaction as OutcomeTransaction}
+          transaction={transaction as CreateOutcomeTransaction}
         />
       );
     }
@@ -61,7 +65,8 @@ export function UpdateTransactionForm({
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger asChild>
         <S.UpdateTransactionButton>
-          <P.NotePencil size={25} />
+          <Pencil />
+          {/* <P.NotePencil size={25} /> */}
         </S.UpdateTransactionButton>
       </Dialog.Trigger>
       <Dialog.Portal>
