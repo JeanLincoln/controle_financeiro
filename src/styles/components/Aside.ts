@@ -110,6 +110,7 @@ export const LinkGroup = styled("div", {
 
 export const UserContainer = styled("div", {
   display: "flex",
+  flexDirection: "column",
   justifyContent: "space-between",
   alignItems: "center",
   justifySelf: "baseline",
@@ -122,5 +123,12 @@ export const UserContainer = styled("div", {
 
   strong: {
     fontSize: "$lg",
+  },
+
+  button: {
+    padding: ".5rem",
+    borderRadius: 10,
+    border: "none",
+    cursor: "pointer",
   },
 });

@@ -7,7 +7,8 @@ import { AuthContext } from "../../contexts/AuthContext";
 import { useContext } from "react";
 
 export function Aside({ children }: any) {
-  const { user } = useContext(AuthContext);
+  const { user, logOut } = useContext(AuthContext);
+
   return (
     <>
       {user && (
@@ -45,13 +46,16 @@ export function Aside({ children }: any) {
 </S.LinkGroup> */}
           </S.LinksContainer>
           <S.UserContainer>
-            <Image
-              src={user.photoURL}
-              alt="a user image"
-              width={50}
-              height={50}
-            />
-            <strong>{user.displayName}</strong>
+            <>
+              <Image
+                src={user.photoURL}
+                alt="a user image"
+                width={50}
+                height={50}
+              />
+              <strong>{user.displayName}</strong>
+            </>
+            <button onClick={logOut}>LogOut</button>
           </S.UserContainer>
         </S.AsideContainer>
       )}
