@@ -40,11 +40,9 @@ export default function Charts() {
     }
   };
 
-  console.log(outcomePerMonth);
-
   useEffect(() => {
     fetchTotalOutcomePerMonth();
-  }, []);
+  }, [user]);
 
   return (
     <S.ChartsContainer>
