@@ -38,6 +38,9 @@ export const FixedTransactionsForm = ({
     formState: { errors },
   } = useForm<CreateFixedValues>({
     resolver: zodResolver(newFixedFormValidationSchema),
+    defaultValues: {
+      type: transaction?.type,
+    },
   });
 
   function generateUniqueId() {
