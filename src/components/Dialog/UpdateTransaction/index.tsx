@@ -66,7 +66,6 @@ export function UpdateTransactionForm({
       <Dialog.Trigger asChild>
         <S.UpdateTransactionButton>
           <Pencil />
-          {/* <P.NotePencil size={25} /> */}
         </S.UpdateTransactionButton>
       </Dialog.Trigger>
       <Dialog.Portal>

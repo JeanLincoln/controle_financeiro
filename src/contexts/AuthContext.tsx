@@ -6,6 +6,8 @@ import router from "next/router";
 
 type User = {
   uid: string;
+  photoURL: string;
+  displayName: string;
 };
 
 type AuthContextType = {
@@ -52,7 +54,11 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        setUser(user);
+        setUser({
+          ...user,
+          photoURL: user.photoURL!,
+          displayName: user.displayName!,
+        });
         router.push("/");
         return;
       }
