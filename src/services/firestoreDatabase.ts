@@ -137,9 +137,12 @@ export const fetchOutcomeTransactionsFirebase = async (
   }
 };
 
-export const fetchChartOutcomeTransactions = async () => {
+export const fetchChartOutcomeTransactions = async (userUid: string) => {
   const chartOutcomeTransactions = [] as FirebaseOutcomeTransaction[];
-  const q = query(collection(db, "outcomeTransactions"));
+  const q = query(
+    collection(db, "outcomeTransactions"),
+    where("userId", "==", userUid)
+  );
 
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((doc) => {

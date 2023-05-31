@@ -19,6 +19,7 @@ import {
   totalOutcomePerMonth,
   totalOutcomeTypes,
 } from "../../utils/ChartUtils";
+import { AuthContext } from "../../contexts/AuthContext";
 
 type outcomePerMonthProps = {
   name: string;
@@ -26,14 +27,17 @@ type outcomePerMonthProps = {
 };
 
 export default function Charts() {
+  const { user } = useContext(AuthContext);
   const { loading, outcomeValues } = useContext(TransactionsContext);
   const [outcomePerMonth, setOutcomePerMonth] = useState<
     outcomePerMonthProps[]
   >([]);
 
   const fetchTotalOutcomePerMonth = async () => {
-    const response = await totalOutcomePerMonth();
-    setOutcomePerMonth(response);
+    if (user) {
+      const response = await totalOutcomePerMonth(user.uid);
+      setOutcomePerMonth(response);
+    }
   };
 
   console.log(outcomePerMonth);

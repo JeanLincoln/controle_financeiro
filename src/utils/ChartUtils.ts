@@ -33,8 +33,8 @@ export const totalOutcomeTypes = (
   return totalOutcomeTypesArray.sort((a, b) => a.value - b.value);
 };
 
-export const totalOutcomePerMonth = async () => {
-  const data = await fetchChartOutcomeTransactions();
+export const totalOutcomePerMonth = async (userUid: string) => {
+  const data = await fetchChartOutcomeTransactions(userUid);
   const thisYear = new Date().getFullYear();
 
   const monthNames = [
