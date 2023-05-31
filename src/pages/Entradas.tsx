@@ -27,7 +27,12 @@ export default function ValoresDeEntrada() {
   } = useContext(TransactionsContext);
   const [currentPage, setCurrentPage] = useState(1);
   const [itensPerPage] = useState(8);
-  const [search, setSearch] = useState<IncomeSearchProps>({});
+  const [search, setSearch] = useState<IncomeSearchProps>({
+    dateFilter: "",
+    descriptionFilter: "",
+    originFilter: "",
+    valueFilter: "",
+  });
   const [searchedTransactions, setSearchedTransanctions] = useState<
     CreateIncomeTransaction[]
   >([]);

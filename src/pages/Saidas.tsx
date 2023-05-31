@@ -29,7 +29,15 @@ export default function ValoresDeSaida() {
   } = useContext(TransactionsContext);
   const [currentPage, setCurrentPage] = useState(1);
   const [itensPerPage] = useState(8);
-  const [search, setSearch] = useState<OutcomeSearchProps>({});
+  const [search, setSearch] = useState<OutcomeSearchProps>({
+    dateFilter: "",
+    descriptionFilter: "",
+    methodFilter: "",
+    typeFilter: "",
+    paymentFormFilter: "",
+    installmentFilter: "",
+    valueFilter: "",
+  });
   const [searchedTransactions, setSearchedTransanctions] = useState<
     CreateOutcomeTransaction[]
   >([]);

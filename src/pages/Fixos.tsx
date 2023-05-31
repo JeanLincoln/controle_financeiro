@@ -24,7 +24,13 @@ export default function ValoresDeEntrada() {
   } = useContext(TransactionsContext);
   const [currentPage, setCurrentPage] = useState(1);
   const [itensPerPage] = useState(7);
-  const [search, setSearch] = useState<FixedSearchProps>({});
+  const [search, setSearch] = useState<FixedSearchProps>({
+    initialDateFilter: "",
+    finalDateFilter: "",
+    descriptionFilter: "",
+    typeFilter: "",
+    valueFilter: "",
+  });
   const [searchedTransactions, setSearchedTransanctions] = useState<
     CreateFixedValues[]
   >([]);
