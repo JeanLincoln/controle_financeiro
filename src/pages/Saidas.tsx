@@ -131,7 +131,7 @@ export default function ValoresDeSaida() {
       );
     }
 
-    if (searchIsEmpty) {
+    if (searchIsEmpty && currentItens.length > 0) {
       return (
         <S.OutputValuesTable>
           <thead>
@@ -209,7 +209,15 @@ export default function ValoresDeSaida() {
       );
     }
 
-    return <div>Nenhum lancamento encontrado!</div>;
+    return (
+      <div>
+        <P.MaskSad className="noTransactions" size={180} />
+        <h3>
+          Não foi encontrada nenhuma transação, cadastre uma nova transação ou
+          verifique sua pesquisa!
+        </h3>
+      </div>
+    );
   };
 
   useEffect(() => {
@@ -276,8 +284,8 @@ export default function ValoresDeSaida() {
         transactionType="outcome"
         insertSearch={insertSearch}
       />
-      {loading ? <Loading /> : handleTransactions()}
-      {!loading && (
+      <S.Content>{loading ? <Loading /> : handleTransactions()}</S.Content>
+      {!loading && currentItens.length > 0 && (
         <Pagination
           currentPage={currentPage}
           itensPerPage={itensPerPage}

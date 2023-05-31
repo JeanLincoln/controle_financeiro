@@ -51,6 +51,8 @@ export default function ValoresDeEntrada() {
   const handleTransactions = () => {
     const searchIsEmpty = Object.values(search).every((value) => value === "");
 
+    console.log(searchIsEmpty, currentItens.length);
+
     if (!searchIsEmpty && currentItens.length > 0) {
       return (
         <S.IncomeValuesTable>
@@ -95,7 +97,7 @@ export default function ValoresDeEntrada() {
       );
     }
 
-    if (searchIsEmpty) {
+    if (searchIsEmpty && currentItens.length > 0) {
       return (
         <S.IncomeValuesTable>
           <thead>
@@ -139,7 +141,15 @@ export default function ValoresDeEntrada() {
       );
     }
 
-    return <div>Nenhum lancamento encontrado!</div>;
+    return (
+      <div>
+        <P.MaskSad className="noTransactions" size={180} />
+        <h3>
+          Não foi encontrada nenhuma transação, cadastre uma nova transação ou
+          verifique sua pesquisa!
+        </h3>
+      </div>
+    );
   };
 
   useEffect(() => {
@@ -197,8 +207,8 @@ export default function ValoresDeEntrada() {
         transactionType="income"
         insertSearch={insertSearch}
       />
-      {loading ? <Loading /> : handleTransactions()}
-      {!loading && (
+      <S.Content>{loading ? <Loading /> : handleTransactions()}</S.Content>
+      {!loading && currentItens.length > 0 && (
         <Pagination
           currentPage={currentPage}
           itensPerPage={itensPerPage}

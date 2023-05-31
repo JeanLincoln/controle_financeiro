@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import * as S from "../../styles/components/Charts";
+import * as P from "phosphor-react";
 import {
   Pie,
   Cell,
@@ -35,6 +36,8 @@ export default function Charts() {
     setOutcomePerMonth(response);
   };
 
+  console.log(outcomePerMonth);
+
   useEffect(() => {
     fetchTotalOutcomePerMonth();
   }, []);
@@ -45,46 +48,62 @@ export default function Charts() {
         <Loading />
       ) : (
         <>
-          <S.ChartContainer>
-            <h1>Tipos de gastos referente a este mês:</h1>
-            <S.PieChartContainer width={430} height={430}>
-              <Pie
-                data={totalOutcomeTypes(outcomeValues)}
-                nameKey="name"
-                dataKey="value"
-                cx={210}
-                cy={200}
-                labelLine={false}
-                outerRadius={150}
-                fill="#8884d8"
+          {outcomeValues.length ? (
+            <S.ChartContainer>
+              <h3>Tipos de gasto neste mês</h3>
+              <S.PieChartContainer width={430} height={430}>
+                <Pie
+                  data={totalOutcomeTypes(outcomeValues)}
+                  nameKey="name"
+                  dataKey="value"
+                  cx={210}
+                  cy={200}
+                  labelLine={false}
+                  outerRadius={150}
+                  fill="#8884d8"
+                >
+                  {totalOutcomeTypes(outcomeValues).map(
+                    (entry, index, array) => {
+                      return (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={fillCells(index, array)}
+                        />
+                      );
+                    }
+                  )}
+                </Pie>
+                <Tooltip content={<CustomTooltip />} />
+                <Legend />
+              </S.PieChartContainer>
+            </S.ChartContainer>
+          ) : (
+            <S.NoTransactionsContainer>
+              <P.MaskSad className="noTransactions" size={180} />
+              <h3>Não existem gastos para o mês em analise!</h3>
+            </S.NoTransactionsContainer>
+          )}
+          {outcomePerMonth.reduce((acc, month) => (acc += month.total), 0) ? (
+            <S.ChartContainer>
+              <h3>Gastos por mês no ano de {new Date().getFullYear()}</h3>
+              <S.BarChartContainer
+                width={800}
+                height={430}
+                data={outcomePerMonth}
               >
-                {totalOutcomeTypes(outcomeValues).map((entry, index, array) => {
-                  return (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={fillCells(index, array)}
-                    />
-                  );
-                })}
-              </Pie>
-              <Tooltip content={<CustomTooltip />} />
-              <Legend />
-            </S.PieChartContainer>
-          </S.ChartContainer>
-          <S.ChartContainer>
-            <h1>Gastos x Mês em {new Date().getFullYear()}:</h1>
-            <S.BarChartContainer
-              width={800}
-              height={430}
-              data={outcomePerMonth}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip content={<CustomTooltip />} />
-              <Bar dataKey="total" fill="#8884d8" />
-            </S.BarChartContainer>
-          </S.ChartContainer>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip content={<CustomTooltip />} />
+                <Bar dataKey="total" fill="#8884d8" />
+              </S.BarChartContainer>
+            </S.ChartContainer>
+          ) : (
+            <S.NoTransactionsContainer>
+              <P.MaskSad className="noTransactions" size={180} />
+              <h3>Não existem gastos para o ano em analise!</h3>
+            </S.NoTransactionsContainer>
+          )}
         </>
       )}
     </S.ChartsContainer>

@@ -115,7 +115,7 @@ export default function ValoresDeEntrada() {
       );
     }
 
-    if (searchIsEmpty) {
+    if (searchIsEmpty && currentItens.length > 0) {
       return (
         <S.FixedValuesTable>
           <thead>
@@ -183,7 +183,15 @@ export default function ValoresDeEntrada() {
       );
     }
 
-    return <div>Nenhum lancamento encontrado!</div>;
+    return (
+      <div>
+        <P.MaskSad className="noTransactions" size={180} />
+        <h3>
+          Não foi encontrada nenhuma transação, cadastre uma nova transação ou
+          verifique sua pesquisa!
+        </h3>
+      </div>
+    );
   };
 
   useEffect(() => {
@@ -231,8 +239,8 @@ export default function ValoresDeEntrada() {
         />
       </S.ElementsContainer>
       <SearchTransactions transactionType="fixed" insertSearch={insertSearch} />
-      {loading ? <Loading /> : handleTransactions()}
-      {!loading && (
+      <S.Content>{loading ? <Loading /> : handleTransactions()}</S.Content>
+      {!loading && currentItens.length > 0 && (
         <Pagination
           currentPage={currentPage}
           itensPerPage={itensPerPage}

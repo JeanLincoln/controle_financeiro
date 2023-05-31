@@ -29,6 +29,27 @@ export const Container = styled("div", {
   },
 });
 
+export const Content = styled("div", {
+  display: "flex",
+  justifyContent: "center",
+
+  div: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: "2rem",
+
+    ".noTransactions": {
+      color: "$gray300",
+    },
+
+    h3: {
+      fontSize: "$lg",
+      color: "$gray300",
+    },
+  },
+});
+
 export const FiltersContainers = styled("div", {
   display: "flex",
   justifyContent: "space-around",

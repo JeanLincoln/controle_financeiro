@@ -1,4 +1,5 @@
 import Charts from "../components/Charts";
+
 import Summary from "../components/Summary";
 import * as S from "../styles/pages/index";
 
