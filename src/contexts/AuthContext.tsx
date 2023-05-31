@@ -48,6 +48,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       .catch((error) => {
         console.log(error);
       });
+    router.reload();
     router.push("/Login");
   };
 
