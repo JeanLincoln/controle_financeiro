@@ -3,12 +3,13 @@ import * as P from "phosphor-react";
 import * as Z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format, formatISO } from "date-fns";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useContext } from "react";
 import CurrencyInput from "react-currency-input-field";
 import { useForm, Controller } from "react-hook-form";
 import { useTransaction } from "../../../hooks/useTransaction";
 import { CreateFixedValues } from "../../../types/TransactionTypes";
 import { formatValue } from "../../../utils/FormatNumberValue";
+import { AuthContext } from "../../../contexts/AuthContext";
 
 type TriggerProps = {
   type: "income" | "outcome" | "fixed";
@@ -29,6 +30,7 @@ export const FixedTransactionsForm = ({
   setOpen,
   transaction,
 }: TriggerProps) => {
+  const { user } = useContext(AuthContext);
   const { createNewTransaction, updateTransaction } = useTransaction();
   const {
     register,
@@ -58,6 +60,7 @@ export const FixedTransactionsForm = ({
     if (!transaction) {
       createNewTransaction(type, {
         ...data,
+        userId: user!.uid,
         id: generateId,
         value: formattedValue,
         initialDate: new Date(

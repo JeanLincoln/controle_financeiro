@@ -1,13 +1,20 @@
 import * as S from "../../../styles/components/Dialog";
 import * as Z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
+import {
+  ChangeEvent,
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useState,
+} from "react";
 import CurrencyInput from "react-currency-input-field";
 import { useForm } from "react-hook-form";
 import { useTransaction } from "../../../hooks/useTransaction";
 import { CreateOutcomeTransaction } from "../../../types/TransactionTypes";
 import { formatValue } from "../../../utils/FormatNumberValue";
 import { formatISO } from "date-fns";
+import { AuthContext } from "../../../contexts/AuthContext";
 
 type TriggerProps = {
   type: "income" | "outcome" | "fixed";
@@ -30,6 +37,7 @@ export const OutcomeTransactionsForm = ({
   setOpen,
   transaction,
 }: TriggerProps) => {
+  const { user } = useContext(AuthContext);
   const {
     register,
     handleSubmit,
@@ -69,6 +77,7 @@ export const OutcomeTransactionsForm = ({
     if (!transaction) {
       createNewTransaction(type, {
         ...data,
+        userId: user!.uid,
         id: generateId,
         value: formattedValue,
         paymentForm: isCredit ? data.paymentForm : "Débito",

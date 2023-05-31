@@ -84,10 +84,15 @@ export const fetchIncomeTransactionsFirebase = async (
 
 export const fetchOutcomeTransactionsFirebase = async (
   filterMonth: string,
-  setOutcomeValues: Dispatch<SetStateAction<CreateOutcomeTransaction[]>>
+  setOutcomeValues: Dispatch<SetStateAction<CreateOutcomeTransaction[]>>,
+  userUid: string
 ) => {
   try {
-    onSnapshot(outcomeTransactionsCollection, (snapshot) => {
+    const q = query(
+      collection(db, "outcomeTransactions"),
+      where("userId", "==", userUid)
+    );
+    onSnapshot(q, (snapshot) => {
       const outcomeTransactions = snapshot.docs.map((doc) =>
         doc.data()
       ) as FirebaseOutcomeTransaction[];
@@ -159,10 +164,15 @@ export const fetchChartOutcomeTransactions = async () => {
 
 export const fetchFixedTransactionsFirebase = async (
   filterMonth: string,
-  setFixedValues: Dispatch<SetStateAction<CreateFixedValues[]>>
+  setFixedValues: Dispatch<SetStateAction<CreateFixedValues[]>>,
+  userUid: string
 ) => {
   try {
-    onSnapshot(fixedValuesCollection, (snapshot) => {
+    const q = query(
+      collection(db, "fixedValues"),
+      where("userId", "==", userUid)
+    );
+    onSnapshot(q, (snapshot) => {
       const FixedTransactions = snapshot.docs.map((doc) =>
         doc.data()
       ) as FirebaseFixedTransaction[];

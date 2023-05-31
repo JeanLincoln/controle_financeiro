@@ -93,10 +93,19 @@ export function TransactionsContextProvider({
           setIncomeValues,
           user.uid
         );
+
+        await fetchOutcomeTransactionsFirebase(
+          filterMonth,
+          setOutcomeValues,
+          user.uid
+        );
+        await fetchFixedTransactionsFirebase(
+          filterMonth,
+          setFixedValues,
+          user.uid
+        );
+        setLoading(false);
       }
-      await fetchOutcomeTransactionsFirebase(filterMonth, setOutcomeValues);
-      await fetchFixedTransactionsFirebase(filterMonth, setFixedValues);
-      setLoading(false);
     } catch ({ message, error }: any) {
       toast(
         "Houve um erro ao carregar as transações:\n" + `${message}:${error}`,

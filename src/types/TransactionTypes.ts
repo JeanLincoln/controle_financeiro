@@ -1,6 +1,7 @@
 import { Timestamp } from "firebase/firestore";
 
 export type CreateIncomeTransaction = {
+  userId: string;
   id: string;
   date: Date;
   description: string;
@@ -9,6 +10,7 @@ export type CreateIncomeTransaction = {
 };
 
 export type FirebaseIncomeTransaction = {
+  userId: string;
   id: string;
   date: Timestamp;
   description: string;
@@ -17,6 +19,7 @@ export type FirebaseIncomeTransaction = {
 };
 
 export type FirebaseOutcomeTransaction = {
+  userId: string;
   id: string;
   date: Timestamp;
   description: string;
@@ -28,6 +31,7 @@ export type FirebaseOutcomeTransaction = {
 };
 
 export type CreateOutcomeTransaction = {
+  userId: string;
   id: string;
   date: Date;
   description: string;
@@ -39,6 +43,7 @@ export type CreateOutcomeTransaction = {
 };
 
 export type CreateFixedValues = {
+  userId: string;
   id: string;
   initialDate: Date;
   finalDate: Date;
@@ -48,6 +53,7 @@ export type CreateFixedValues = {
 };
 
 export type FirebaseFixedTransaction = {
+  userId: string;
   id: string;
   initialDate: Timestamp;
   finalDate: Timestamp;
