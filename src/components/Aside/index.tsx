@@ -55,7 +55,9 @@ export function Aside({ children }: any) {
               />
               <strong>{user.displayName}</strong>
             </>
-            <button onClick={logOut}>LogOut</button>
+            <button onClick={logOut}>
+              <P.SignOut size={25} />
+            </button>
           </S.UserContainer>
         </S.AsideContainer>
       )}

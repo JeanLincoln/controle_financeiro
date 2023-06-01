@@ -126,9 +126,18 @@ export const UserContainer = styled("div", {
   },
 
   button: {
-    padding: ".5rem",
-    borderRadius: 10,
+    background: "transparent",
     border: "none",
     cursor: "pointer",
+    svg: {
+      color: "$gray300",
+      transition: "all ease 0.3s",
+    },
+
+    "&:hover": {
+      svg: {
+        color: "$gray100",
+      },
+    },
   },
 });
