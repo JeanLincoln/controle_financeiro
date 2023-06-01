@@ -1,4 +1,4 @@
-import { differenceInMonths } from "date-fns";
+import { differenceInCalendarMonths, differenceInMonths } from "date-fns";
 import { CreateOutcomeTransaction } from "../types/TransactionTypes";
 import { fetchChartOutcomeTransactions } from "../services/firestoreDatabase";
 
@@ -68,10 +68,13 @@ export const totalOutcomePerMonth = async (userUid: string) => {
   ];
 
   for (let i = 0; i <= monthNames.length; i++) {
+    // if (resultArray[i].name === "Abril") {
+    //   debugger;
+    // }
     const filteredTransations = data.filter(
       (transaction: CreateOutcomeTransaction) => {
-        const datesDifference = differenceInMonths(
-          new Date(thisYear, i, new Date(transaction.date).getDate()),
+        const datesDifference = differenceInCalendarMonths(
+          new Date(thisYear, i, 1),
           new Date(
             new Date(transaction.date).getFullYear(),
             new Date(transaction.date).getMonth(),
