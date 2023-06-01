@@ -17,6 +17,7 @@ export const NoTransactionsContainer = styled("div", {
   flexDirection: "column",
   alignItems: "center",
   gap: "2rem",
+  margin: "16rem 0",
   alignSelf: "center",
 
   ".noTransactions": {
