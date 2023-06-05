@@ -4,15 +4,14 @@ import * as P from "phosphor-react";
 import { ChangeEvent, useContext, useEffect, useState } from "react";
 import { TransactionsContext } from "../contexts/TransactionsContext";
 import { NewTransactionForm } from "../components/Dialog/NewTransaction";
-import { format } from "date-fns";
 import { formatMonetary } from "../utils/FormatMonetaryValues";
 import { Pagination } from "../components/Pagination";
-import { UpdateTransactionForm } from "../components/Dialog/UpdateTransaction";
 import { FixedSearchProps, CreateFixedValues } from "../types/TransactionTypes";
 import { handlefixedSearch } from "../utils/HandleSearch";
 import { SearchTransactions } from "../components/SearchTransactions";
 import { Loading } from "../components/Loading";
 import { MonthSelector } from "../components/MonthSelector";
+import FixedValuesItem from "../components/TransactionsItems/FixedValuesItem";
 
 export default function ValoresDeEntrada() {
   const {
@@ -51,142 +50,8 @@ export default function ValoresDeEntrada() {
   ) => setSearch((state) => ({ ...state, [filter]: event.target.value }));
 
   const handleTransactions = () => {
-    const searchIsEmpty = Object.values(search).every((value) => value === "");
-
-    if (!searchIsEmpty && currentItens.length > 0) {
-      return (
-        <S.FixedValuesTable>
-          <thead>
-            <tr>
-              <th>Data de inicio</th>
-              <th>Data de fim</th>
-              <th>Descrição</th>
-              <th>Tipo</th>
-              <th>Valor</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentItens.map((transaction, index) => {
-              return (
-                <tr key={index}>
-                  <td>
-                    {format(new Date(transaction.initialDate), "dd/MM/yyyy")}
-                  </td>
-                  <td>
-                    {transaction.finalDate
-                      ? format(new Date(transaction.finalDate), "dd/MM/yyyy")
-                      : "Não determinado"}
-                  </td>
-                  <td>{transaction.description}</td>
-                  <td>
-                    <S.TransactionType
-                      transactionType={
-                        transaction.type === "Entrada" ? "income" : "outcome"
-                      }
-                    >
-                      {transaction.type}
-                    </S.TransactionType>
-                  </td>
-                  <td>
-                    <S.TransactionValue
-                      transactionType={
-                        transaction.type === "Entrada" ? "income" : "outcome"
-                      }
-                    >
-                      {formatMonetary(transaction.value)}
-                    </S.TransactionValue>
-                  </td>
-                  <td>
-                    <button
-                      className="delete"
-                      onClick={() => {
-                        deleteTransaction("fixed", transaction.id);
-                      }}
-                    >
-                      <P.Trash size={32} />
-                    </button>
-                  </td>
-                  <td>
-                    <UpdateTransactionForm
-                      method="put"
-                      type="fixed"
-                      transaction={transaction}
-                    />
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </S.FixedValuesTable>
-      );
-    }
-
-    if (searchIsEmpty && currentItens.length > 0) {
-      return (
-        <S.FixedValuesTable>
-          <thead>
-            <tr>
-              <th>Data de inicio</th>
-              <th>Data de fim</th>
-              <th>Descrição</th>
-              <th>Tipo</th>
-              <th>Valor</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentItens.map((transaction, index) => {
-              return (
-                <tr key={index}>
-                  <td>
-                    {format(new Date(transaction.initialDate), "dd/MM/yyyy")}
-                  </td>
-                  <td>
-                    {new Date(transaction.finalDate).getFullYear() !== 9999
-                      ? format(new Date(transaction.finalDate), "dd/MM/yyyy")
-                      : "Não determinado"}
-                  </td>
-                  <td>{transaction.description}</td>
-                  <td>
-                    <S.TransactionType
-                      transactionType={
-                        transaction.type === "Entrada" ? "income" : "outcome"
-                      }
-                    >
-                      {transaction.type}
-                    </S.TransactionType>
-                  </td>
-                  <td>
-                    <S.TransactionValue
-                      transactionType={
-                        transaction.type === "Entrada" ? "income" : "outcome"
-                      }
-                    >
-                      {formatMonetary(transaction.value)}
-                    </S.TransactionValue>
-                  </td>
-                  <td>
-                    <button
-                      className="delete"
-                      onClick={() => {
-                        deleteTransaction("fixed", transaction.id);
-                      }}
-                    >
-                      <P.Trash size={32} />
-                    </button>
-                  </td>
-                  <td>
-                    <UpdateTransactionForm
-                      method="put"
-                      type="fixed"
-                      transaction={transaction}
-                    />
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </S.FixedValuesTable>
-      );
+    if (currentItens.length > 0) {
+      return <FixedValuesItem currentItens={currentItens} />;
     }
 
     return (
@@ -245,7 +110,7 @@ export default function ValoresDeEntrada() {
         />
       </S.ElementsContainer>
       <SearchTransactions transactionType="fixed" insertSearch={insertSearch} />
-      <S.Content>{loading ? <Loading /> : handleTransactions()}</S.Content>
+      {loading ? <Loading /> : handleTransactions()}
       {!loading && currentItens.length > 0 && (
         <Pagination
           currentPage={currentPage}

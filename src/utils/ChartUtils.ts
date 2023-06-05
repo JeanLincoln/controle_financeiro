@@ -68,9 +68,6 @@ export const totalOutcomePerMonth = async (userUid: string) => {
   ];
 
   for (let i = 0; i <= monthNames.length; i++) {
-    // if (resultArray[i].name === "Abril") {
-    //   debugger;
-    // }
     const filteredTransations = data.filter(
       (transaction: CreateOutcomeTransaction) => {
         const datesDifference = differenceInCalendarMonths(

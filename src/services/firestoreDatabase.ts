@@ -263,7 +263,6 @@ export const createNewFixedTransactionsFirebase = async (
   vehicleToPost: CreateFixedValues
 ) => {
   try {
-    debugger;
     await addDoc(fixedValuesCollection, vehicleToPost);
     toast("Transação fixa inserida !", { className: "success" });
     return vehicleToPost;

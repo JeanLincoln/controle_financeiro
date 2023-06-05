@@ -29,27 +29,6 @@ export const Container = styled("div", {
   },
 });
 
-export const Content = styled("div", {
-  display: "flex",
-  justifyContent: "center",
-
-  div: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    gap: "2rem",
-
-    ".noTransactions": {
-      color: "$gray300",
-    },
-
-    h3: {
-      fontSize: "$lg",
-      color: "$gray300",
-    },
-  },
-});
-
 export const FiltersContainers = styled("div", {
   display: "flex",
   justifyContent: "space-around",
@@ -102,85 +81,6 @@ export const SearchTransactionForm = styled("form", {
 export const CardsContainer = styled("div", {
   display: "flex",
   gap: "2rem",
-});
-
-export const FixedValuesTable = styled("table", {
-  textAlign: "center",
-
-  width: "100%",
-  borderCollapse: "separate",
-  borderSpacing: "0 0.5rem",
-  marginTop: "1rem",
-
-  fontSize: "$lg",
-
-  td: {
-    padding: "1.25rem 2rem",
-    backgroundColor: "$gray700",
-
-    "&:first-child": {
-      borderTopLeftRadius: 6,
-      borderBottomLeftRadius: 6,
-    },
-
-    "&:last-child": {
-      borderTopRightRadius: 6,
-      borderBottomRightRadius: 6,
-      color: "$green500",
-    },
-
-    "button.delete": {
-      backgroundColor: "transparent",
-      border: "none",
-      svg: {
-        color: "$gray300",
-        cursor: "pointer",
-        "&:hover": {
-          color: "$red100",
-          animation: `${shakeBottom} 0.8s cubic-bezier(0.455, 0.030, 0.515, 0.955) both`,
-        },
-      },
-    },
-  },
-});
-
-export const TransactionType = styled("span", {
-  borderRadius: "20px",
-  padding: "5px",
-
-  fontSize: "$md",
-
-  variants: {
-    transactionType: {
-      income: {
-        border: " 1px solid $green600",
-        "&:not(:disabled):hover": {
-          transition: "background-color 0.2s",
-        },
-        color: "$green500",
-      },
-      outcome: {
-        border: " 1px solid $red100",
-        "&:not(:disabled):hover": {
-          transition: "background-color 0.2s",
-        },
-        color: "$red100",
-      },
-    },
-  },
-});
-
-export const TransactionValue = styled("span", {
-  variants: {
-    transactionType: {
-      income: {
-        color: "$green500",
-      },
-      outcome: {
-        color: "$red100",
-      },
-    },
-  },
 });
 
 export const VariantSubTotal = styled("h2", {

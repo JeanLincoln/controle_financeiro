@@ -1,4 +1,5 @@
 import { keyframes, styled } from "..";
+import * as Dialog from "@radix-ui/react-dialog";
 
 const shakeBottom = keyframes({
   "0%, 100%": {
@@ -13,6 +14,41 @@ const shakeBottom = keyframes({
   "90%": { transform: "rotate(2deg)" },
 });
 
+export const Overlay = styled(Dialog.Overlay, {
+  position: "fixed",
+  width: "100%",
+  height: "100%",
+  inset: 0,
+  background: "rgba(0,0,0,0.75)",
+});
+
+export const Content = styled(Dialog.Content, {
+  minWidth: "50rem",
+  borderRadius: 6,
+  padding: "2.5rem 3rem",
+  background: "$gray600",
+
+  position: "fixed",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%,-50%)",
+
+  form: {
+    marginTop: "2rem",
+    display: "flex",
+    flexDirection: "column",
+    gap: "1rem",
+
+    "input, select": {
+      borderRadius: 6,
+      border: 0,
+      background: "$gray700",
+      color: "$gray300",
+      padding: "2rem",
+    },
+  },
+});
+
 export const Container = styled("div", {
   display: "flex",
   flexDirection: "column",
@@ -22,27 +58,6 @@ export const Container = styled("div", {
   padding: "5rem 4rem 0",
   width: "100%",
   marginLeft: "10rem",
-});
-
-export const Content = styled("div", {
-  display: "flex",
-  justifyContent: "center",
-
-  div: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    gap: "2rem",
-
-    ".noTransactions": {
-      color: "$gray300",
-    },
-
-    h3: {
-      fontSize: "$lg",
-      color: "$gray300",
-    },
-  },
 });
 
 export const FiltersContainers = styled("div", {

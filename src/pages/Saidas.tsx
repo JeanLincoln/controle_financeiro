@@ -17,6 +17,7 @@ import {
 import { SearchTransactions } from "../components/SearchTransactions";
 import { handleOutcomeSearch } from "../utils/HandleSearch";
 import { Loading } from "../components/Loading";
+import OutcomeTransactionItem from "../components/TransactionsItems/OutcomeTransactionItem";
 
 export default function ValoresDeSaida() {
   const {
@@ -27,6 +28,7 @@ export default function ValoresDeSaida() {
     deleteTransaction,
     filterMonth,
   } = useContext(TransactionsContext);
+  const [open, setOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [itensPerPage] = useState(8);
   const [search, setSearch] = useState<OutcomeSearchProps>({
@@ -59,162 +61,8 @@ export default function ValoresDeSaida() {
   ) => setSearch((state) => ({ ...state, [filter]: event.target.value }));
 
   const handleTransactions = () => {
-    const searchIsEmpty = Object.values(search).every((value) => value === "");
-
-    if (!searchIsEmpty && currentItens.length > 0) {
-      return (
-        <S.OutputValuesTable>
-          <thead>
-            <tr>
-              <th>Data</th>
-              <th>Finaliza em</th>
-              <th>Descrição</th>
-              <th>Método</th>
-              <th>Tipo</th>
-              <th>Forma de pagamento</th>
-              <th>Parcelas</th>
-              <th>Parcela Atual</th>
-              <th>Valor da parcela</th>
-              <th>Valor da compra</th>
-              <th>Valor restante da compra</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentItens.map((transaction) => {
-              return (
-                <tr key={transaction.id}>
-                  <td>{format(new Date(transaction.date), "dd/MM/yyyy")}</td>
-                  <td>
-                    {transaction.installment !== 1
-                      ? format(
-                          addMonths(
-                            new Date(transaction.date),
-                            transaction.installment
-                          ),
-                          "dd/MM/yyyy"
-                        )
-                      : format(new Date(transaction.date), "dd/MM/yyyy")}
-                  </td>
-                  <td>{transaction.description}</td>
-                  <td>{transaction.method}</td>
-                  <td>{transaction.type}</td>
-                  <td>{transaction.paymentForm}</td>
-                  <td>{transaction.installment}</td>
-                  <td>{CalculateActualInstallment(transaction.date)}</td>
-                  <td>
-                    {formatMonetary(
-                      transaction.value / transaction.installment
-                    )}
-                  </td>
-                  <td>{formatMonetary(transaction.value)}</td>
-                  <td>
-                    {formatMonetary(
-                      transaction.value -
-                        (transaction.value / transaction.installment) *
-                          CalculateActualInstallment(transaction.date)
-                    )}
-                  </td>
-                  <td>
-                    <button
-                      className="delete"
-                      onClick={() => {
-                        deleteTransaction("outcome", transaction.id);
-                      }}
-                    >
-                      <P.Trash size={25} />
-                    </button>
-                  </td>
-                  <td>
-                    <UpdateTransactionForm
-                      method="put"
-                      type="outcome"
-                      transaction={transaction}
-                    />
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </S.OutputValuesTable>
-      );
-    }
-
-    if (searchIsEmpty && currentItens.length > 0) {
-      return (
-        <S.OutputValuesTable>
-          <thead>
-            <tr>
-              <th>Data</th>
-              <th>Finaliza em</th>
-              <th>Descrição</th>
-              <th>Método</th>
-              <th>Tipo</th>
-              <th>Forma de pagamento</th>
-              <th>Parcelas</th>
-              <th>Parcela Atual</th>
-              <th>Valor da parcela</th>
-              <th>Valor da compra</th>
-              <th>Valor restante da compra</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentItens.map((transaction) => {
-              return (
-                <tr key={transaction.id}>
-                  <td>{format(new Date(transaction.date), "dd/MM/yyyy")}</td>
-                  <td>
-                    {transaction.installment !== 1
-                      ? format(
-                          addMonths(
-                            new Date(transaction.date),
-                            transaction.installment
-                          ),
-                          "dd/MM/yyyy"
-                        )
-                      : format(new Date(transaction.date), "dd/MM/yyyy")}
-                  </td>
-                  <td>{transaction.description}</td>
-                  <td>{transaction.method}</td>
-                  <td>{transaction.type}</td>
-                  <td>{transaction.paymentForm}</td>
-                  <td>{transaction.installment}</td>
-                  <td>{CalculateActualInstallment(transaction.date)}</td>
-                  <td>
-                    {formatMonetary(
-                      transaction.value / transaction.installment
-                    )}
-                  </td>
-                  <td>{formatMonetary(transaction.value)}</td>
-                  <td>
-                    {formatMonetary(
-                      transaction.value -
-                        (transaction.value / transaction.installment) *
-                          CalculateActualInstallment(transaction.date)
-                    )}
-                  </td>
-                  <td>
-                    <button
-                      className="delete"
-                      onClick={() => {
-                        deleteTransaction("outcome", transaction.id);
-                      }}
-                    >
-                      <P.Trash size={25} />
-                    </button>
-                  </td>
-                  <td>
-                    <UpdateTransactionForm
-                      method="put"
-                      type="outcome"
-                      transaction={transaction}
-                    />
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </S.OutputValuesTable>
-      );
+    if (currentItens.length > 0) {
+      return <OutcomeTransactionItem currentItens={currentItens} />;
     }
 
     return (
@@ -292,7 +140,7 @@ export default function ValoresDeSaida() {
         transactionType="outcome"
         insertSearch={insertSearch}
       />
-      <S.Content>{loading ? <Loading /> : handleTransactions()}</S.Content>
+      <>{loading ? <Loading /> : handleTransactions()}</>
       {!loading && currentItens.length > 0 && (
         <Pagination
           currentPage={currentPage}

@@ -1,18 +1,5 @@
 import { keyframes, styled } from "..";
 
-const shakeBottom = keyframes({
-  "0%, 100%": {
-    transform: "rotate(0deg)",
-    transformOrigin: " 50% 100%",
-    animationTimingFunction: "cubic-bezier(0.5, 0, 1, 0.5)",
-  },
-  "10%": { transform: "rotate(2deg)" },
-  "20%,  40%,  60%": { transform: "rotate(-4deg)" },
-  "30%,  50%,  70%": { transform: "rotate(4deg);" },
-  "80%": { transform: "rotate(-2deg)" },
-  "90%": { transform: "rotate(2deg)" },
-});
-
 export const Container = styled("div", {
   display: "flex",
   flexDirection: "column",
@@ -22,27 +9,6 @@ export const Container = styled("div", {
   padding: "5rem 4rem 0",
   width: "100%",
   marginLeft: "10rem",
-});
-
-export const Content = styled("div", {
-  display: "flex",
-  justifyContent: "center",
-
-  div: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    gap: "2rem",
-
-    ".noTransactions": {
-      color: "$gray300",
-    },
-
-    h3: {
-      fontSize: "$lg",
-      color: "$gray300",
-    },
-  },
 });
 
 export const FiltersContainers = styled("div", {
@@ -91,45 +57,5 @@ export const SearchTransactionForm = styled("form", {
     color: "white",
 
     flex: 1,
-  },
-});
-
-export const IncomeValuesTable = styled("table", {
-  textAlign: "center",
-
-  width: "100%",
-  borderCollapse: "separate",
-  borderSpacing: "0 0.5rem",
-  marginTop: "1rem",
-
-  fontSize: "$lg",
-
-  td: {
-    padding: "1.25rem 2rem",
-    backgroundColor: "$gray700",
-
-    "&:first-child": {
-      borderTopLeftRadius: 6,
-      borderBottomLeftRadius: 6,
-    },
-
-    "&:last-child": {
-      borderTopRightRadius: 6,
-      borderBottomRightRadius: 6,
-      color: "$green500",
-    },
-
-    "button.delete": {
-      backgroundColor: "transparent",
-      border: "none",
-      svg: {
-        color: "$gray300",
-        cursor: "pointer",
-        "&:hover": {
-          color: "$red100",
-          animation: `${shakeBottom} 0.8s cubic-bezier(0.455, 0.030, 0.515, 0.955) both`,
-        },
-      },
-    },
   },
 });
