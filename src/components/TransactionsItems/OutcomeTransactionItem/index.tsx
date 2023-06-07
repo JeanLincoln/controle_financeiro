@@ -70,22 +70,24 @@ export default function OutcomeTransactionItem({
                 <span>{formatMonetary(transaction.value)}</span>
               </S.TransactionInfoGroup>
             </S.TransactionsInfosContainer>
+            <div className="iconsDiv">
+              <button
+                className="delete"
+                onClick={() => {
+                  deleteTransaction("outcome", transaction.id);
+                }}
+              >
+                <P.Trash size={30} />
+              </button>
 
-            <button
-              className="delete"
-              onClick={() => {
-                deleteTransaction("outcome", transaction.id);
-              }}
-            >
-              <P.Trash size={30} />
-            </button>
+              <UpdateTransactionForm
+                method="put"
+                type="outcome"
+                transaction={transaction}
+              />
 
-            <UpdateTransactionForm
-              method="put"
-              type="outcome"
-              transaction={transaction}
-            />
-            <TransactionInfo type="outcome" transaction={transaction} />
+              <TransactionInfo type="outcome" transaction={transaction} />
+            </div>
           </S.TransactionContainer>
         );
       })}

@@ -1,85 +1,136 @@
-import { keyframes, styled } from "..";
-
-const shakeBottom = keyframes({
-  "0%, 100%": {
-    transform: "rotate(0deg)",
-    transformOrigin: " 50% 100%",
-    animationTimingFunction: "cubic-bezier(0.5, 0, 1, 0.5)",
-  },
-  "10%": { transform: "rotate(2deg)" },
-  "20%,  40%,  60%": { transform: "rotate(-4deg)" },
-  "30%,  50%,  70%": { transform: "rotate(4deg);" },
-  "80%": { transform: "rotate(-2deg)" },
-  "90%": { transform: "rotate(2deg)" },
-});
+import { styled } from "..";
 
 export const Container = styled("div", {
   display: "flex",
   flexDirection: "column",
 
-  marginTop: "3rem",
-  gap: "3rem",
-  padding: "5rem 4rem 0",
-  width: "100%",
-  marginLeft: "10rem",
-
   ".loader": {
     top: "0 !important",
     alignSelf: "center",
   },
-});
 
-export const FiltersContainers = styled("div", {
-  display: "flex",
-  justifyContent: "space-around",
-});
-
-export const FilterItem = styled("button", {
-  padding: "1.5rem",
-  height: "1rem",
-  borderRadius: 8,
-  border: "none",
-  backgroundColor: "$gray700",
-  color: "$white",
-  fontWeight: "bold",
-  fontSize: "$md",
-  cursor: "pointer",
-  lineHeight: 0,
-
-  "&:hover": {
-    backgroundColor: "$gray400",
+  "@bp1": {
+    marginTop: "3rem",
+    gap: "3rem",
+    padding: "10px 20px 0",
+    marginBottom: 200,
+    width: "100%",
   },
 
-  "&.activeFilter": {
-    backgroundColor: "$gray400",
+  "@bp2": {
+    marginTop: "3rem",
+    gap: "3rem",
+    padding: "10px 20px 0",
+    marginBottom: 200,
+    width: "100%",
+  },
+
+  "@bp3": {
+    marginTop: "3rem",
+    gap: "3rem",
+    padding: "10px 20px 0",
+    marginBottom: 200,
+    width: "100%",
+  },
+
+  "@bp4": {
+    marginTop: "3rem",
+    gap: "3rem",
+    padding: "5rem 4rem 0",
+    width: "100%",
+    marginLeft: "10rem",
   },
 });
 
 export const ElementsContainer = styled("div", {
   display: "flex",
-  alignItems: "center",
-  width: "100%",
-  justifyContent: "space-between",
+  flexWrap: "wrap",
+
+  "@bp1": {
+    alignItems: "center",
+    width: "100%",
+    input: {
+      '&[type="month"]': {
+        alignSelf: "baseline",
+      },
+    },
+
+    button: {
+      marginTop: 20,
+      justifySelf: "flex-start",
+    },
+  },
+
+  "@bp2": {
+    alignItems: "center",
+    width: "100%",
+    input: {
+      '&[type="month"]': {
+        alignSelf: "baseline",
+      },
+    },
+
+    button: {
+      marginTop: 20,
+      justifySelf: "flex-start",
+    },
+  },
+
+  "@bp3": {
+    alignItems: "center",
+    width: "100%",
+    input: {
+      '&[type="month"]': {
+        alignSelf: "center",
+      },
+    },
+
+    button: {
+      marginTop: 20,
+      justifySelf: "flex-start",
+    },
+  },
+
+  "@bp4": {
+    alignItems: "center",
+    width: "100%",
+    justifyContent: "space-between",
+
+    input: {
+      '&[type="month"]': {
+        alignSelf: "baseline",
+      },
+    },
+  },
 });
 
-export const SearchTransactionForm = styled("form", {
+export const FiltersContainers = styled("div", {
   display: "flex",
-  width: "100%",
-  gap: "1rem",
+  flexWrap: "wrap",
+  justifyContent: "space-around",
+});
 
-  input: {
-    backgroundColor: "$gray700",
-    border: "1px solid $gray400",
-    padding: "1rem",
-    borderRadius: "10px",
-    color: "white",
+export const NoTransactionsContainer = styled("div", {
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+  textAlign: "center",
 
-    flex: 1,
+  gap: 50,
+
+  "@bp1": {
+    fontSize: "$lg",
+  },
+
+  "@bp5": {
+    fontSize: "$md",
   },
 });
 
 export const CardsContainer = styled("div", {
   display: "flex",
+  flexWrap: "wrap",
   gap: "2rem",
 });
 

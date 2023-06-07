@@ -42,10 +42,6 @@ export const TransactionsContainer = styled("div", {
 });
 
 export const TransactionContainer = styled("div", {
-  display: "flex",
-  justifyContent: "start",
-  gap: 1,
-  padding: "2rem",
   borderRadius: 10,
   border: "1px solid $gray400",
 
@@ -71,6 +67,33 @@ export const TransactionContainer = styled("div", {
       },
     },
   },
+
+  "@bp1": {
+    display: "flex",
+    flexWrap: "wrap-reverse",
+    gap: 1,
+    padding: "2rem",
+
+    ".iconsDiv": {
+      width: "100%",
+      display: "flex",
+      justifyContent: "space-between",
+    },
+  },
+
+  "@bp4": {
+    display: "flex",
+    flexWrap: "nowrap",
+    justifyContent: "start",
+    gap: 1,
+    padding: "2rem",
+
+    ".iconsDiv": {
+      maxWidth: 150,
+      display: "flex",
+      justifyContent: "flex-start",
+    },
+  },
 });
 
 export const TransactionsInfosContainer = styled("div", {
@@ -78,7 +101,7 @@ export const TransactionsInfosContainer = styled("div", {
   justifyContent: "start",
   flexWrap: "wrap",
   width: "100%",
-  gap: 5,
+  gap: 20,
   padding: "2rem",
   borderRadius: 10,
   border: "1px solid $gray400",
@@ -106,7 +129,7 @@ export const TransactionInfoGroup = styled("div", {
   flexDirection: "column",
   alignItems: "start",
   justifyContent: "space-around",
-  width: "20rem",
+  flex: 1,
   border: "1px solid $gray500",
   borderRadius: 10,
   padding: "5px 10px",

@@ -59,20 +59,22 @@ export default function FixedValuesItem({ currentItens }: FixedValuesItem) {
                 </S.TransactionValue>
               </S.TransactionInfoGroup>
             </S.TransactionsInfosContainer>
-            <button
-              className="delete"
-              onClick={() => {
-                deleteTransaction("fixed", transaction.id);
-              }}
-            >
-              <P.Trash size={30} />
-            </button>
+            <div className="iconsDiv">
+              <button
+                className="delete"
+                onClick={() => {
+                  deleteTransaction("fixed", transaction.id);
+                }}
+              >
+                <P.Trash size={30} />
+              </button>
 
-            <UpdateTransactionForm
-              method="put"
-              type="fixed"
-              transaction={transaction}
-            />
+              <UpdateTransactionForm
+                method="put"
+                type="fixed"
+                transaction={transaction}
+              />
+            </div>
           </S.TransactionContainer>
         );
       })}

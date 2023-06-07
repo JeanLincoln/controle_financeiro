@@ -55,13 +55,13 @@ export default function ValoresDeEntrada() {
     }
 
     return (
-      <div>
+      <S.NoTransactionsContainer>
         <P.MaskSad className="noTransactions" size={180} />
         <h3>
           Não foi encontrada nenhuma transação, cadastre uma nova transação ou
           verifique sua pesquisa!
         </h3>
-      </div>
+      </S.NoTransactionsContainer>
     );
   };
 

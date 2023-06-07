@@ -39,20 +39,22 @@ export default function IncomeTransactionItem({
                 <span>{formatMonetary(transaction.value)}</span>
               </S.TransactionInfoGroup>
             </S.TransactionsInfosContainer>
-            <button
-              className="delete"
-              onClick={() => {
-                deleteTransaction("income", transaction.id);
-              }}
-            >
-              <P.Trash size={30} />
-            </button>
+            <div className="iconsDiv">
+              <button
+                className="delete"
+                onClick={() => {
+                  deleteTransaction("income", transaction.id);
+                }}
+              >
+                <P.Trash size={30} />
+              </button>
 
-            <UpdateTransactionForm
-              method="put"
-              type="income"
-              transaction={transaction}
-            />
+              <UpdateTransactionForm
+                method="put"
+                type="income"
+                transaction={transaction}
+              />
+            </div>
           </S.TransactionContainer>
         );
       })}

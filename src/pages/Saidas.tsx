@@ -66,13 +66,13 @@ export default function ValoresDeSaida() {
     }
 
     return (
-      <div>
+      <S.NoTransactionsContainer>
         <P.MaskSad className="noTransactions" size={180} />
         <h3>
           Não foi encontrada nenhuma transação, cadastre uma nova transação ou
           verifique sua pesquisa!
         </h3>
-      </div>
+      </S.NoTransactionsContainer>
     );
   };
 
@@ -99,37 +99,41 @@ export default function ValoresDeSaida() {
     <S.Container>
       <S.ElementsContainer>
         <MonthSelector setCurrentPage={setCurrentPage} />
-        <Card>
-          <div>
-            <span>Saídas Fixas</span>
-            <P.ArrowCircleDown size={32} color="#f75a68" />
-          </div>
-          <h2>{loading ? <Loading /> : formatMonetary(fixedOutcomeTotal())}</h2>
-        </Card>
-        <P.PlusCircle size={32} />
-        <Card>
-          <div>
-            <span>Saídas Mensais</span>
-            <P.ArrowCircleDown size={32} color="#f75a68" />
-          </div>
-          <h2>
-            {loading ? <Loading /> : formatMonetary(monthlyOutcomeTotal())}
-          </h2>
-        </Card>
-        <P.Equals size={32} />
-        <Card>
-          <div>
-            <span>Total de Saídas</span>
-            <P.ArrowCircleDown size={32} color="#f75a68" />
-          </div>
-          <h2>
-            {loading ? (
-              <Loading />
-            ) : (
-              formatMonetary(fixedOutcomeTotal() + monthlyOutcomeTotal())
-            )}
-          </h2>
-        </Card>
+        <S.CardsContainer>
+          <Card>
+            <div>
+              <span>Saídas Fixas</span>
+              <P.ArrowCircleDown size={32} color="#f75a68" />
+            </div>
+            <h2>
+              {loading ? <Loading /> : formatMonetary(fixedOutcomeTotal())}
+            </h2>
+          </Card>
+          <P.PlusCircle size={32} />
+          <Card>
+            <div>
+              <span>Saídas Mensais</span>
+              <P.ArrowCircleDown size={32} color="#f75a68" />
+            </div>
+            <h2>
+              {loading ? <Loading /> : formatMonetary(monthlyOutcomeTotal())}
+            </h2>
+          </Card>
+          <P.Equals size={32} />
+          <Card>
+            <div>
+              <span>Total de Saídas</span>
+              <P.ArrowCircleDown size={32} color="#f75a68" />
+            </div>
+            <h2>
+              {loading ? (
+                <Loading />
+              ) : (
+                formatMonetary(fixedOutcomeTotal() + monthlyOutcomeTotal())
+              )}
+            </h2>
+          </Card>
+        </S.CardsContainer>
         <NewTransactionForm
           method="post"
           type="outcome"
