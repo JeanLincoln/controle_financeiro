@@ -19,7 +19,7 @@ export const Content = styled(Dialog.Content, {
   },
 
   "@bp4": {
-    width: "auto",
+    width: "50vw",
     height: "auto",
   },
 });
