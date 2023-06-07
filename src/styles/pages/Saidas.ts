@@ -1,148 +1,151 @@
 import { keyframes, styled } from "..";
 
-const shakeBottom = keyframes({
-  "0%, 100%": {
-    transform: "rotate(0deg)",
-    transformOrigin: " 50% 100%",
-    animationTimingFunction: "cubic-bezier(0.5, 0, 1, 0.5)",
-  },
-  "10%": { transform: "rotate(2deg)" },
-  "20%,  40%,  60%": { transform: "rotate(-4deg)" },
-  "30%,  50%,  70%": { transform: "rotate(4deg);" },
-  "80%": { transform: "rotate(-2deg)" },
-  "90%": { transform: "rotate(2deg)" },
-});
-
 export const Container = styled("div", {
   display: "flex",
   flexDirection: "column",
 
-  marginTop: "3rem",
-  gap: "3rem",
-  padding: "5rem 4rem 0",
-  width: "100%",
-  marginLeft: "10rem",
-});
-
-export const Content = styled("div", {
-  display: "flex",
-  justifyContent: "center",
-
-  div: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    gap: "2rem",
-
-    ".noTransactions": {
-      color: "$gray300",
-    },
-
-    h3: {
-      fontSize: "$lg",
-      color: "$gray300",
-    },
-  },
-});
-
-export const FiltersContainers = styled("div", {
-  display: "flex",
-  justifyContent: "space-around",
-});
-
-export const FilterItem = styled("button", {
-  padding: "1.5rem",
-  height: "1rem",
-  borderRadius: 8,
-  border: "none",
-  backgroundColor: "$gray700",
-  color: "$white",
-  fontWeight: "bold",
-  fontSize: "$md",
-  cursor: "pointer",
-  lineHeight: 0,
-
-  "&:hover": {
-    backgroundColor: "$gray400",
+  ".loader": {
+    top: "0 !important",
+    alignSelf: "center",
   },
 
-  "&.activeFilter": {
-    backgroundColor: "$gray400",
+  "@bp1": {
+    marginTop: "3rem",
+    gap: "3rem",
+    padding: "10px 20px 0",
+    marginBottom: 200,
+    width: "100%",
   },
-});
 
-export const OutputValuesTable = styled("table", {
-  textAlign: "center",
+  "@bp2": {
+    marginTop: "3rem",
+    gap: "3rem",
+    padding: "10px 20px 0",
+    marginBottom: 200,
+    width: "100%",
+  },
 
-  width: "100%",
-  borderCollapse: "separate",
-  borderSpacing: "0 0.5rem",
-  marginTop: "1rem",
+  "@bp3": {
+    marginTop: "3rem",
+    gap: "3rem",
+    padding: "10px 20px 0",
+    marginBottom: 200,
+    width: "100%",
+  },
 
-  fontSize: "$md",
-
-  td: {
-    padding: "1rem",
-    backgroundColor: "$gray700",
-
-    "&:first-child": {
-      borderTopLeftRadius: 6,
-      borderBottomLeftRadius: 6,
-    },
-
-    "&:last-child": {
-      borderTopRightRadius: 6,
-      borderBottomRightRadius: 6,
-      color: "$red100",
-    },
-
-    "button.delete": {
-      backgroundColor: "transparent",
-      border: "none",
-      svg: {
-        color: "$gray300",
-        cursor: "pointer",
-        "&:hover": {
-          color: "$red100",
-          animation: `${shakeBottom} 0.8s cubic-bezier(0.455, 0.030, 0.515, 0.955) both`,
-        },
-      },
-    },
+  "@bp4": {
+    marginTop: "3rem",
+    gap: "3rem",
+    padding: "5rem 4rem 0",
+    width: "100%",
+    marginLeft: "10rem",
   },
 });
 
 export const ElementsContainer = styled("div", {
   display: "flex",
-  alignItems: "center",
-  justifyContent: "space-between",
-  width: "100%",
-});
+  flexWrap: "wrap",
 
-export const SearchTransactionForm = styled("form", {
-  display: "flex",
-  width: "100%",
-  gap: "1rem",
+  "@bp1": {
+    alignItems: "center",
+    width: "100%",
+    input: {
+      '&[type="month"]': {
+        alignSelf: "baseline",
+      },
+    },
 
-  input: {
-    backgroundColor: "$gray700",
-    border: "1px solid $gray400",
-    padding: "1rem",
-    borderRadius: "10px",
-    color: "white",
+    button: {
+      marginTop: 20,
+      justifySelf: "flex-start",
+    },
+  },
 
-    flex: 1,
+  "@bp2": {
+    alignItems: "center",
+    width: "100%",
+    input: {
+      '&[type="month"]': {
+        alignSelf: "baseline",
+      },
+    },
+
+    button: {
+      marginTop: 20,
+      justifySelf: "flex-start",
+    },
+  },
+
+  "@bp3": {
+    flexDirection: "column",
+    alignItems: "center",
+    width: "100%",
+    input: {
+      '&[type="month"]': {
+        alignSelf: "center",
+      },
+    },
+
+    button: {
+      marginTop: 20,
+      justifySelf: "flex-start",
+    },
+  },
+
+  "@bp4": {
+    flexDirection: "initial",
+    alignItems: "center",
+    width: "100%",
+    justifyContent: "space-between",
+
+    input: {
+      '&[type="month"]': {
+        alignSelf: "baseline",
+      },
+    },
   },
 });
 
-export const SetIncomeTransactionButton = styled("button", {
-  padding: "3rem",
-  height: "1rem",
-  borderRadius: 8,
-  border: "none",
-  backgroundColor: "$red200",
-  color: "$white",
-  fontWeight: "bold",
-  fontSize: "$xl",
-  cursor: "pointer",
-  lineHeight: 0,
+export const CardsContainer = styled("div", {
+  flexWrap: "wrap",
+
+  "@bp1": {
+    display: "flex",
+    flexDirection: "column",
+    width: "inherit",
+    alignItems: "center",
+    gap: "2rem",
+  },
+
+  "@bp4": {
+    display: "flex",
+    flexDirection: "initial",
+    width: "max-content",
+    alignItems: "center",
+    gap: "1.5rem",
+  },
+});
+
+export const FiltersContainers = styled("div", {
+  display: "flex",
+  flexWrap: "wrap",
+  justifyContent: "space-around",
+});
+
+export const NoTransactionsContainer = styled("div", {
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+  textAlign: "center",
+
+  gap: 50,
+
+  "@bp1": {
+    fontSize: "$lg",
+  },
+
+  "@bp5": {
+    fontSize: "$md",
+  },
 });

@@ -87,7 +87,9 @@ export default function Charts() {
           )}
           {outcomePerMonth.reduce((acc, month) => (acc += month.total), 0) ? (
             <S.ChartContainer>
-              <h3>Gastos por mês no ano de {new Date().getFullYear()}</h3>
+              <h3 className="barChartTitle">
+                Gastos por mês no ano de {new Date().getFullYear()}
+              </h3>
               <S.BarChartContainer
                 width={800}
                 height={430}

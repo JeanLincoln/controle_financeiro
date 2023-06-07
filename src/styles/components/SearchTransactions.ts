@@ -2,6 +2,7 @@ import { styled } from "..";
 
 export const FiltersContainers = styled("div", {
   display: "flex",
+  flexWrap: "wrap",
   border: "1px solid $gray400",
   borderRadius: "10px",
   justifyContent: "flex-start",
@@ -20,6 +21,7 @@ export const ItemGroup = styled("div", {
   },
 
   input: {
+    width: 250,
     padding: "1.34rem",
     border: "none",
     borderRadius: 8,
@@ -52,6 +54,7 @@ export const ItemGroup = styled("div", {
   },
 
   select: {
+    width: 250,
     padding: "1.34rem",
     border: "none",
     borderRadius: 8,

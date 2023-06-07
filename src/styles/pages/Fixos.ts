@@ -1,186 +1,137 @@
-import { keyframes, styled } from "..";
-
-const shakeBottom = keyframes({
-  "0%, 100%": {
-    transform: "rotate(0deg)",
-    transformOrigin: " 50% 100%",
-    animationTimingFunction: "cubic-bezier(0.5, 0, 1, 0.5)",
-  },
-  "10%": { transform: "rotate(2deg)" },
-  "20%,  40%,  60%": { transform: "rotate(-4deg)" },
-  "30%,  50%,  70%": { transform: "rotate(4deg);" },
-  "80%": { transform: "rotate(-2deg)" },
-  "90%": { transform: "rotate(2deg)" },
-});
+import { styled } from "..";
 
 export const Container = styled("div", {
   display: "flex",
   flexDirection: "column",
 
-  marginTop: "3rem",
-  gap: "3rem",
-  padding: "5rem 4rem 0",
-  width: "100%",
-  marginLeft: "10rem",
-
   ".loader": {
     top: "0 !important",
     alignSelf: "center",
   },
+
+  "@bp1": {
+    marginTop: "3rem",
+    gap: "3rem",
+    padding: "10px 20px 0",
+    marginBottom: 200,
+    width: "100%",
+  },
+
+  "@bp2": {
+    marginTop: "3rem",
+    gap: "3rem",
+    padding: "10px 20px 0",
+    marginBottom: 200,
+    width: "100%",
+  },
+
+  "@bp3": {
+    marginTop: "3rem",
+    gap: "3rem",
+    padding: "10px 20px 0",
+    marginBottom: 200,
+    width: "100%",
+  },
+
+  "@bp4": {
+    marginTop: "3rem",
+    gap: "3rem",
+    padding: "5rem 4rem 0",
+    width: "100%",
+    marginLeft: "10rem",
+  },
 });
 
-export const Content = styled("div", {
+export const ElementsContainer = styled("div", {
   display: "flex",
-  justifyContent: "center",
+  flexWrap: "wrap",
 
-  div: {
-    display: "flex",
-    flexDirection: "column",
+  "@bp1": {
     alignItems: "center",
-    gap: "2rem",
-
-    ".noTransactions": {
-      color: "$gray300",
+    width: "100%",
+    input: {
+      '&[type="month"]': {
+        alignSelf: "baseline",
+      },
     },
 
-    h3: {
-      fontSize: "$lg",
-      color: "$gray300",
+    button: {
+      marginTop: 20,
+      justifySelf: "flex-start",
+    },
+  },
+
+  "@bp2": {
+    alignItems: "center",
+    width: "100%",
+    input: {
+      '&[type="month"]': {
+        alignSelf: "baseline",
+      },
+    },
+
+    button: {
+      marginTop: 20,
+      justifySelf: "flex-start",
+    },
+  },
+
+  "@bp3": {
+    alignItems: "center",
+    width: "100%",
+    input: {
+      '&[type="month"]': {
+        alignSelf: "center",
+      },
+    },
+
+    button: {
+      marginTop: 20,
+      justifySelf: "flex-start",
+    },
+  },
+
+  "@bp4": {
+    alignItems: "center",
+    width: "100%",
+    justifyContent: "space-between",
+
+    input: {
+      '&[type="month"]': {
+        alignSelf: "baseline",
+      },
     },
   },
 });
 
 export const FiltersContainers = styled("div", {
   display: "flex",
+  flexWrap: "wrap",
   justifyContent: "space-around",
 });
 
-export const FilterItem = styled("button", {
-  padding: "1.5rem",
-  height: "1rem",
-  borderRadius: 8,
-  border: "none",
-  backgroundColor: "$gray700",
-  color: "$white",
-  fontWeight: "bold",
-  fontSize: "$md",
-  cursor: "pointer",
-  lineHeight: 0,
-
-  "&:hover": {
-    backgroundColor: "$gray400",
-  },
-
-  "&.activeFilter": {
-    backgroundColor: "$gray400",
-  },
-});
-
-export const ElementsContainer = styled("div", {
+export const NoTransactionsContainer = styled("div", {
   display: "flex",
+  flexDirection: "column",
   alignItems: "center",
-  width: "100%",
-  justifyContent: "space-between",
-});
+  justifyContent: "center",
+  textAlign: "center",
 
-export const SearchTransactionForm = styled("form", {
-  display: "flex",
-  width: "100%",
-  gap: "1rem",
+  gap: 50,
 
-  input: {
-    backgroundColor: "$gray700",
-    border: "1px solid $gray400",
-    padding: "1rem",
-    borderRadius: "10px",
-    color: "white",
+  "@bp1": {
+    fontSize: "$lg",
+  },
 
-    flex: 1,
+  "@bp5": {
+    fontSize: "$md",
   },
 });
 
 export const CardsContainer = styled("div", {
   display: "flex",
+  flexWrap: "wrap",
   gap: "2rem",
-});
-
-export const FixedValuesTable = styled("table", {
-  textAlign: "center",
-
-  width: "100%",
-  borderCollapse: "separate",
-  borderSpacing: "0 0.5rem",
-  marginTop: "1rem",
-
-  fontSize: "$lg",
-
-  td: {
-    padding: "1.25rem 2rem",
-    backgroundColor: "$gray700",
-
-    "&:first-child": {
-      borderTopLeftRadius: 6,
-      borderBottomLeftRadius: 6,
-    },
-
-    "&:last-child": {
-      borderTopRightRadius: 6,
-      borderBottomRightRadius: 6,
-      color: "$green500",
-    },
-
-    "button.delete": {
-      backgroundColor: "transparent",
-      border: "none",
-      svg: {
-        color: "$gray300",
-        cursor: "pointer",
-        "&:hover": {
-          color: "$red100",
-          animation: `${shakeBottom} 0.8s cubic-bezier(0.455, 0.030, 0.515, 0.955) both`,
-        },
-      },
-    },
-  },
-});
-
-export const TransactionType = styled("span", {
-  borderRadius: "20px",
-  padding: "5px",
-
-  fontSize: "$md",
-
-  variants: {
-    transactionType: {
-      income: {
-        border: " 1px solid $green600",
-        "&:not(:disabled):hover": {
-          transition: "background-color 0.2s",
-        },
-        color: "$green500",
-      },
-      outcome: {
-        border: " 1px solid $red100",
-        "&:not(:disabled):hover": {
-          transition: "background-color 0.2s",
-        },
-        color: "$red100",
-      },
-    },
-  },
-});
-
-export const TransactionValue = styled("span", {
-  variants: {
-    transactionType: {
-      income: {
-        color: "$green500",
-      },
-      outcome: {
-        color: "$red100",
-      },
-    },
-  },
 });
 
 export const VariantSubTotal = styled("h2", {

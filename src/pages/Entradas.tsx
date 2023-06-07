@@ -16,6 +16,7 @@ import {
 import { SearchTransactions } from "../components/SearchTransactions";
 import { handleIncomeSearch } from "../utils/HandleSearch";
 import { Loading } from "../components/Loading";
+import IncomeTransactionItem from "../components/TransactionsItems/IncomeTransactionItem";
 
 export default function ValoresDeEntrada() {
   const {
@@ -56,104 +57,18 @@ export default function ValoresDeEntrada() {
   const handleTransactions = () => {
     const searchIsEmpty = Object.values(search).every((value) => value === "");
 
-    console.log(searchIsEmpty, currentItens.length);
-
-    if (!searchIsEmpty && currentItens.length > 0) {
-      return (
-        <S.IncomeValuesTable>
-          <thead>
-            <tr>
-              <th>Data</th>
-              <th>Descrição</th>
-              <th>Procedência</th>
-              <th>Valor</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentItens.map((transaction) => {
-              return (
-                <tr key={transaction.id}>
-                  <td>{format(new Date(transaction.date), "dd/MM/yyyy")}</td>
-                  <td>{transaction.description}</td>
-                  <td>{transaction.origin}</td>
-                  <td>{formatMonetary(transaction.value)}</td>
-                  <td>
-                    <button
-                      className="delete"
-                      onClick={() => {
-                        deleteTransaction("income", transaction.id);
-                      }}
-                    >
-                      <P.Trash size={32} />
-                    </button>
-                  </td>
-                  <td>
-                    <UpdateTransactionForm
-                      method="put"
-                      type="income"
-                      transaction={transaction}
-                    />
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </S.IncomeValuesTable>
-      );
-    }
-
-    if (searchIsEmpty && currentItens.length > 0) {
-      return (
-        <S.IncomeValuesTable>
-          <thead>
-            <tr>
-              <th>Data</th>
-              <th>Descrição</th>
-              <th>Procedência</th>
-              <th>Valor</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentItens.map((transaction) => {
-              return (
-                <tr key={transaction.id}>
-                  <td>{format(new Date(transaction.date), "dd/MM/yyyy")}</td>
-                  <td>{transaction.description}</td>
-                  <td>{transaction.origin}</td>
-                  <td>{formatMonetary(transaction.value)}</td>
-                  <td>
-                    <button
-                      className="delete"
-                      onClick={() => {
-                        deleteTransaction("income", transaction.id);
-                      }}
-                    >
-                      <P.Trash size={32} />
-                    </button>
-                  </td>
-                  <td>
-                    <UpdateTransactionForm
-                      method="put"
-                      type="income"
-                      transaction={transaction}
-                    />
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </S.IncomeValuesTable>
-      );
+    if (currentItens.length > 0) {
+      return <IncomeTransactionItem currentItens={currentItens} />;
     }
 
     return (
-      <div>
+      <S.NoTransactionsContainer>
         <P.MaskSad className="noTransactions" size={180} />
         <h3>
           Não foi encontrada nenhuma transação, cadastre uma nova transação ou
           verifique sua pesquisa!
         </h3>
-      </div>
+      </S.NoTransactionsContainer>
     );
   };
 
@@ -171,37 +86,41 @@ export default function ValoresDeEntrada() {
     <S.Container>
       <S.ElementsContainer>
         <MonthSelector setCurrentPage={setCurrentPage} />
-        <Card>
-          <div>
-            <span>Entradas Fixas</span>
-            <P.ArrowCircleUp size={32} color="#00b37e" />
-          </div>
-          <h2>{loading ? <Loading /> : formatMonetary(fixedIncomeTotal())}</h2>
-        </Card>
-        <P.PlusCircle size={32} />
-        <Card>
-          <div>
-            <span>Entradas Mensais</span>
-            <P.ArrowCircleUp size={32} color="#00b37e" />
-          </div>
-          <h2>
-            {loading ? <Loading /> : formatMonetary(monthlyIncomeTotal())}
-          </h2>
-        </Card>
-        <P.Equals size={32} />
-        <Card>
-          <div>
-            <span>Total de entradas</span>
-            <P.ArrowCircleUp size={32} color="#00b37e" />
-          </div>
-          <h2>
-            {loading ? (
-              <Loading />
-            ) : (
-              formatMonetary(fixedIncomeTotal() + monthlyIncomeTotal())
-            )}
-          </h2>
-        </Card>
+        <S.CardsContainer>
+          <Card>
+            <div>
+              <span>Entradas Fixas</span>
+              <P.ArrowCircleUp size={32} color="#00b37e" />
+            </div>
+            <h2>
+              {loading ? <Loading /> : formatMonetary(fixedIncomeTotal())}
+            </h2>
+          </Card>
+          <P.PlusCircle size={32} />
+          <Card>
+            <div>
+              <span>Entradas Mensais</span>
+              <P.ArrowCircleUp size={32} color="#00b37e" />
+            </div>
+            <h2>
+              {loading ? <Loading /> : formatMonetary(monthlyIncomeTotal())}
+            </h2>
+          </Card>
+          <P.Equals size={32} />
+          <Card>
+            <div>
+              <span>Total de entradas</span>
+              <P.ArrowCircleUp size={32} color="#00b37e" />
+            </div>
+            <h2>
+              {loading ? (
+                <Loading />
+              ) : (
+                formatMonetary(fixedIncomeTotal() + monthlyIncomeTotal())
+              )}
+            </h2>
+          </Card>
+        </S.CardsContainer>
         <NewTransactionForm
           method="post"
           type="income"
@@ -212,7 +131,7 @@ export default function ValoresDeEntrada() {
         transactionType="income"
         insertSearch={insertSearch}
       />
-      <S.Content>{loading ? <Loading /> : handleTransactions()}</S.Content>
+      {loading ? <Loading /> : handleTransactions()}
       {!loading && currentItens.length > 0 && (
         <Pagination
           currentPage={currentPage}

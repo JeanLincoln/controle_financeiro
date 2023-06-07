@@ -2,14 +2,18 @@ import { BarChart, PieChart } from "recharts";
 import { styled } from "..";
 
 export const ChartsContainer = styled("div", {
-  display: "flex",
-  justifyContent: "space-around",
-  alignItems: "start",
-  backgroundColor: "$gray400",
-  boxShadow: "-5px 5px 5px #121214",
-  borderRadius: 10,
-  margin: "50px 50px 0 50px",
-  marginBottom: "5rem",
+  display: "none",
+
+  "@bp6": {
+    display: "flex",
+    justifyContent: "space-around",
+    alignItems: "start",
+    backgroundColor: "$gray400",
+    boxShadow: "-5px 5px 5px #121214",
+    borderRadius: 10,
+    margin: "50px 50px 0 50px",
+    marginBottom: "5rem",
+  },
 });
 
 export const NoTransactionsContainer = styled("div", {

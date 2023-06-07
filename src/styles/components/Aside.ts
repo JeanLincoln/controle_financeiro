@@ -1,99 +1,284 @@
 import { styled } from "..";
 
 export const AsideContainer = styled("div", {
-  display: "flex",
-  position: "fixed",
-  flexDirection: "column",
-  alignItems: "center",
-
   boxShadow: "5px 5px 5px #121214",
-
-  borderTopRightRadius: "10px",
-  borderBottomRightRadius: "10px",
-
   backgroundColor: "$gray600",
-
-  height: "100vh",
-  padding: "3rem 2rem",
-  gap: "8rem",
-  width: "10rem",
   zIndex: 1,
-
   transition: "all ease 0.2s",
 
-  "h3,h1,strong": {
-    display: "none",
-  },
-
-  ul: {
+  "@bp1": {
+    display: "flex",
+    position: "fixed",
+    bottom: 0,
     alignItems: "center",
-  },
 
-  "&:hover": {
-    width: "29rem",
-    padding: "3rem 5rem",
+    height: 100,
+    width: "100%",
+    padding: "3rem 2rem",
+    gap: 5,
 
-    "h1,strong": {
-      display: "block",
-    },
+    boxShadow: "0 -5px 5px #121214",
 
-    h3: {
-      display: "inline-block",
+    "h3,h1,strong": {
+      display: "none",
     },
 
     ul: {
-      alignItems: "start",
+      alignItems: "center",
+    },
+  },
+
+  "@bp2": {
+    display: "flex",
+    position: "fixed",
+    bottom: 0,
+    alignItems: "center",
+
+    height: 100,
+    width: "100%",
+    padding: "3rem 2rem",
+    gap: 5,
+
+    boxShadow: "0 -5px 5px #121214",
+
+    "h3,h1,strong": {
+      display: "none",
+    },
+
+    ul: {
+      alignItems: "center",
+    },
+  },
+
+  "@bp3": {
+    display: "flex",
+    position: "fixed",
+    bottom: 0,
+    alignItems: "center",
+
+    height: 100,
+    width: "100%",
+    padding: "3rem 2rem",
+    gap: "8rem",
+
+    boxShadow: "0 -5px 5px #121214",
+
+    "h3,h1,strong": {
+      display: "none",
+    },
+
+    ul: {
+      alignItems: "center",
+    },
+  },
+
+  "@bp4": {
+    display: "flex",
+    position: "fixed",
+    flexDirection: "column",
+    alignItems: "center",
+
+    borderTopRightRadius: "10px",
+    borderBottomRightRadius: "10px",
+
+    height: "100%",
+    padding: "3rem 2rem",
+    gap: "8rem",
+    width: "10rem",
+
+    "h3,h1,strong": {
+      display: "none",
+    },
+
+    ul: {
+      alignItems: "center",
+    },
+
+    "&:hover": {
+      width: "29rem",
+      padding: "3rem 5rem",
+
+      "h1,strong": {
+        display: "block",
+      },
+
+      h3: {
+        display: "inline-block",
+      },
+
+      ul: {
+        alignItems: "start",
+      },
     },
   },
 });
 
 export const LogoContainer = styled("div", {
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "flex-start",
-  alignItems: "center",
-  textAlign: "center",
-
-  gap: "2rem",
-  flex: 1,
-
   svg: {
     color: "$green500",
   },
 
-  h1: {
-    fontSize: "$2xl",
-  },
-
   a: {
     textDecoration: "none",
     color: "$gray200",
+  },
+
+  "@bp1": {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    textAlign: "center",
+
+    h1: {
+      fontSize: "$2xl",
+    },
+
+    svg: {
+      width: 25,
+      height: 25,
+    },
+  },
+
+  "@bp2": {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    textAlign: "center",
+
+    h1: {
+      fontSize: "$2xl",
+    },
+
+    svg: {
+      width: 25,
+      height: 25,
+    },
+  },
+
+  "@bp4": {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    textAlign: "center",
+
+    gap: "2rem",
+    flex: 1,
+
+    h1: {
+      fontSize: "$2xl",
+    },
   },
 });
 
 export const LinksContainer = styled("ul", {
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "start",
   listStyle: "none",
 
-  letterSpacing: "0.2rem",
-  lineHeight: "25px",
-  width: "100%",
-  gap: "3rem",
-  flex: 3,
-
   h3: {
-    fontSize: "$lg",
     fontWeight: "normal",
   },
 
   a: {
-    display: "flex",
-    alignItems: "center",
-    gap: "1rem",
     textDecoration: "none",
     color: "$gray200",
+  },
+
+  "@bp1": {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+
+    letterSpacing: "0.2rem",
+    lineHeight: "25px",
+    width: "100%",
+    gap: 35,
+    flex: 3,
+
+    h3: {
+      fontSize: "$lg",
+      fontWeight: "normal",
+    },
+
+    a: {
+      display: "flex",
+      alignItems: "center",
+      gap: "1rem",
+    },
+  },
+
+  "@bp2": {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+
+    letterSpacing: "0.2rem",
+    lineHeight: "25px",
+    width: "100%",
+    gap: 35,
+    flex: 3,
+
+    h3: {
+      fontSize: "$lg",
+      fontWeight: "normal",
+    },
+
+    a: {
+      display: "flex",
+      alignItems: "center",
+      gap: "1rem",
+    },
+  },
+
+  "@bp3": {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+
+    letterSpacing: "0.2rem",
+    lineHeight: "25px",
+    width: "100%",
+    gap: 50,
+    flex: 3,
+
+    h3: {
+      fontSize: "$lg",
+      fontWeight: "normal",
+    },
+
+    a: {
+      display: "flex",
+      alignItems: "center",
+      gap: "1rem",
+      textDecoration: "none",
+      color: "$gray200",
+    },
+  },
+
+  "@bp4": {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "start",
+
+    letterSpacing: "0.2rem",
+    lineHeight: "25px",
+    width: "100%",
+    gap: "3rem",
+    flex: 3,
+
+    h3: {
+      fontSize: "$lg",
+      fontWeight: "normal",
+    },
+
+    a: {
+      display: "flex",
+      alignItems: "center",
+      gap: "1rem",
+      textDecoration: "none",
+      color: "$gray200",
+    },
   },
 });
 
@@ -109,20 +294,8 @@ export const LinkGroup = styled("div", {
 });
 
 export const UserContainer = styled("div", {
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "space-between",
-  alignItems: "center",
-  justifySelf: "baseline",
-
-  gap: "2rem",
-
   img: {
     borderRadius: "50%",
-  },
-
-  strong: {
-    fontSize: "$lg",
   },
 
   button: {
@@ -138,6 +311,70 @@ export const UserContainer = styled("div", {
       svg: {
         color: "$gray100",
       },
+    },
+  },
+
+  "@bp1": {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    justifySelf: "baseline",
+    gap: 30,
+
+    img: {
+      height: 25,
+      width: 25,
+    },
+
+    strong: {
+      fontSize: "$lg",
+    },
+  },
+
+  "@bp2": {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    justifySelf: "baseline",
+    gap: 30,
+
+    img: {
+      height: 25,
+      width: 25,
+    },
+
+    strong: {
+      fontSize: "$lg",
+    },
+  },
+
+  "@bp3": {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    justifySelf: "baseline",
+    gap: 30,
+
+    img: {
+      height: 35,
+      width: 35,
+    },
+
+    strong: {
+      fontSize: "$lg",
+    },
+  },
+
+  "@bp4": {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    alignItems: "center",
+    justifySelf: "baseline",
+    gap: "2rem",
+
+    strong: {
+      fontSize: "$lg",
     },
   },
 });
